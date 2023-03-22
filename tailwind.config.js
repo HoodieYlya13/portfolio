@@ -6,6 +6,16 @@ module.exports = {
   edOpen: "class",
   expOpen: "class",
   contOpen: "class",
+  ac0: "class",
+  ac1: "class",
+  ac2: "class",
+  ac3: "class",
+  ac4: "class",
+  ac5: "class",
+  ac6: "class",
+  ac7: "class",
+  ac8: "class",
+  ac9: "class",
   content: [
     "./app/**/*.{js,ts,jsx,tsx}",
     "./pages/**/*.{js,ts,jsx,tsx}",
@@ -20,6 +30,9 @@ module.exports = {
     extend: {
       fontFamily: {
         burtons: "burtons",
+      },
+      boxShadow: {
+        'lg-light': '0 10px 15px -3px rgb(255 255 255 / 0.1), 0 4px 6px -4px rgb(255 255 255 / 0.1)',
       }
     },
     screens: {

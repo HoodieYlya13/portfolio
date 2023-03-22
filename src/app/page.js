@@ -33,6 +33,16 @@ export default function Home() {
   const [edOpen, setEdOpen] = useState(false);
   const [expOpen, setExpOpen] = useState(false);
   const [contOpen, setContOpen] = useState(false);
+  const [ac0, setAc0] = useState(true);
+  const [ac1, setAc1] = useState(false);
+  const [ac2, setAc2] = useState(false);
+  const [ac3, setAc3] = useState(false);
+  const [ac4, setAc4] = useState(false);
+  const [ac5, setAc5] = useState(false);
+  const [ac6, setAc6] = useState(false);
+  const [ac7, setAc7] = useState(false);
+  const [ac8, setAc8] = useState(false);
+  const [ac9, setAc9] = useState(false);
 
   let menuRef = useRef();
 
@@ -130,9 +140,14 @@ export default function Home() {
                     </div>
                     
                   </div>
-                  <a href="./Resume_Ylya_Martchenko.pdf" target="_blank" rel="noreferrer" className="inline-flex items-center text-white bg-gradient-to-r from-orange-600 to-orange-500 hover:bg-orange-700 focus:ring-2 focus:ring-orange-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center ml-3">
+                  <a href="./Resume_Ylya_Martchenko.pdf" target="_blank" rel="noreferrer"data-tooltip-target="tooltip-resume" className="inline-flex items-center text-white bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-700 hover:to-orange-600 focus:ring-2 focus:ring-orange-500 font-medium rounded-lg text-sm px-5 py-2.5 text-center ml-3">
                     Resume
+                    <span className="sr-only">View my resume</span>
                   </a>
+                  <div id="tooltip-resume" role="tooltip" className="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
+                      View my resume
+                      <div className="tooltip-arrow" data-popper-arrow></div>
+                  </div>
                 </div>
                 <div className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1">
                     
@@ -265,19 +280,19 @@ export default function Home() {
         
         <section className="min-h-screen pb-10 px-10 md:px-20 xl:px-40">
 
-          <div className="text-center p-10">
-            <h2 className="text-5xl pt-20 pb-10 text-orange-600 font-medium md:text-6xl md:pt-32 md:pb-20">
+          <div className="text-center py-10">
+            <h2 className="px-5 xs:px-10 text-5xl pt-20 pb-10 text-orange-600 font-medium md:text-6xl md:pt-32 md:pb-20">
               Ylya Martchenko
             </h2>
-            <h3 className="text-2xl py-2 md:text-3xl dark:text-gray-100">Full stack developer</h3>
-            <p className="text-md py-5 leading-8 text-gray-800 md:text-xl max-w-lg mx-auto dark:text-gray-300">
+            <h3 className="px-10 text-2xl py-2 md:text-3xl dark:text-gray-100">Full stack developer</h3>
+            <p className="px-10 text-md py-5 leading-8 text-gray-800 md:text-xl max-w-lg mx-auto dark:text-gray-300">
               I am a 21-year-old student looking for a work-linked training in computer science cooperating with an engineering school. <br/>
               Join me down below and let's get started!
             </p>
           </div>
           <div className="text-5xl flex justify-center gap-16 py-3 text-orange-500">
 
-            <a href="mailto:ylyamartchenko@gmail.com" target="_blank" rel="noreferrer" data-tooltip-target="tooltip-mail-2">
+            <a href="mailto:ylyamartchenko@gmail.com" target="_blank" rel="noreferrer" data-tooltip-target="tooltip-mail-2" className="hover:text-orange-600">
               <AiFillMail aria-hidden="true"/>
               <span className="sr-only">Send an E-mail</span>
             </a>
@@ -287,7 +302,7 @@ export default function Home() {
                 <div className="tooltip-arrow" data-popper-arrow></div>
             </div>
 
-            <a href="https://www.linkedin.com/in/ylya-martchenko-214a64184" target="_blank" rel="noreferrer" data-tooltip-target="tooltip-linkedin-2">
+            <a href="https://www.linkedin.com/in/ylya-martchenko-214a64184" target="_blank" rel="noreferrer" data-tooltip-target="tooltip-linkedin-2" className="hover:text-orange-600">
               <AiFillLinkedin aria-hidden="true"/>
               <span className="sr-only">View on LinkedIn</span>
             </a>
@@ -297,7 +312,7 @@ export default function Home() {
                 <div className="tooltip-arrow" data-popper-arrow></div>
             </div>
 
-            <a href="https://github.com/HoodieYlya13" target="_blank" rel="noreferrer" data-tooltip-target="tooltip-github-2">
+            <a href="https://github.com/HoodieYlya13" target="_blank" rel="noreferrer" data-tooltip-target="tooltip-github-2" className="hover:text-orange-600">
               <svg className="w-12 h-12" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="github" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><path fill="currentColor" d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"></path></svg>
               <span className="sr-only">View on Github</span>
             </a>
@@ -314,7 +329,7 @@ export default function Home() {
             </div>
           </div>
 
-         </section>
+        </section>
 
         <section className="bg-gray-50 dark:bg-gray-800 py-10 px-10 md:px-20 xl:px-40 scroll-mt-20 md:scroll-mt-24" id="Education">
 
@@ -348,274 +363,479 @@ export default function Home() {
         </ol>
 
         </section>
-
+        
         <section className="py-10 px-10 md:px-20 xl:px-40 scroll-mt-20 md:scroll-mt-24" id="Experience">
 
           <h3 className="text-3xl py-1 max-w-4xl mx-auto dark:text-gray-100">Experience</h3>
 
           <div className="max-w-6xl mx-auto space-y-4 sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:gap-4 sm:space-y-0 mt-12">
 
-            <div className="block px-8 py-12 text-center bg-white rounded-xl shadow-lg dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
-              <p className="text-left dark:text-gray-100">2015</p>
-              <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
-                Basketball playground project
-              </h3>
-              <p className="py-2 dark:text-gray-300">
-                Metz City Hall
-              </p>
-              <div id="accordion-flush" data-accordion="collapse" data-active-classNamees="bg-white dark:bg-gray-800 text-gray-900 dark:text-white" data-inactive-classNamees="text-gray-500 dark:text-gray-400">
-                <h2 id="accordion-flush-heading-1">
-                  <button type="button" className="flex items-center justify-between w-full py-5 font-medium text-left text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400" data-accordion-target="#accordion-flush-body-1" aria-expanded="false" aria-controls="accordion-flush-body-1">
-                    <span className="text-orange-600">What I did</span>
-                    <svg data-accordion-icon className="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
-                  </button>
-                </h2>
-                <div id="accordion-flush-body-1" className="hidden" aria-labelledby="accordion-flush-heading-1">
+            {ac0 && <div className="block sm:hidden px-8 py-12 text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
+                
+                <p className="text-left dark:text-gray-100">2015</p>
+
+                <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
+                  Basketball playground project
+                </h3>
+
+                <p className="py-2 dark:text-gray-300">
+                  Metz City Hall
+                </p>
+
+                <button onClick={() => setAc0(!ac0)} type="button" className="bg-white dark:bg-inherit flex items-center justify-between w-full py-5 font-medium text-left border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
+                  <span className="text-orange-600">What I did</span>
+                  <svg data-accordion-icon className="w-6 h-6 shrink-0 rotate-180 dark:text-gray-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                </button>
+
+                <div className="block">
                   <div className="py-5 font-light border-b border-gray-200 dark:border-gray-700">
                     <p className="mb-2 text-gray-500 dark:text-gray-400">
-                      Main character in the project of building a basketball court in my neighborhood, at only <span className=" text-orange-600">14 years old</span>.
+                      Main character in the project of building a basketball court in my neighborhood, at only <span className="text-orange-600">14 years old</span>.
                       My friends and I had presented our dream court to the elected representatives of our city.
                     </p>
-                    <p className="mb-2 text-gray-500 dark:text-gray-400">
+                    <p className="text-gray-500 dark:text-gray-400">
                       We proposed a PowerPoint presentation and our 3D model with the estimate cost that companies gave us.
                       The total cost of the project was around <span className=" text-orange-600">€100,000</span> which was partially covered (35%) thanks to a partnership with GRDF.
                     </p>
                   </div>
                 </div>
-              </div>
-            </div>
 
-            <div className="block px-8 py-12 text-center bg-white rounded-xl shadow-lg dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
-              <p className="text-left dark:text-gray-100">Nov. 2015 - Dec. 2015</p>
-              <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
-                Internship
-              </h3>
-              <p className="py-2 dark:text-gray-300">
-                Metz City Hall  : Citizenship service and participatory democracy
-              </p>
-              <div id="accordion-flush" data-accordion="collapse" data-active-classNamees="bg-white dark:bg-gray-800 text-gray-900 dark:text-white" data-inactive-classNamees="text-gray-500 dark:text-gray-400">
-                <h2 id="accordion-flush-heading-2">
-                  <button type="button" className="flex items-center justify-between w-full py-5 font-medium text-left text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400" data-accordion-target="#accordion-flush-body-2" aria-expanded="false" aria-controls="accordion-flush-body-2">
+              </div>
+            }
+
+            {!ac0 && <div className="block sm:hidden px-8 py-12 text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
+                
+                <p className="text-left dark:text-gray-100">2015</p>
+
+                  <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
+                    Basketball playground project
+                  </h3>
+
+                <p className="py-2 dark:text-gray-300">
+                  Metz City Hall
+                </p>
+
+                <button onClick={() => setAc0(!ac0)} type="button" className="bg-white dark:bg-inherit flex items-center justify-between w-full py-5 font-medium text-left border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
+                  <span className="text-orange-600">What I did</span>
+                  <svg data-accordion-icon className="w-6 h-6 shrink-0 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                </button>
+
+              </div>
+            }
+
+            {ac1 && <div className="sm:block hidden px-8 py-12 text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
+                
+                <p className="text-left dark:text-gray-100">2015</p>
+
+                <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
+                  Basketball playground project
+                </h3>
+
+                <p className="py-2 dark:text-gray-300">
+                  Metz City Hall
+                </p>
+
+                <button onClick={() => setAc1(!ac1)} type="button" className="bg-white dark:bg-inherit flex items-center justify-between w-full py-5 font-medium text-left border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
+                  <span className="text-orange-600">What I did</span>
+                  <svg data-accordion-icon className="w-6 h-6 shrink-0 rotate-180 dark:text-gray-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                </button>
+
+                <div className="block">
+                  <div className="py-5 font-light border-b border-gray-200 dark:border-gray-700">
+                    <p className="mb-2 text-gray-500 dark:text-gray-400">
+                      Main character in the project of building a basketball court in my neighborhood, at only <span className="text-orange-600">14 years old</span>.
+                      My friends and I had presented our dream court to the elected representatives of our city.
+                    </p>
+                    <p className="text-gray-500 dark:text-gray-400">
+                      We proposed a PowerPoint presentation and our 3D model with the estimate cost that companies gave us.
+                      The total cost of the project was around <span className=" text-orange-600">€100,000</span> which was partially covered (35%) thanks to a partnership with GRDF.
+                    </p>
+                  </div>
+                </div>
+
+              </div>
+            }
+
+            {!ac1 && <div className="sm:block hidden px-8 py-12 text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
+                
+                <p className="text-left dark:text-gray-100">2015</p>
+
+                  <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-300">
+                    Basketball playground project
+                  </h3>
+
+                <p className="py-2 dark:text-gray-300">
+                  Metz City Hall
+                </p>
+
+                <button onClick={() => setAc1(!ac1)} type="button" className="bg-white dark:bg-inherit flex items-center justify-between w-full py-5 font-medium text-left border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
+                  <span className="text-orange-600">What I did</span>
+                  <svg data-accordion-icon className="w-6 h-6 shrink-0 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                </button>
+
+              </div>
+            }
+
+            {ac2 && <div className="block px-8 py-12 text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
+                
+                <p className="text-left dark:text-gray-100">Nov. 2015 - Dec. 2015</p>
+                <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
+                  Internship
+                </h3>
+                <p className="py-2 dark:text-gray-300">
+                  Metz City Hall : Citizenship service and participatory democracy
+                </p>
+
+                  <button onClick={() => setAc2(!ac2)} type="button" className="bg-white dark:bg-inherit flex items-center justify-between w-full py-5 font-medium text-left border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
                     <span className="text-orange-600">What I did</span>
-                    <svg data-accordion-icon className="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
+                    <svg data-accordion-icon className="w-6 h-6 shrink-0 rotate-180 dark:text-gray-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
                   </button>
-                </h2>
-                <div id="accordion-flush-body-2" className="hidden" aria-labelledby="accordion-flush-heading-2">
+
                   <div className="py-5 font-light border-b border-gray-200 dark:border-gray-700">
                     <p className="mb-2 text-gray-500 dark:text-gray-400">
                       Our basketball project directly led me to an inspiring internship with the team that turned our dream court into reality.
                     </p>
-                    <p className="mb-2 text-gray-500 dark:text-gray-400">
+                    <p className="text-gray-500 dark:text-gray-400">
                       There, I participated in important meetings such as <span className=" text-orange-600">"participatory budget plan"</span> which implied setting up budgets for citizens' projects up to <span className=" text-orange-600">€1,000,000</span>.
                       Moreover, I even organized meetings with citizens that had potential projects for our city.
                     </p>
                   </div>
-                </div>
-              </div>
-            </div>
 
-            <div className="block px-8 py-12 text-center bg-white rounded-xl shadow-lg dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
-              <p className="text-left dark:text-gray-100">May 2017 - Oct. 2021</p>
-              <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
-                Sport Junior Association President
-              </h3>
-              <p className="py-2 dark:text-gray-300">
-                Junior Association 2PB
-              </p>
-              <div id="accordion-flush" data-accordion="collapse" data-active-classNamees="bg-white dark:bg-gray-800 text-gray-900 dark:text-white" data-inactive-classNamees="text-gray-500 dark:text-gray-400">
-                <h2 id="accordion-flush-heading-3">
-                  <button type="button" className="flex items-center justify-between w-full py-5 font-medium text-left text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400" data-accordion-target="#accordion-flush-body-3" aria-expanded="false" aria-controls="accordion-flush-body-3">
-                    <span className="text-orange-600">What I did</span>
-                    <svg data-accordion-icon className="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
-                  </button>
-                </h2>
-                <div id="accordion-flush-body-3" className="hidden" aria-labelledby="accordion-flush-heading-3">
-                  <div className="py-5 font-light border-b border-gray-200 dark:border-gray-700">
-                    <p className="mb-2 text-gray-500 dark:text-gray-400">
-                      After the building of our basketball court, we wanted to <span className=" text-orange-600">organize some major basketball events</span> such as tournaments or holiday courses.
-                      Our main goal was to gather the most people and generations no matter their basketball level.
-                    </p>
-                    <p className="mb-2 text-gray-500 dark:text-gray-400">
-                      We inspired many players and saw lots of them improve.
-                      Unfortunately, we encountered Covid-19 and at the same time we all went to differents colleges so we decided not to turn our Junior Association into an Association.
-                    </p>
-                  </div>
                 </div>
-              </div>
-            </div>
+              }
 
-            <div className="block px-8 py-12 text-center bg-white rounded-xl shadow-lg dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
-              <p className="text-left dark:text-gray-100">Jun. 2019 – Jun. 2021 </p>
-              <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
-                Neighborhood representative on the M.Y.C.
-              </h3>
-              <p className="py-2 dark:text-gray-300">
-                Metz City Hall: Metz Youth Council (M.Y.C.)
-              </p>
-              <div id="accordion-flush" data-accordion="collapse" data-active-classNamees="bg-white dark:bg-gray-800 text-gray-900 dark:text-white" data-inactive-classNamees="text-gray-500 dark:text-gray-400">
-                <h2 id="accordion-flush-heading-4">
-                  <button type="button" className="flex items-center justify-between w-full py-5 font-medium text-left text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400" data-accordion-target="#accordion-flush-body-4" aria-expanded="false" aria-controls="accordion-flush-body-4">
-                    <span className="text-orange-600">What I did</span>
-                    <svg data-accordion-icon className="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
-                  </button>
-                </h2>
-                <div id="accordion-flush-body-4" className="hidden" aria-labelledby="accordion-flush-heading-4">
-                  <div className="py-5 font-light border-b border-gray-200 dark:border-gray-700">
-                    <p className="mb-2 text-gray-500 dark:text-gray-400">
-                      My last civic mission was to bring out, collect and take into account the words of young people in Metz's politics.
-                      The M.Y.C. served for young people to express their <span className=" text-orange-600">ideas</span>, <span className=" text-orange-600">needs</span>, <span className=" text-orange-600">hopes</span> and <span className=" text-orange-600">proposals</span> to elected officials.
-                    </p>
-                    <p className="mb-2 text-gray-500 dark:text-gray-400">
-                      We promoted Messins' emancipation, encouraged their commitment, animated their critical and initiative spirit, to train them in citizenship and knowledge of the institutions.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
+              {!ac2 && <div className="block px-8 py-12 text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
+                
+                  <p className="text-left dark:text-gray-100">Nov. 2015 - Dec. 2015</p>
+                  <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
+                    Internship
+                  </h3>
+                  <p className="py-2 dark:text-gray-300">
+                    Metz City Hall : Citizenship service and participatory democracy
+                  </p>
 
-            <div className="block px-8 py-12 text-center bg-white rounded-xl shadow-lg dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
-              <p className="text-left dark:text-gray-100">Jun. 2020 – Mar. 2022</p>
-              <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
-                Food delivery by car
-              </h3>
-              <p className="py-2 dark:text-gray-300">
-                UberEats & Deliveroo | Metz, France
-              </p>
-              <div id="accordion-flush" data-accordion="collapse" data-active-classNamees="bg-white dark:bg-gray-800 text-gray-900 dark:text-white" data-inactive-classNamees="text-gray-500 dark:text-gray-400">
-                <h2 id="accordion-flush-heading-5">
-                  <button type="button" className="flex items-center justify-between w-full py-5 font-medium text-left text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400" data-accordion-target="#accordion-flush-body-5" aria-expanded="false" aria-controls="accordion-flush-body-5">
+                  <button onClick={() => setAc2(!ac2)} type="button" className="bg-white dark:bg-inherit flex items-center justify-between w-full py-5 font-medium text-left border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
                     <span className="text-orange-600">What I did</span>
-                    <svg data-accordion-icon className="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
+                    <svg data-accordion-icon className="w-6 h-6 shrink-0 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
                   </button>
-                </h2>
-                <div id="accordion-flush-body-5" className="hidden" aria-labelledby="accordion-flush-heading-3">
-                  <div className="py-5 font-light border-b border-gray-200 dark:border-gray-700">
-                    <p className="mb-2 text-gray-500 dark:text-gray-400">
-                      I delivered more than <span className=" text-orange-600">5,000</span> food packages during the Covid-19 period, especially during lockdowns.
-                    </p>
-                    <p className="mb-2 text-gray-500 dark:text-gray-400">
-                      By the way, I had a high satisfaction rate of <span className=" text-orange-600">98%</span>.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
 
-            <div className="block px-8 py-12 text-center bg-white rounded-xl shadow-lg dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
-              <p className="text-left dark:text-gray-100">Jan. 2022 – Feb. 2022</p>
-              <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
-                2 websites
-              </h3>
-              <p className="py-2 dark:text-gray-300">
-                E-commerce
-              </p>
-              <div id="accordion-flush" data-accordion="collapse" data-active-classNamees="bg-white dark:bg-gray-800 text-gray-900 dark:text-white" data-inactive-classNamees="text-gray-500 dark:text-gray-400">
-                <h2 id="accordion-flush-heading-6">
-                  <button type="button" className="flex items-center justify-between w-full py-5 font-medium text-left text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400" data-accordion-target="#accordion-flush-body-6" aria-expanded="false" aria-controls="accordion-flush-body-6">
-                    <span className="text-orange-600">What I did</span>
-                    <svg data-accordion-icon className="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
-                  </button>
-                </h2>
-                <div id="accordion-flush-body-6" className="hidden" aria-labelledby="accordion-flush-heading-3">
-                  <div className="py-5 font-light border-b border-gray-200 dark:border-gray-700">
-                    <p className="mb-2 text-gray-500 dark:text-gray-400">
-                      I have created 2 e-commerce websites where I dropshipped some AliExpress products.
-                      Indeed, I used Shopify to <span className=" text-orange-600">automate</span> my websites but I deeply modified the source codes to get different web designs instead of simply using free templates.
-                    </p>
-                    <p className="mb-2 text-gray-500 dark:text-gray-400">
-                      Even though I started generated little revenue I stopped my businesses because I found them <span className=" text-orange-600">non-ethical</span>.
-                      Today, I cannot stand those dropshipping websites as I can instantly recognize them.
-                    </p>
-                  </div>
                 </div>
-              </div>
-            </div>
+              }
 
-            <div className="block px-8 py-12 text-center bg-white rounded-xl shadow-lg dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
-              <p className="text-left dark:text-gray-100">Apr. 2022 – Jun. 2022</p>
-              <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
-                Metrology technician
-              </h3>
-              <p className="py-2 dark:text-gray-300">
-                Trescal | Florange, France
-              </p>
-              <div id="accordion-flush" data-accordion="collapse" data-active-classNamees="bg-white dark:bg-gray-800 text-gray-900 dark:text-white" data-inactive-classNamees="text-gray-500 dark:text-gray-400">
-                <h2 id="accordion-flush-heading-7">
-                  <button type="button" className="flex items-center justify-between w-full py-5 font-medium text-left text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400" data-accordion-target="#accordion-flush-body-7" aria-expanded="false" aria-controls="accordion-flush-body-3">
+              {ac3 && <div className="block px-8 py-12 text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
+                
+                  <p className="text-left dark:text-gray-100">May 2017 - Oct. 2021</p>
+                  <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
+                    Sport Junior Association President
+                  </h3>
+                  <p className="py-2 dark:text-gray-300">
+                    Junior Association 2PB
+                  </p>
+                  <button onClick={() => setAc3(!ac3)} type="button" className="bg-white dark:bg-inherit flex items-center justify-between w-full py-5 font-medium text-left border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
                     <span className="text-orange-600">What I did</span>
-                    <svg data-accordion-icon className="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
+                    <svg data-accordion-icon className="w-6 h-6 shrink-0 rotate-180 dark:text-gray-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
                   </button>
-                </h2>
-                <div id="accordion-flush-body-7" className="hidden" aria-labelledby="accordion-flush-heading-7">
-                  <div className="py-5 font-light border-b border-gray-200 dark:border-gray-700">
-                    <p className="mb-2 text-gray-500 dark:text-gray-400">
-                      I worked for the <span className=" text-orange-600">global leader</span> in calibration.
-                      My job consisted to verify and calibrate measurement instruments.
-                    </p>
-                    <p className="mb-2 text-gray-500 dark:text-gray-400">
-                      It was truly a <span className=" text-orange-600">versatile experience</span> as I learned to work in many fields such as "Force", "Torque", "Temperature", "Pressure" and "Dimensional".
-                    </p>
+                  <div className="block">
+                    <div className="py-5 font-light border-b border-gray-200 dark:border-gray-700">
+                      <p className="mb-2 text-gray-500 dark:text-gray-400">
+                        After the building of our basketball court, we wanted to <span className=" text-orange-600">organize some major basketball events</span> such as tournaments or holiday courses.
+                        Our main goal was to gather the most people and generations no matter their basketball level.
+                      </p>
+                      <p className="text-gray-500 dark:text-gray-400">
+                        We inspired many players and saw lots of them improve.
+                        Unfortunately, we encountered Covid-19 and at the same time we all went to differents colleges so we decided not to turn our Junior Association into an Association.
+                      </p>
+                    </div>
                   </div>
+                  
                 </div>
-              </div>
-            </div>
+              }
 
-            <div className="block px-8 py-12 text-center bg-white rounded-xl shadow-lg dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
-              <p className="text-left dark:text-gray-100">Jun. 2022 – Jul. 2022</p>
-              <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
-                Bottle labeling
-              </h3>
-              <p className="py-2 dark:text-gray-300">
-                Schumacher-Knepper | Schengen, Luxembourg
-              </p>
-              <div id="accordion-flush" data-accordion="collapse" data-active-classNamees="bg-white dark:bg-gray-800 text-gray-900 dark:text-white" data-inactive-classNamees="text-gray-500 dark:text-gray-400">
-                <h2 id="accordion-flush-heading-8">
-                  <button type="button" className="flex items-center justify-between w-full py-5 font-medium text-left text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400" data-accordion-target="#accordion-flush-body-8" aria-expanded="false" aria-controls="accordion-flush-body-8">
+              {!ac3 && <div className="block px-8 py-12 text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
+                
+                  <p className="text-left dark:text-gray-100">May 2017 - Oct. 2021</p>
+                  <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
+                    Sport Junior Association President
+                  </h3>
+                  <p className="py-2 dark:text-gray-300">
+                    Junior Association 2PB
+                  </p>
+                  <button onClick={() => setAc3(!ac3)} type="button" className="bg-white dark:bg-inherit flex items-center justify-between w-full py-5 font-medium text-left border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
                     <span className="text-orange-600">What I did</span>
-                    <svg data-accordion-icon className="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
+                    <svg data-accordion-icon className="w-6 h-6 shrink-0 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
                   </button>
-                </h2>
-                <div id="accordion-flush-body-8" className="hidden" aria-labelledby="accordion-flush-heading-8">
-                  <div className="py-5 font-light border-b border-gray-200 dark:border-gray-700">
-                    <p className="mb-2 text-gray-500 dark:text-gray-400">
-                      This was not the funniest job but I learned to work <span className=" text-orange-600">fast</span> and <span className=" text-orange-600">efficiently</span>.
-                    </p>
-                    <p className="mb-2 text-gray-500 dark:text-gray-400">
-                      I can be proud as I did not break any bottle during this period.
-                    </p>
-                  </div>
+                  
                 </div>
-              </div>
-            </div>
+              }
 
-            <div className="block px-8 py-12 text-center bg-white rounded-xl shadow-lg dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
-              <p className="text-left dark:text-gray-100">Jul. 2022 – Aug. 2022</p>
-              <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
-                Drywaller
-              </h3>
-              <p className="py-2 dark:text-gray-300">
-                Plaqui'Lux | Luxembourg
-              </p>
-              <div id="accordion-flush" data-accordion="collapse" data-active-classNamees="bg-white dark:bg-gray-800 text-gray-900 dark:text-white" data-inactive-classNamees="text-gray-500 dark:text-gray-400">
-                <h2 id="accordion-flush-heading-9">
-                  <button type="button" className="flex items-center justify-between w-full py-5 font-medium text-left text-gray-500 border-b border-gray-200 dark:border-gray-700 dark:text-gray-400" data-accordion-target="#accordion-flush-body-9" aria-expanded="false" aria-controls="accordion-flush-body-9">
+              {ac4 && <div className="block px-8 py-12 text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
+                
+                  <p className="text-left dark:text-gray-100">Jun. 2019 – Jun. 2021</p>
+                  <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
+                    Neighborhood representative on the M.Y.C.
+                  </h3>
+                  <p className="py-2 dark:text-gray-300">
+                    Metz City Hall: Metz Youth Council (M.Y.C.)
+                  </p>
+                  <button onClick={() => setAc4(!ac4)} type="button" className="bg-white dark:bg-inherit flex items-center justify-between w-full py-5 font-medium text-left border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
                     <span className="text-orange-600">What I did</span>
-                    <svg data-accordion-icon className="w-6 h-6 shrink-0" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd"></path></svg>
+                    <svg data-accordion-icon className="w-6 h-6 shrink-0 rotate-180 dark:text-gray-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
                   </button>
-                </h2>
-                <div id="accordion-flush-body-9" className="hidden" aria-labelledby="accordion-flush-heading-9">
-                  <div className="py-5 font-light border-b border-gray-200 dark:border-gray-700">
-                    <p className="mb-2 text-gray-500 dark:text-gray-400">
-                      This was by far the <span className=" text-orange-600">hardest</span> job I have done.
-                      Indeed, it was quite physical as I cut and hang panels of wallboard.
-                    </p>
-                    <p className="mb-2 text-gray-500 dark:text-gray-400">
-                      By the way, I am glad I worked with the most precise person I have seen (besides my dad).
-                    </p>
+                  <div className="block">
+                    <div className="py-5 font-light border-b border-gray-200 dark:border-gray-700">
+                      <p className="mb-2 text-gray-500 dark:text-gray-400">
+                        My last civic mission was to bring out, collect and take into account the words of young people in Metz's politics.
+                        The M.Y.C. served for young people to express their <span className=" text-orange-600">ideas</span>, <span className=" text-orange-600">needs</span>, <span className=" text-orange-600">hopes</span> and <span className=" text-orange-600">proposals</span> to elected officials.
+                      </p>
+                      <p className="text-gray-500 dark:text-gray-400">
+                        We promoted Messins' emancipation, encouraged their commitment, animated their critical and initiative spirit, to train them in citizenship and knowledge of the institutions.
+                      </p>
+                    </div>
                   </div>
+                  
                 </div>
-              </div>
-            </div>
+              }
+
+              {!ac4 && <div className="block px-8 py-12 text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
+                
+                  <p className="text-left dark:text-gray-100">Jun. 2019 – Jun. 2021</p>
+                  <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
+                    Neighborhood representative on the M.Y.C.
+                  </h3>
+                  <p className="py-2 dark:text-gray-300">
+                    Metz City Hall: Metz Youth Council (M.Y.C.)
+                  </p>
+                  <button onClick={() => setAc4(!ac4)} type="button" className="bg-white dark:bg-inherit flex items-center justify-between w-full py-5 font-medium text-left border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
+                    <span className="text-orange-600">What I did</span>
+                    <svg data-accordion-icon className="w-6 h-6 shrink-0 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                  </button>
+                  
+                </div>
+              }
+
+              {ac5 && <div className="block px-8 py-12 text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
+                
+                  <p className="text-left dark:text-gray-100">Jun. 2020 – Mar. 2022</p>
+                  <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
+                    Food delivery by car
+                  </h3>
+                  <p className="py-2 dark:text-gray-300">
+                    UberEats & Deliveroo | Metz, France
+                  </p>
+                  <button onClick={() => setAc5(!ac5)} type="button" className="bg-white dark:bg-inherit flex items-center justify-between w-full py-5 font-medium text-left border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
+                    <span className="text-orange-600">What I did</span>
+                    <svg data-accordion-icon className="w-6 h-6 shrink-0 rotate-180 dark:text-gray-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                  </button>
+                  <div className="block">
+                    <div className="py-5 font-light border-b border-gray-200 dark:border-gray-700">
+                      <p className="mb-2 text-gray-500 dark:text-gray-400">
+                          I delivered more than <span className=" text-orange-600">5,000</span> food packages during the Covid-19 period, especially during lockdowns.
+                      </p>
+                      <p className="text-gray-500 dark:text-gray-400">
+                          By the way, I had a high satisfaction rate of <span className=" text-orange-600">98%</span>.
+                      </p>
+                    </div>
+                  </div>
+                  
+                </div>
+              }
+
+              {!ac5 && <div className="block px-8 py-12 text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
+                
+                  <p className="text-left dark:text-gray-100">Jun. 2020 – Mar. 2022</p>
+                  <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
+                    Food delivery by car
+                  </h3>
+                  <p className="py-2 dark:text-gray-300">
+                    UberEats & Deliveroo | Metz, France
+                  </p>
+                  <button onClick={() => setAc5(!ac5)} type="button" className="bg-white dark:bg-inherit flex items-center justify-between w-full py-5 font-medium text-left border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
+                    <span className="text-orange-600">What I did</span>
+                    <svg data-accordion-icon className="w-6 h-6 shrink-0 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                  </button>
+                  
+                </div>
+              }
+
+              {ac6 && <div className="block px-8 py-12 text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
+                
+                  <p className="text-left dark:text-gray-100">Jan. 2022 – Feb. 2022</p>
+                  <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
+                    2 websites
+                  </h3>
+                  <p className="py-2 dark:text-gray-300">
+                    E-commerce
+                  </p>
+                  <button onClick={() => setAc6(!ac6)} type="button" className="bg-white dark:bg-inherit flex items-center justify-between w-full py-5 font-medium text-left border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
+                    <span className="text-orange-600">What I did</span>
+                    <svg data-accordion-icon className="w-6 h-6 shrink-0 rotate-180 dark:text-gray-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                  </button>
+                  <div className="block">
+                    <div className="py-5 font-light border-b border-gray-200 dark:border-gray-700">
+                      <p className="mb-2 text-gray-500 dark:text-gray-400">
+                        I have created 2 e-commerce websites where I dropshipped some AliExpress products.
+                        Indeed, I used Shopify to <span className=" text-orange-600">automate</span> my websites but I deeply modified the source codes to get different web designs instead of simply using free templates.
+                      </p>
+                      <p className="text-gray-500 dark:text-gray-400">
+                        Even though I started generated little revenue I stopped my businesses because I found them <span className=" text-orange-600">non-ethical</span>.
+                        Today, I cannot stand those dropshipping websites as I can instantly recognize them.
+                      </p>
+                    </div>
+                  </div>
+                  
+                </div>
+              }
+
+              {!ac6 && <div className="block px-8 py-12 text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
+                
+                  <p className="text-left dark:text-gray-100">Jan. 2022 – Feb. 2022</p>
+                  <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
+                    2 websites
+                  </h3>
+                  <p className="py-2 dark:text-gray-300">
+                    E-commerce
+                  </p>
+                  <button onClick={() => setAc6(!ac6)} type="button" className="bg-white dark:bg-inherit flex items-center justify-between w-full py-5 font-medium text-left border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
+                    <span className="text-orange-600">What I did</span>
+                    <svg data-accordion-icon className="w-6 h-6 shrink-0 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                  </button>
+                  
+                </div>
+              }
+
+              {ac7 && <div className="block px-8 py-12 text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
+                
+                  <p className="text-left dark:text-gray-100">Apr. 2022 – Jun. 2022</p>
+                  <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
+                    Metrology technician
+                  </h3>
+                  <p className="py-2 dark:text-gray-300">
+                    Trescal | Florange, France
+                  </p>
+                  <button onClick={() => setAc7(!ac7)} type="button" className="bg-white dark:bg-inherit flex items-center justify-between w-full py-5 font-medium text-left border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
+                    <span className="text-orange-600">What I did</span>
+                    <svg data-accordion-icon className="w-6 h-6 shrink-0 rotate-180 dark:text-gray-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                  </button>
+                  <div className="block">
+                    <div className="py-5 font-light border-b border-gray-200 dark:border-gray-700">
+                      <p className="mb-2 text-gray-500 dark:text-gray-400">
+                        I worked for the <span className=" text-orange-600">global leader</span> in calibration.
+                        My job consisted to verify and calibrate measurement instruments.
+                      </p>
+                      <p className="text-gray-500 dark:text-gray-400">
+                        It was truly a <span className=" text-orange-600">versatile experience</span> as I learned to work in many fields such as "Force", "Torque", "Temperature", "Pressure" and "Dimensional".
+                      </p>
+                    </div>
+                  </div>
+                  
+                </div>
+              }
+
+              {!ac7 && <div className="block px-8 py-12 text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
+                
+                  <p className="text-left dark:text-gray-100">Apr. 2022 – Jun. 2022</p>
+                  <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
+                    Metrology technician
+                  </h3>
+                  <p className="py-2 dark:text-gray-300">
+                    Trescal | Florange, France
+                  </p>
+                  <button onClick={() => setAc7(!ac7)} type="button" className="bg-white dark:bg-inherit flex items-center justify-between w-full py-5 font-medium text-left border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
+                    <span className="text-orange-600">What I did</span>
+                    <svg data-accordion-icon className="w-6 h-6 shrink-0 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                  </button>
+                  
+                </div>
+              }
+
+              {ac8 && <div className="block px-8 py-12 text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
+                
+                  <p className="text-left dark:text-gray-100">Jun. 2022 – Jul. 2022</p>
+                  <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
+                    Bottle labeling
+                  </h3>
+                  <p className="py-2 dark:text-gray-300">
+                    Schumacher-Knepper | Schengen, Luxembourg
+                  </p>
+                  <button onClick={() => setAc8(!ac8)} type="button" className="bg-white dark:bg-inherit flex items-center justify-between w-full py-5 font-medium text-left border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
+                    <span className="text-orange-600">What I did</span>
+                    <svg data-accordion-icon className="w-6 h-6 shrink-0 rotate-180 dark:text-gray-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                  </button>
+                  <div className="block">
+                    <div className="py-5 font-light border-b border-gray-200 dark:border-gray-700">
+                      <p className="mb-2 text-gray-500 dark:text-gray-400">
+                        This was not the funniest job but I learned to work <span className=" text-orange-600">fast</span> and <span className=" text-orange-600">efficiently</span>.
+                      </p>
+                      <p className="text-gray-500 dark:text-gray-400">
+                        I can be proud as I did not break any bottle during this period.
+                      </p>
+                    </div>
+                  </div>
+                  
+                </div>
+              }
+
+              {!ac8 && <div className="block px-8 py-12 text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
+                
+                  <p className="text-left dark:text-gray-100">Jun. 2022 – Jul. 2022</p>
+                  <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
+                    Bottle labeling
+                  </h3>
+                  <p className="py-2 dark:text-gray-300">
+                    Schumacher-Knepper | Schengen, Luxembourg
+                  </p>
+                  <button onClick={() => setAc8(!ac8)} type="button" className="bg-white dark:bg-inherit flex items-center justify-between w-full py-5 font-medium text-left border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
+                    <span className="text-orange-600">What I did</span>
+                    <svg data-accordion-icon className="w-6 h-6 shrink-0 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                  </button>
+                  
+                </div>
+              }
+
+              {ac9 && <div className="block px-8 py-12 text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
+                
+                  <p className="text-left dark:text-gray-100">Jul. 2022 – Aug. 2022</p>
+                  <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
+                    Drywaller
+                  </h3>
+                  <p className="py-2 dark:text-gray-300">
+                    Plaqui'Lux | Luxembourg
+                  </p>
+                  <button onClick={() => setAc9(!ac9)} type="button" className="bg-white dark:bg-inherit flex items-center justify-between w-full py-5 font-medium text-left border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
+                    <span className="text-orange-600">What I did</span>
+                    <svg data-accordion-icon className="w-6 h-6 shrink-0 rotate-180 dark:text-gray-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                  </button>
+                  <div className="block">
+                    <div className="py-5 font-light border-b border-gray-200 dark:border-gray-700">
+                      <p className="mb-2 text-gray-500 dark:text-gray-400">
+                        This was by far the <span className=" text-orange-600">hardest</span> job I have done.
+                        Indeed, it was quite physical as I cut and hang panels of wallboard.
+                      </p>
+                      <p className="text-gray-500 dark:text-gray-400">
+                        By the way, I am glad I worked with the most precise person I have seen (besides my dad).
+                      </p>
+                    </div>
+                  </div>
+                              
+                </div>
+              }
+
+              {!ac9 && <div className="block px-8 py-12 text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
+                
+                  <p className="text-left dark:text-gray-100">Jul. 2022 – Aug. 2022</p>
+                  <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
+                    Drywaller
+                  </h3>
+                  <p className="py-2 dark:text-gray-300">
+                    Plaqui'Lux | Luxembourg
+                  </p>
+                  <button onClick={() => setAc9(!ac9)} type="button" className="bg-white dark:bg-inherit flex items-center justify-between w-full py-5 font-medium text-left border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
+                    <span className="text-orange-600">What I did</span>
+                    <svg data-accordion-icon className="w-6 h-6 shrink-0 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                  </button>
+                              
+                </div>
+              }
 
           </div>
 
@@ -626,72 +846,72 @@ export default function Home() {
           <h3 className="text-3xl max-w-4xl mx-auto py-1 mb-10 dark:text-gray-100">Skills</h3>
             <div className="max-w-6xl mx-auto space-y-4 grid sm:grid-cols-2 sl:grid-cols-3 lg:grid-cols-4 sm:gap-4 sm:space-y-0 md:mt-12">
 
-              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600 hover:shadow-lg dark:hover:shadow-lg-light">
+              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
                 <Image src={HTML} className="center" height={48}/>
                 <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">HTML5</h4>
               </a>
 
-              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600 hover:shadow-lg dark:hover:shadow-lg-light">
+              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
                 <Image src={CSS} className="center" height={48}/>
                 <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">CSS3</h4>
               </a>
 
-              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600 hover:shadow-lg dark:hover:shadow-lg-light">
+              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
                 <Image src={PHP} className="center" height={48}/>
                 <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">PHP</h4>
               </a>
 
-              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600 hover:shadow-lg dark:hover:shadow-lg-light">
+              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
                 <Image src={Python} className="center" height={48}/>
                 <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">Python 3</h4>
               </a>
 
-              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600 hover:shadow-lg dark:hover:shadow-lg-light">
+              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
                 <Image src={JS} className="center" height={48}/>
                 <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">JavaScript</h4>
               </a>
 
-              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600 hover:shadow-lg dark:hover:shadow-lg-light">
+              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
                 <Image src={ReactJS} className="center" height={48}/>
                 <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">React JS</h4>
               </a>
 
-              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600 hover:shadow-lg dark:hover:shadow-lg-light">
+              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
                 <Image src={Catia} className="center" height={48}/>
                 <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">Catia</h4>
               </a>
 
-              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600 hover:shadow-lg dark:hover:shadow-lg-light">
+              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
                 <Image src={ThreeD} className="center" height={48}/>
                 <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">3DEXPERIENCE</h4>
               </a>
 
-              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600 hover:shadow-lg dark:hover:shadow-lg-light">
+              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
                 <Image src={SW} className="center" height={48}/>
                 <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">SolidWorks</h4>
               </a>
 
-              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600 hover:shadow-lg dark:hover:shadow-lg-light">
+              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
                 <Image src={ZS} className="center" height={48}/>
                 <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">Z-SUITE</h4>
               </a>
 
-              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600 hover:shadow-lg dark:hover:shadow-lg-light">
+              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
                 <Image src={Inventor} className="center" height={48}/>
                 <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">Autodesk Inventor</h4>
               </a>
 
-              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600 hover:shadow-lg dark:hover:shadow-lg-light">
+              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
                 <Image src={Office} className="center" height={48}/>
                 <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">Microsoft Office Pack</h4>
               </a>
 
-              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600 hover:shadow-lg dark:hover:shadow-lg-light">
+              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
                 <Image src={PS} className="center" height={48}/>
                 <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">Photoshop</h4>
               </a>
 
-              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600 hover:shadow-lg dark:hover:shadow-lg-light">
+              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
                 <Image src={AI} className="center" height={48}/>
                 <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">Illustrator</h4>
               </a>
@@ -748,7 +968,7 @@ export default function Home() {
             <textarea name="message" rows="4" className="block p-2.5 mb-6 w-full max-w-3xl mx-auto text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-orange-500 focus:border-orange-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-orange-500 dark:focus:border-orange-500" placeholder="Write your message here..." required />
 
             <div className="center">          
-              <button className="text-white bg-orange-600 hover:bg-orange-700 focus:ring-4 focus:outline-none focus:ring-orange-400 font-medium rounded-lg text-base px-6 py-3.5 text-center dark:focus:ring-orange-800">Submit your message</button>
+              <button className="text-white bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-700 hover:to-orange-600 focus:ring-4 focus:outline-none focus:ring-orange-400 font-medium rounded-lg text-base px-6 py-3.5 text-center dark:focus:ring-orange-800">Submit your message</button>
             </div>
             
           </form>
@@ -798,8 +1018,8 @@ export default function Home() {
                 </div>
             </div>
             <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
-            <div className="sm:flex sm:items-center sm:justify-between lg:container lg:px-0 xl:px-40 max-w-8xl mx-auto pl-6 px-2 sm:px-6">
-                <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2023 <a href="/" onClick={() => setHomeOpen(true) & setEdOpen(false) & setExpOpen(false) & setContOpen(false)} className="hover:underline">HY13dev™</a>. All Rights Reserved.
+            <div className="sm:flex sm:items-center sm:justify-between lg:container xl:px-40 max-w-8xl mx-auto pl-6 px-2 sm:px-6">
+                <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">© {new Date().getFullYear()} <a href="/" onClick={() => setHomeOpen(true) & setEdOpen(false) & setExpOpen(false) & setContOpen(false)} className="hover:underline">HY13dev™</a>. All Rights Reserved.
                 </span>
                 <div className="flex mt-4 space-x-6 sm:justify-center sm:mt-0">
                     <a href="mailto:ylyamartchenko@gmail.com" target="_blank" rel="noreferrer" className="text-gray-500 hover:text-gray-900 dark:hover:text-white">
