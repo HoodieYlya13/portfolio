@@ -23,6 +23,8 @@ import PS from "../../public/ps.png";
 import AI from "../../public/ai.png";
 import Image from "next/image";
 import deved from '../../public/me.png';
+import Corvette from '../../public/Corvette.png';
+import Island from '../../public/Island.png';
 import React, { useEffect, useState, useRef } from "react";
 import 'flowbite';
 
@@ -43,6 +45,8 @@ export default function Home() {
   const [ac7, setAc7] = useState(false);
   const [ac8, setAc8] = useState(false);
   const [ac9, setAc9] = useState(false);
+  const [ac10, setAc10] = useState(false);
+
 
   let menuRef = useRef();
 
@@ -103,7 +107,7 @@ export default function Home() {
                 </div>
                 <div className="flex md:order-2">
                   <a href="mailto:ylyamartchenko@gmail.com" target="_blank" rel="noreferrer" data-tooltip-target="tooltip-mail" className="hidden sm:inline-block text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 mr-1" >
-                    <AiFillMail className="w-6 h-6" aria-hidden="true"/>
+                    <AiFillMail alt="mail" className="w-6 h-6" aria-hidden="true"/>
                     <span className="sr-only">Send an E-mail</span>
                   </a>
                   <div id="tooltip-mail" role="tooltip" className="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
@@ -111,7 +115,7 @@ export default function Home() {
                       <div className="tooltip-arrow" data-popper-arrow></div>
                   </div>
                   <a href="https://www.linkedin.com/in/ylya-martchenko-214a64184" target="_blank" rel="noreferrer" data-tooltip-target="tooltip-linkedin" className="hidden sm:inline-block text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 mr-1" >
-                    <AiFillLinkedin className="w-6 h-6" aria-hidden="true"/>
+                    <AiFillLinkedin alt="linkedin" className="w-6 h-6" aria-hidden="true"/>
                     <span className="sr-only">View on LinkedIn</span>
                   </a>
                   <div id="tooltip-linkedin" role="tooltip" className="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip">
@@ -127,7 +131,7 @@ export default function Home() {
                       <div className="tooltip-arrow" data-popper-arrow></div>
                   </div>
                   <button onClick={() => setDarkMode(!darkMode)} id="theme-toggle" data-tooltip-target="tooltip-toggle" type="button" className="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
-                    <BsFillMoonStarsFill className="cursor-pointer text-2xl dark:text-gray-400"/>
+                    <BsFillMoonStarsFill alt="darkMode" className="cursor-pointer text-2xl dark:text-gray-400"/>
                     <svg aria-hidden="true" id="theme-toggle-dark-icon" className="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
                     <svg aria-hidden="true" id="theme-toggle-light-icon" className="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fillRule="evenodd" clipRule="evenodd"></path></svg>
                     <span className="sr-only">Toggle dark mode</span>
@@ -286,14 +290,14 @@ export default function Home() {
             </h2>
             <h3 className="px-10 text-2xl py-2 md:text-3xl dark:text-gray-100">Full stack developer</h3>
             <p className="px-10 text-md py-5 leading-8 text-gray-800 md:text-xl max-w-lg mx-auto dark:text-gray-300">
-              I am a 21-year-old student looking for a work-linked training in computer science cooperating with an engineering school. <br/>
+              I am a {(new Date().getDate() < 28 && new Date().getMonth() === 3) || new Date().getMonth() < 3 ? new Date().getFullYear()-2002 : new Date().getFullYear()-2001}-year-old student at Polytech Nancy working for Equasens as a developer. <br/>
               Join me down below and let's get started!
             </p>
           </div>
           <div className="text-5xl flex justify-center gap-16 py-3 text-orange-500">
 
             <a href="mailto:ylyamartchenko@gmail.com" target="_blank" rel="noreferrer" data-tooltip-target="tooltip-mail-2" className="hover:text-orange-600">
-              <AiFillMail aria-hidden="true"/>
+              <AiFillMail alt="mail" aria-hidden="true"/>
               <span className="sr-only">Send an E-mail</span>
             </a>
 
@@ -303,7 +307,7 @@ export default function Home() {
             </div>
 
             <a href="https://www.linkedin.com/in/ylya-martchenko-214a64184" target="_blank" rel="noreferrer" data-tooltip-target="tooltip-linkedin-2" className="hover:text-orange-600">
-              <AiFillLinkedin aria-hidden="true"/>
+              <AiFillLinkedin alt="linkedin" aria-hidden="true"/>
               <span className="sr-only">View on LinkedIn</span>
             </a>
 
@@ -325,7 +329,7 @@ export default function Home() {
 
           <div className="relative mx-auto bg-gradient-to-b from-orange-600 rounded-full w-80 h-80 mt-20 overflow-hidden md:h-96 md:w-96">
             <div className="mt-3 md:mt-3.5">
-              <Image src={deved} cover/>
+              <Image alt="Ylya Martchenko" src={deved} cover/>
             </div>
           </div>
 
@@ -354,11 +358,17 @@ export default function Home() {
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Diploma of Higher Education in Engineering Science</h3>
                 <p className="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">F.R.U. Mathematics, computer science, mechanics | Metz</p>
             </li>
-            <li className="ml-4">
+            <li className="mb-10 ml-4">
                 <div className="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
                 <time className="mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">2023</time>
                 <h3 className="text-lg font-semibold text-gray-900 dark:text-white">HarvardX CS50x</h3>
                 <p className="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">Harvard University | Online courses</p>
+            </li>
+            <li className="ml-4">
+                <div className="absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -left-1.5 border border-white dark:border-gray-900 dark:bg-gray-700"></div>
+                <time className="mb-1 text-sm font-normal leading-none text-gray-400 dark:text-gray-500">2023 - 2026</time>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Engineer in IARN (Informatics, Automatic, Robotics, Networks)</h3>
+                <p className="mb-4 text-base font-normal text-gray-500 dark:text-gray-400">Polytech Nancy | Vandœuvre-lès-Nancy</p>
             </li>
         </ol>
 
@@ -367,6 +377,21 @@ export default function Home() {
         <section className="py-10 px-10 md:px-20 xl:px-40 scroll-mt-20 md:scroll-mt-24" id="Experience">
 
           <h3 className="text-3xl py-1 max-w-4xl mx-auto dark:text-gray-100">Experience</h3>
+
+          <div className="max-w-6xl mx-auto space-y-4 grid lg:grid-cols-2 lg:gap-4 lg:space-y-0 mt-12">
+            <a href="https://first3d-six.vercel.app/" target="_blank" rel="noreferrer">
+              <div className="block relative mx-auto overflow-hidden text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-xl dark:hover:shadow-lg-light">
+                <Image src={Corvette} alt="Corvette" className="center"/>
+                <h1 className="txt hover:text-gray-200">My first 3D project</h1>
+              </div>
+            </a>
+            <a href="https://floating-island-seven.vercel.app/" target="_blank" rel="noreferrer">
+              <div className="block relative mx-auto overflow-hidden text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-xl dark:hover:shadow-lg-light">
+                <Image src={Island} alt="Island" className="center"/>
+                <h1 className="txt hover:text-gray-200">Floating Island</h1>
+              </div>
+            </a>
+          </div>
 
           <div className="max-w-6xl mx-auto space-y-4 sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:gap-4 sm:space-y-0 mt-12">
 
@@ -570,7 +595,7 @@ export default function Home() {
 
               {ac4 && <div className="block px-8 py-12 text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
                 
-                  <p className="text-left dark:text-gray-100">Jun. 2019 – Jun. 2021</p>
+                  <p className="text-left dark:text-gray-100">Jun. 2019 - Jun. 2021</p>
                   <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
                     Neighborhood representative on the M.Y.C.
                   </h3>
@@ -598,7 +623,7 @@ export default function Home() {
 
               {!ac4 && <div className="block px-8 py-12 text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
                 
-                  <p className="text-left dark:text-gray-100">Jun. 2019 – Jun. 2021</p>
+                  <p className="text-left dark:text-gray-100">Jun. 2019 - Jun. 2021</p>
                   <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
                     Neighborhood representative on the M.Y.C.
                   </h3>
@@ -615,7 +640,7 @@ export default function Home() {
 
               {ac5 && <div className="block px-8 py-12 text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
                 
-                  <p className="text-left dark:text-gray-100">Jun. 2020 – Mar. 2022</p>
+                  <p className="text-left dark:text-gray-100">Jun. 2020 - Mar. 2022</p>
                   <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
                     Food delivery by car
                   </h3>
@@ -642,7 +667,7 @@ export default function Home() {
 
               {!ac5 && <div className="block px-8 py-12 text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
                 
-                  <p className="text-left dark:text-gray-100">Jun. 2020 – Mar. 2022</p>
+                  <p className="text-left dark:text-gray-100">Jun. 2020 - Mar. 2022</p>
                   <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
                     Food delivery by car
                   </h3>
@@ -659,7 +684,7 @@ export default function Home() {
 
               {ac6 && <div className="block px-8 py-12 text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
                 
-                  <p className="text-left dark:text-gray-100">Jan. 2022 – Feb. 2022</p>
+                  <p className="text-left dark:text-gray-100">Jan. 2022 - Feb. 2022</p>
                   <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
                     2 websites
                   </h3>
@@ -688,7 +713,7 @@ export default function Home() {
 
               {!ac6 && <div className="block px-8 py-12 text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
                 
-                  <p className="text-left dark:text-gray-100">Jan. 2022 – Feb. 2022</p>
+                  <p className="text-left dark:text-gray-100">Jan. 2022 - Feb. 2022</p>
                   <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
                     2 websites
                   </h3>
@@ -705,7 +730,7 @@ export default function Home() {
 
               {ac7 && <div className="block px-8 py-12 text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
                 
-                  <p className="text-left dark:text-gray-100">Apr. 2022 – Jun. 2022</p>
+                  <p className="text-left dark:text-gray-100">Apr. 2022 - Jun. 2022</p>
                   <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
                     Metrology technician
                   </h3>
@@ -733,7 +758,7 @@ export default function Home() {
 
               {!ac7 && <div className="block px-8 py-12 text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
                 
-                  <p className="text-left dark:text-gray-100">Apr. 2022 – Jun. 2022</p>
+                  <p className="text-left dark:text-gray-100">Apr. 2022 - Jun. 2022</p>
                   <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
                     Metrology technician
                   </h3>
@@ -750,7 +775,7 @@ export default function Home() {
 
               {ac8 && <div className="block px-8 py-12 text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
                 
-                  <p className="text-left dark:text-gray-100">Jun. 2022 – Jul. 2022</p>
+                  <p className="text-left dark:text-gray-100">Jun. 2022 - Jul. 2022</p>
                   <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
                     Bottle labeling
                   </h3>
@@ -777,7 +802,7 @@ export default function Home() {
 
               {!ac8 && <div className="block px-8 py-12 text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
                 
-                  <p className="text-left dark:text-gray-100">Jun. 2022 – Jul. 2022</p>
+                  <p className="text-left dark:text-gray-100">Jun. 2022 - Jul. 2022</p>
                   <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
                     Bottle labeling
                   </h3>
@@ -794,7 +819,7 @@ export default function Home() {
 
               {ac9 && <div className="block px-8 py-12 text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
                 
-                  <p className="text-left dark:text-gray-100">Jul. 2022 – Aug. 2022</p>
+                  <p className="text-left dark:text-gray-100">Jul. 2022 - Aug. 2022</p>
                   <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
                     Drywaller
                   </h3>
@@ -822,7 +847,7 @@ export default function Home() {
 
               {!ac9 && <div className="block px-8 py-12 text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
                 
-                  <p className="text-left dark:text-gray-100">Jul. 2022 – Aug. 2022</p>
+                  <p className="text-left dark:text-gray-100">Jul. 2022 - Aug. 2022</p>
                   <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
                     Drywaller
                   </h3>
@@ -830,6 +855,54 @@ export default function Home() {
                     Plaqui'Lux | Luxembourg
                   </p>
                   <button onClick={() => setAc9(!ac9)} type="button" className="bg-white dark:bg-inherit flex items-center justify-between w-full py-5 font-medium text-left border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
+                    <span className="text-orange-600">What I did</span>
+                    <svg data-accordion-icon className="w-6 h-6 shrink-0 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                  </button>
+                              
+                </div>
+              }
+
+              {ac10 && <div className="block px-8 py-12 text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
+                
+                  <p className="text-left dark:text-gray-100">Sep. 2023 - Sep. 2026</p>
+                  <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
+                    Developer
+                  </h3>
+                  <p className="py-2 dark:text-gray-300">
+                    Equasens | Villers-lÃ¨s-Nancy
+                  </p>
+                  <button onClick={() => setAc10(!ac10)} type="button" className="bg-white dark:bg-inherit flex items-center justify-between w-full py-5 font-medium text-left border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
+                    <span className="text-orange-600">What I did</span>
+                    <svg data-accordion-icon className="w-6 h-6 shrink-0 rotate-180 dark:text-gray-300" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                  </button>
+                  <div className="block">
+                    <div className="py-5 font-light border-b border-gray-200 dark:border-gray-700">
+                      <p className="mb-2 text-gray-500 dark:text-gray-400">
+                        Coming soon (starting in <span className=" text-orange-600">September 2023</span>)
+                      </p>
+                      {/* <p className="mb-2 text-gray-500 dark:text-gray-400">
+                        This was by far the <span className=" text-orange-600">hardest</span> job I have done.
+                        Indeed, it was quite physical as I cut and hang panels of wallboard.
+                      </p>
+                      <p className="text-gray-500 dark:text-gray-400">
+                        By the way, I am glad I worked with the most precise person I have seen (besides my dad).
+                      </p> */}
+                    </div>
+                  </div>
+                              
+                </div>
+              }
+
+              {!ac10 && <div className="block px-8 py-12 text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-lg dark:hover:shadow-lg-light">
+                
+                  <p className="text-left dark:text-gray-100">Sep. 2023 - Sep. 2026</p>
+                  <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
+                    Developer
+                  </h3>
+                  <p className="py-2 dark:text-gray-300">
+                    Equasens | Villers-lÃ¨s-Nancy
+                  </p>
+                  <button onClick={() => setAc10(!ac10)} type="button" className="bg-white dark:bg-inherit flex items-center justify-between w-full py-5 font-medium text-left border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
                     <span className="text-orange-600">What I did</span>
                     <svg data-accordion-icon className="w-6 h-6 shrink-0 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
                   </button>
@@ -846,75 +919,75 @@ export default function Home() {
           <h3 className="text-3xl max-w-4xl mx-auto py-1 mb-10 dark:text-gray-100">Skills</h3>
             <div className="max-w-6xl mx-auto space-y-4 grid sm:grid-cols-2 sl:grid-cols-3 lg:grid-cols-4 sm:gap-4 sm:space-y-0 md:mt-12">
 
-              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
-                <Image src={HTML} className="center" height={48}/>
+              <div className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
+                <Image src={HTML} alt="HTML" className="center" height={48}/>
                 <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">HTML5</h4>
-              </a>
+              </div>
 
-              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
-                <Image src={CSS} className="center" height={48}/>
+              <div className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
+                <Image src={CSS} alt="CSS" className="center" height={48}/>
                 <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">CSS3</h4>
-              </a>
+              </div>
 
-              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
-                <Image src={PHP} className="center" height={48}/>
+              <div className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
+                <Image src={PHP} alt="PHP" className="center" height={48}/>
                 <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">PHP</h4>
-              </a>
+              </div>
 
-              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
-                <Image src={Python} className="center" height={48}/>
+              <div className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
+                <Image src={Python} alt="Python" className="center" height={48}/>
                 <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">Python 3</h4>
-              </a>
+              </div>
 
-              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
-                <Image src={JS} className="center" height={48}/>
+              <div className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
+                <Image src={JS} alt="JS" className="center" height={48}/>
                 <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">JavaScript</h4>
-              </a>
+              </div>
 
-              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
-                <Image src={ReactJS} className="center" height={48}/>
+              <div className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
+                <Image src={ReactJS} alt="ReactJS" className="center" height={48}/>
                 <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">React JS</h4>
-              </a>
+              </div>
 
-              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
-                <Image src={Catia} className="center" height={48}/>
+              <div className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
+                <Image src={Catia} alt="Catia" className="center" height={48}/>
                 <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">Catia</h4>
-              </a>
+              </div>
 
-              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
-                <Image src={ThreeD} className="center" height={48}/>
+              <div className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
+                <Image src={ThreeD} alt="ThreeJS" className="center" height={48}/>
                 <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">3DEXPERIENCE</h4>
-              </a>
+              </div>
 
-              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
-                <Image src={SW} className="center" height={48}/>
+              <div className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
+                <Image src={SW} alt="SolidWorks" className="center" height={48}/>
                 <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">SolidWorks</h4>
-              </a>
+              </div>
 
-              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
-                <Image src={ZS} className="center" height={48}/>
+              <div className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
+                <Image src={ZS} alt="Z-Suite" className="center" height={48}/>
                 <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">Z-SUITE</h4>
-              </a>
+              </div>
 
-              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
-                <Image src={Inventor} className="center" height={48}/>
+              <div className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
+                <Image src={Inventor} alt="Inventor" className="center" height={48}/>
                 <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">Autodesk Inventor</h4>
-              </a>
+              </div>
 
-              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
-                <Image src={Office} className="center" height={48}/>
+              <div className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
+                <Image src={Office} alt="Microsoft Office Pack" className="center" height={48}/>
                 <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">Microsoft Office Pack</h4>
-              </a>
+              </div>
 
-              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
-                <Image src={PS} className="center" height={48}/>
+              <div className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
+                <Image src={PS} alt="Photoshop" className="center" height={48}/>
                 <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">Photoshop</h4>
-              </a>
+              </div>
 
-              <a className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
-                <Image src={AI} className="center" height={48}/>
+              <div className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
+                <Image src={AI} alt="Illustrator" className="center" height={48}/>
                 <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">Illustrator</h4>
-              </a>
+              </div>
               
             </div>
 
@@ -1003,13 +1076,13 @@ export default function Home() {
                         <ul className="text-gray-600 dark:text-gray-400">
                             <li className="mb-4">
                                 <a href="mailto:ylyamartchenko@gmail.com" target="_blank" rel="noreferrer" className="flex hover:underline">
-                                  <AiFillMail className="mt-1 mr-1"/>
+                                  <AiFillMail alt="mail" className="mt-1 mr-1"/>
                                   ylyamartchenko@gmail.com
                                 </a>
                             </li>
                             <li>
-                                <a href="tel:+33699723879" className="flex hover:underline">
-                                  <AiFillPhone className="mt-1 mr-1"/>
+                                <a href="tel:+33699723579" className="flex hover:underline">
+                                  <AiFillPhone alt="phone" className="mt-1 mr-1"/>
                                   +33 6 99 72 35 79
                                 </a>
                             </li>
@@ -1023,11 +1096,11 @@ export default function Home() {
                 </span>
                 <div className="flex mt-4 space-x-6 sm:justify-center sm:mt-0">
                     <a href="mailto:ylyamartchenko@gmail.com" target="_blank" rel="noreferrer" className="text-gray-500 hover:text-gray-900 dark:hover:text-white">
-                        <AiFillMail className="w-5 h-5"/>
+                        <AiFillMail alt="mail" className="w-5 h-5"/>
                         <span className="sr-only">Mail address</span>
                     </a>
                     <a href="https://www.linkedin.com/in/ylya-martchenko-214a64184" target="_blank" rel="noreferrer" className="text-gray-500 hover:text-gray-900 dark:hover:text-white">
-                        <AiFillLinkedin className="w-5 h-5"/>
+                        <AiFillLinkedin alt="linkedin" className="w-5 h-5"/>
                         <span className="sr-only">LinkedIn page</span>
                     </a>
                     <a href="https://github.com/HoodieYlya13" target="_blank" rel="noreferrer" className="text-gray-500 hover:text-gray-900 dark:hover:text-white">
@@ -1041,8 +1114,8 @@ export default function Home() {
                         </svg>
                         <span className="sr-only">Discord account</span>
                     </a> */}
-                    <a href="tel:+33699723879" className="text-gray-500 hover:text-gray-900 dark:hover:text-white">
-                        <AiFillPhone className="w-5 h-5"/>
+                    <a href="tel:+33699723579" className="text-gray-500 hover:text-gray-900 dark:hover:text-white">
+                        <AiFillPhone alt="phone" className="w-5 h-5"/>
                         <span className="sr-only">Mail address</span>
                     </a>
                 </div>
