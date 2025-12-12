@@ -1,0 +1,21 @@
+{
+  "COMMON": {
+    "LOADING": "Loading..."
+  },
+  "HOME_PAGE": {
+    "META": {
+      "TITLE": "Ylya Martchenko Portfolio",
+      "DESCRIPTION": "Welcome to Ylya Martchenko Portfolio!"
+    }
+  },
+  "ERRORS": {
+    "SYST_001": "An unexpected error occurred.",
+    "TOO_MANY_REQUESTS": "Too many requests. Please try again later."
+  },
+  "LOCALE_MISMATCH": {
+    "TITLE": "Switch Language?",
+    "DESCRIPTION": "We detected that your preferred language is <important>{preferredLocale}</important>, but you are viewing the site in <important>{currentLocale}</important>.",
+    "KEEP": "Keep {locale}",
+    "SWITCH": "Switch to {locale}"
+  }
+}
