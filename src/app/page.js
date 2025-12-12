@@ -9,24 +9,21 @@ import {
 import Logo from "../../public/logo.png";
 import HTML from "../../public/html.png";
 import CSS from "../../public/css.png";
-import PHP from "../../public/php.png";
 import Python from "../../public/python.png";
 import JS from "../../public/js.png";
+import TS from "../../public/ts.png";
 import ReactJS from "../../public/react.png";
-import Catia from "../../public/catia.png";
-import ThreeD from "../../public/3dexp.png";
-import SW from "../../public/sw1.png";
-import ZS from "../../public/zs.png";
-import Inventor from "../../public/inventor.png";
-import Office from "../../public/office1.png";
 import PS from "../../public/ps.png";
 import AI from "../../public/ai.png";
 import Image from "next/image";
-import deved from '../../public/me.png';
-import Corvette from '../../public/Corvette.png';
+import Me from '../../public/me.png';
+import Botr from '../../public/botr.png';
 import Island from '../../public/Island.png';
 import React, { useEffect, useState, useRef } from "react";
+import NodeJSDark from '../../public/nodejsDark.png';
+import NodeJSLight from '../../public/nodejsLight.png';
 import 'flowbite';
+import Git from '../../public/git.png';
 
 export default function Home() {
   const [darkMode, setDarkMode] = useState(true);
@@ -114,7 +111,7 @@ export default function Home() {
                       Send an E-mail
                       <div className="tooltip-arrow" data-popper-arrow></div>
                   </div>
-                  <a href="https://www.linkedin.com/in/ylya-martchenko-214a64184" target="_blank" rel="noreferrer" data-tooltip-target="tooltip-linkedin" className="hidden sm:inline-block text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 mr-1" >
+                  <a href="https://www.linkedin.com/in/ylya-martchenko" target="_blank" rel="noreferrer" data-tooltip-target="tooltip-linkedin" className="hidden sm:inline-block text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5 mr-1" >
                     <AiFillLinkedin alt="linkedin" className="w-6 h-6" aria-hidden="true"/>
                     <span className="sr-only">View on LinkedIn</span>
                   </a>
@@ -288,9 +285,9 @@ export default function Home() {
             <h2 className="px-5 xs:px-10 text-5xl pt-20 pb-10 text-orange-600 font-medium md:text-6xl md:pt-32 md:pb-20">
               Ylya Martchenko
             </h2>
-            <h3 className="px-10 text-2xl py-2 md:text-3xl dark:text-gray-100">Full stack developer</h3>
+            <h3 className="px-10 text-2xl py-2 md:text-3xl dark:text-gray-100">Full Stack Developer</h3>
             <p className="px-10 text-md py-5 leading-8 text-gray-800 md:text-xl max-w-lg mx-auto dark:text-gray-300">
-              I am a {(new Date().getDate() < 28 && new Date().getMonth() === 3) || new Date().getMonth() < 3 ? new Date().getFullYear()-2002 : new Date().getFullYear()-2001}-year-old student at Polytech Nancy working for Equasens as a developer. <br/>
+              I am a {(new Date().getDate() < 28 && new Date().getMonth() === 3) || new Date().getMonth() < 3 ? new Date().getFullYear()-2002 : new Date().getFullYear()-2001}-year-old student at Polytech Nancy working for Equasens as a Full Stack Developer. <br/>
               Join me down below and let's get started!
             </p>
           </div>
@@ -306,7 +303,7 @@ export default function Home() {
                 <div className="tooltip-arrow" data-popper-arrow></div>
             </div>
 
-            <a href="https://www.linkedin.com/in/ylya-martchenko-214a64184" target="_blank" rel="noreferrer" data-tooltip-target="tooltip-linkedin-2" className="hover:text-orange-600">
+            <a href="https://www.linkedin.com/in/ylya-martchenko" target="_blank" rel="noreferrer" data-tooltip-target="tooltip-linkedin-2" className="hover:text-orange-600">
               <AiFillLinkedin alt="linkedin" aria-hidden="true"/>
               <span className="sr-only">View on LinkedIn</span>
             </a>
@@ -329,7 +326,7 @@ export default function Home() {
 
           <div className="relative mx-auto bg-gradient-to-b from-orange-600 rounded-full w-80 h-80 mt-20 overflow-hidden md:h-96 md:w-96">
             <div className="mt-3 md:mt-3.5">
-              <Image alt="Ylya Martchenko" src={deved} cover/>
+              <Image alt="Ylya Martchenko" src={Me} cover/>
             </div>
           </div>
 
@@ -379,16 +376,16 @@ export default function Home() {
           <h3 className="text-3xl py-1 max-w-4xl mx-auto dark:text-gray-100">Experience</h3>
 
           <div className="max-w-6xl mx-auto space-y-4 grid lg:grid-cols-2 lg:gap-4 lg:space-y-0 mt-12">
-            <a href="https://first3d-six.vercel.app/" target="_blank" rel="noreferrer">
-              <div className="block relative mx-auto overflow-hidden text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-xl dark:hover:shadow-lg-light">
-                <Image src={Corvette} alt="Corvette" className="center"/>
-                <h1 className="txt hover:text-gray-200">My first 3D project</h1>
+            <a href="https://bookoftruth.xyz/" target="_blank" rel="noreferrer">
+              <div className="experience botr block relative mx-auto overflow-hidden text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-xl dark:hover:shadow-lg-light">
+                <Image src={Botr} alt="Book of Truth" className="center" />
+                <h1 className="txt hover:text-gray-200 z-10">Book of Truth</h1>
               </div>
             </a>
             <a href="https://floating-island-seven.vercel.app/" target="_blank" rel="noreferrer">
-              <div className="block relative mx-auto overflow-hidden text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-xl dark:hover:shadow-lg-light">
-                <Image src={Island} alt="Island" className="center"/>
-                <h1 className="txt hover:text-gray-200">Floating Island</h1>
+              <div className="experience island block relative mx-auto overflow-hidden text-center bg-white rounded-xl shadow-sm dark:bg-gray-800 hover:shadow-xl dark:hover:shadow-lg-light">
+                <Image src={Island} alt="Island" className="center" />
+                <h1 className="txt hover:text-gray-200 z-10">Floating Island</h1>
               </div>
             </a>
           </div>
@@ -568,7 +565,7 @@ export default function Home() {
                       </p>
                       <p className="text-gray-500 dark:text-gray-400">
                         We inspired many players and saw lots of them improve.
-                        Unfortunately, we encountered Covid-19 and at the same time we all went to differents colleges so we decided not to turn our Junior Association into an Association.
+                        Unfortunately, we encountered Covid-19 and at the same time we all went to different colleges so we decided not to turn our Junior Association into an Association.
                       </p>
                     </div>
                   </div>
@@ -866,10 +863,10 @@ export default function Home() {
                 
                   <p className="text-left dark:text-gray-100">Sep. 2023 - Sep. 2026</p>
                   <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
-                    Developer
+                    Full Stack Developer
                   </h3>
                   <p className="py-2 dark:text-gray-300">
-                    Equasens | Villers-lÃ¨s-Nancy
+                    Equasens | Villers-lès-Nancy
                   </p>
                   <button onClick={() => setAc10(!ac10)} type="button" className="bg-white dark:bg-inherit flex items-center justify-between w-full py-5 font-medium text-left border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
                     <span className="text-orange-600">What I did</span>
@@ -878,15 +875,11 @@ export default function Home() {
                   <div className="block">
                     <div className="py-5 font-light border-b border-gray-200 dark:border-gray-700">
                       <p className="mb-2 text-gray-500 dark:text-gray-400">
-                        Coming soon (starting in <span className=" text-orange-600">September 2023</span>)
-                      </p>
-                      {/* <p className="mb-2 text-gray-500 dark:text-gray-400">
-                        This was by far the <span className=" text-orange-600">hardest</span> job I have done.
-                        Indeed, it was quite physical as I cut and hang panels of wallboard.
+                        I am considered a <span className=" text-orange-600">Full Stack Developer</span>, although I mainly focus on <span className=" text-orange-600">Front-End</span> development.
                       </p>
                       <p className="text-gray-500 dark:text-gray-400">
-                        By the way, I am glad I worked with the most precise person I have seen (besides my dad).
-                      </p> */}
+                        At work, we use the <span className=" text-orange-600">Angular</span> framework. However, I often joke with my colleagues about my preference for <span className=" text-orange-600">React</span> and how I believe it is a superior framework.
+                      </p>
                     </div>
                   </div>
                               
@@ -897,10 +890,10 @@ export default function Home() {
                 
                   <p className="text-left dark:text-gray-100">Sep. 2023 - Sep. 2026</p>
                   <h3 className="text-lg font-medium pt-8 pb-2 dark:text-gray-100">
-                    Developer
+                    Full Stack Developer
                   </h3>
                   <p className="py-2 dark:text-gray-300">
-                    Equasens | Villers-lÃ¨s-Nancy
+                    Equasens | Villers-lès-Nancy
                   </p>
                   <button onClick={() => setAc10(!ac10)} type="button" className="bg-white dark:bg-inherit flex items-center justify-between w-full py-5 font-medium text-left border-b border-gray-200 dark:border-gray-700 dark:text-gray-400">
                     <span className="text-orange-600">What I did</span>
@@ -918,6 +911,30 @@ export default function Home() {
 
           <h3 className="text-3xl max-w-4xl mx-auto py-1 mb-10 dark:text-gray-100">Skills</h3>
             <div className="max-w-6xl mx-auto space-y-4 grid sm:grid-cols-2 sl:grid-cols-3 lg:grid-cols-4 sm:gap-4 sm:space-y-0 md:mt-12">
+              <div className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
+                <Image src={ReactJS} alt="ReactJS" className="center" height={48}/>
+                <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">React</h4>
+              </div>
+
+              <div className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
+                <svg className="center" _ngcontent-ng-c1790337009="" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 223 236" height="48" class="angular-logo"><g _ngcontent-ng-c1790337009="" clip-path="url(#a)"><path _ngcontent-ng-c1790337009="" fill="url(#b)" d="m222.077 39.192-8.019 125.923L137.387 0l84.69 39.192Zm-53.105 162.825-57.933 33.056-57.934-33.056 11.783-28.556h92.301l11.783 28.556ZM111.039 62.675l30.357 73.803H80.681l30.358-73.803ZM7.937 165.115 0 39.192 84.69 0 7.937 165.115Z"></path><path _ngcontent-ng-c1790337009="" fill="url(#c)" d="m222.077 39.192-8.019 125.923L137.387 0l84.69 39.192Zm-53.105 162.825-57.933 33.056-57.934-33.056 11.783-28.556h92.301l11.783 28.556ZM111.039 62.675l30.357 73.803H80.681l30.358-73.803ZM7.937 165.115 0 39.192 84.69 0 7.937 165.115Z"></path></g><defs _ngcontent-ng-c1790337009=""><linearGradient _ngcontent-ng-c1790337009="" id="b" x1="49.009" x2="225.829" y1="213.75" y2="129.722" gradientUnits="userSpaceOnUse"><stop _ngcontent-ng-c1790337009="" stop-color="#E40035"></stop><stop _ngcontent-ng-c1790337009="" offset=".24" stop-color="#F60A48"></stop><stop _ngcontent-ng-c1790337009="" offset=".352" stop-color="#F20755"></stop><stop _ngcontent-ng-c1790337009="" offset=".494" stop-color="#DC087D"></stop><stop _ngcontent-ng-c1790337009="" offset=".745" stop-color="#9717E7"></stop><stop _ngcontent-ng-c1790337009="" offset="1" stop-color="#6C00F5"></stop></linearGradient><linearGradient _ngcontent-ng-c1790337009="" id="c" x1="41.025" x2="156.741" y1="28.344" y2="160.344" gradientUnits="userSpaceOnUse"><stop _ngcontent-ng-c1790337009="" stop-color="#FF31D9"></stop><stop _ngcontent-ng-c1790337009="" offset="1" stop-color="#FF5BE1" stop-opacity="0"></stop></linearGradient><clipPath _ngcontent-ng-c1790337009="" id="a"><path _ngcontent-ng-c1790337009="" fill="#fff" d="M0 0h223v236H0z"></path></clipPath></defs></svg>
+                <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">Angular</h4>
+              </div>
+
+              <div className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
+                <svg className="center" xmlns="http://www.w3.org/2000/svg" height="48" viewBox=".5 -.2 1023 1024.1"><path d="m478.5.6c-2.2.2-9.2.9-15.5 1.4-145.3 13.1-281.4 91.5-367.6 212-48 67-78.7 143-90.3 223.5-4.1 28.1-4.6 36.4-4.6 74.5s.5 46.4 4.6 74.5c27.8 192.1 164.5 353.5 349.9 413.3 33.2 10.7 68.2 18 108 22.4 15.5 1.7 82.5 1.7 98 0 68.7-7.6 126.9-24.6 184.3-53.9 8.8-4.5 10.5-5.7 9.3-6.7-.8-.6-38.3-50.9-83.3-111.7l-81.8-110.5-102.5-151.7c-56.4-83.4-102.8-151.6-103.2-151.6-.4-.1-.8 67.3-1 149.6-.3 144.1-.4 149.9-2.2 153.3-2.6 4.9-4.6 6.9-8.8 9.1-3.2 1.6-6 1.9-21.1 1.9h-17.3l-4.6-2.9c-3-1.9-5.2-4.4-6.7-7.3l-2.1-4.5.2-200.5.3-200.6 3.1-3.9c1.6-2.1 5-4.8 7.4-6.1 4.1-2 5.7-2.2 23-2.2 20.4 0 23.8.8 29.1 6.6 1.5 1.6 57 85.2 123.4 185.9s157.2 238.2 201.8 305.7l81 122.7 4.1-2.7c36.3-23.6 74.7-57.2 105.1-92.2 64.7-74.3 106.4-164.9 120.4-261.5 4.1-28.1 4.6-36.4 4.6-74.5s-.5-46.4-4.6-74.5c-27.8-192.1-164.5-353.5-349.9-413.3-32.7-10.6-67.5-17.9-106.5-22.3-9.6-1-75.7-2.1-84-1.3zm209.4 309.4c4.8 2.4 8.7 7 10.1 11.8.8 2.6 1 58.2.8 183.5l-.3 179.8-31.7-48.6-31.8-48.6v-130.7c0-84.5.4-132 1-134.3 1.6-5.6 5.1-10 9.9-12.6 4.1-2.1 5.6-2.3 21.3-2.3 14.8 0 17.4.2 20.7 2z"/><path d="m784.3 945.1c-3.5 2.2-4.6 3.7-1.5 2 2.2-1.3 5.8-4 5.2-4.1-.3 0-2 1-3.7 2.1zm-6.9 4.5c-1.8 1.4-1.8 1.5.4.4 1.2-.6 2.2-1.3 2.2-1.5 0-.8-.5-.6-2.6 1.1zm-5 3c-1.8 1.4-1.8 1.5.4.4 1.2-.6 2.2-1.3 2.2-1.5 0-.8-.5-.6-2.6 1.1zm-5 3c-1.8 1.4-1.8 1.5.4.4 1.2-.6 2.2-1.3 2.2-1.5 0-.8-.5-.6-2.6 1.1zm-7.6 4c-3.8 2-3.6 2.8.2.9 1.7-.9 3-1.8 3-2 0-.7-.1-.6-3.2 1.1z"/></svg>
+                <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">Next JS</h4>
+              </div>
+
+              <div className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
+                <div className="dark:hidden">
+                  <Image src={NodeJSDark} alt="NodeJSDark" className="center" height={48}/>
+                </div>
+                <div className="hidden dark:block">
+                  <Image src={NodeJSLight} alt="NodeJSLight" className="center" height={48}/>
+                </div>
+                <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">Node JS</h4>
+              </div>
 
               <div className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
                 <Image src={HTML} alt="HTML" className="center" height={48}/>
@@ -926,17 +943,7 @@ export default function Home() {
 
               <div className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
                 <Image src={CSS} alt="CSS" className="center" height={48}/>
-                <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">CSS3</h4>
-              </div>
-
-              <div className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
-                <Image src={PHP} alt="PHP" className="center" height={48}/>
-                <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">PHP</h4>
-              </div>
-
-              <div className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
-                <Image src={Python} alt="Python" className="center" height={48}/>
-                <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">Python 3</h4>
+                <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">CSS3 / SCSS</h4>
               </div>
 
               <div className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
@@ -945,38 +952,18 @@ export default function Home() {
               </div>
 
               <div className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
-                <Image src={ReactJS} alt="ReactJS" className="center" height={48}/>
-                <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">React JS</h4>
+                <Image src={TS} alt="TS" className="center" height={48}/>
+                <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">TypeScript</h4>
               </div>
 
               <div className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
-                <Image src={Catia} alt="Catia" className="center" height={48}/>
-                <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">Catia</h4>
+                <Image src={Python} alt="Python" className="center" height={48}/>
+                <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">Python 3</h4>
               </div>
 
               <div className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
-                <Image src={ThreeD} alt="ThreeJS" className="center" height={48}/>
-                <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">3DEXPERIENCE</h4>
-              </div>
-
-              <div className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
-                <Image src={SW} alt="SolidWorks" className="center" height={48}/>
-                <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">SolidWorks</h4>
-              </div>
-
-              <div className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
-                <Image src={ZS} alt="Z-Suite" className="center" height={48}/>
-                <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">Z-SUITE</h4>
-              </div>
-
-              <div className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
-                <Image src={Inventor} alt="Inventor" className="center" height={48}/>
-                <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">Autodesk Inventor</h4>
-              </div>
-
-              <div className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
-                <Image src={Office} alt="Microsoft Office Pack" className="center" height={48}/>
-                <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">Microsoft Office Pack</h4>
+                <Image src={Git} alt="Git" className="center" height={48}/>
+                <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">Git</h4>
               </div>
 
               <div className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
@@ -987,8 +974,7 @@ export default function Home() {
               <div className="block px-8 py-12 text-center bg-white border border-gray-200 rounded-lg shadow-sm dark:bg-gray-700 dark:border-gray-600">
                 <Image src={AI} alt="Illustrator" className="center" height={48}/>
                 <h4 className="font-semibold text-xl text-gray-900 dark:text-white mt-3.5">Illustrator</h4>
-              </div>
-              
+              </div>              
             </div>
 
         </section>
@@ -1067,7 +1053,7 @@ export default function Home() {
                                 <a href="https://github.com/HoodieYlya13" target="_blank" rel="noreferrer" className="hover:underline ">Github</a>
                             </li>
                             <li>
-                                <a href="https://www.linkedin.com/in/ylya-martchenko-214a64184" target="_blank" rel="noreferrer" className="hover:underline">LinkedIn</a>
+                                <a href="https://www.linkedin.com/in/ylya-martchenko" target="_blank" rel="noreferrer" className="hover:underline">LinkedIn</a>
                             </li>
                         </ul>
                     </div>
@@ -1099,7 +1085,7 @@ export default function Home() {
                         <AiFillMail alt="mail" className="w-5 h-5"/>
                         <span className="sr-only">Mail address</span>
                     </a>
-                    <a href="https://www.linkedin.com/in/ylya-martchenko-214a64184" target="_blank" rel="noreferrer" className="text-gray-500 hover:text-gray-900 dark:hover:text-white">
+                    <a href="https://www.linkedin.com/in/ylya-martchenko" target="_blank" rel="noreferrer" className="text-gray-500 hover:text-gray-900 dark:hover:text-white">
                         <AiFillLinkedin alt="linkedin" className="w-5 h-5"/>
                         <span className="sr-only">LinkedIn page</span>
                     </a>
