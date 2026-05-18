@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import NavItem from "./NavItem";
 
 interface NavbarProps {
@@ -32,20 +33,24 @@ export default function Navbar({ children }: NavbarProps) {
           
           <NavItem
             icon={
-              <video
-                src="/memoji-video3.mov"
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="size-full object-cover object-center"
-              />
+              <Link href="/" className="size-full block">
+                <video
+                  src="/memoji-video3.mov"
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  className="size-full object-cover object-center"
+                />
+              </Link>
             }
             className="flex-1 min-w-0"
           >
-            <div className="font-bold md:text-lg uppercase tracking-wide">
-              Ylya Martchenko
-            </div>
+            <Link href="/">
+              <div className="font-bold md:text-lg uppercase tracking-wide">
+                Ylya Martchenko
+              </div>
+            </Link>
             <div className="overflow-hidden whitespace-nowrap w-full mask-marquee">
               <div className="scroll-marquee gap-2 items-center">
                 {[
