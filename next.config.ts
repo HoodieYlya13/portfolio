@@ -1,9 +1,9 @@
-import { NextConfig } from "next";
-import createNextIntlPlugin from "next-intl/plugin";
+import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  allowedDevOrigins: ["localhost:3000", "192.168.1.102:3000"],
+  /* config options here */
+  reactCompiler: true,
+  cacheComponents: true,
 };
 
-const withNextIntl = createNextIntlPlugin();
-export default withNextIntl(nextConfig);
+export default nextConfig;
