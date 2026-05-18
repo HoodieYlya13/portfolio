@@ -15,7 +15,7 @@ export default function Navbar({ children }: NavbarProps) {
         className="fixed inset-0 z-40 hidden peer-checked:block cursor-default"
       />
       
-      <div className="fixed bottom-4 left-1/2 -translate-x-1/2 w-[95%] max-w-2xl backdrop-blur-md text-background rounded-xl shadow-lg z-50 flex flex-col overflow-hidden transition-colors duration-500 ease-in-out bg-foreground/40 peer-checked:bg-foreground/70 peer-checked:[&_.icon-close]:block peer-checked:[&_.icon-menu]:hidden peer-checked:[&_.menu-content]:grid-rows-[1fr] peer-checked:[&_.line-sep]:scale-x-100 peer-checked:[&_.line-sep]:delay-500">
+      <div className="fixed bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 w-[95%] max-w-2xl backdrop-blur-md text-background rounded-xl md:rounded-2xl shadow-lg z-50 flex flex-col overflow-hidden transition-colors duration-500 ease-in-out bg-foreground/40 peer-checked:bg-foreground/70 peer-checked:[&_.icon-close]:block peer-checked:[&_.icon-menu]:hidden peer-checked:[&_.menu-content]:grid-rows-[1fr] peer-checked:[&_.line-sep]:scale-x-100 peer-checked:[&_.line-sep]:delay-500 peer-checked:[&_.menu-item]:translate-y-0 peer-checked:[&_.menu-item]:opacity-100">
         
         <div className="transition-[grid-template-rows] duration-500 ease-in-out grid grid-rows-[0fr] menu-content">
           <div className="overflow-hidden">
@@ -38,12 +38,12 @@ export default function Navbar({ children }: NavbarProps) {
                 loop
                 muted
                 playsInline
-                className="w-full h-full object-cover object-center"
+                className="size-full object-cover object-center"
               />
             }
             className="flex-1 min-w-0"
           >
-            <div className="font-bold uppercase tracking-wide">
+            <div className="font-bold md:text-lg uppercase tracking-wide">
               Ylya Martchenko
             </div>
             <div className="overflow-hidden whitespace-nowrap w-full mask-marquee">
@@ -64,7 +64,7 @@ export default function Navbar({ children }: NavbarProps) {
                 ].map((text, index) => (
                   <span
                     key={index}
-                    className="text-xs opacity-70 uppercase font-medium shrink-0"
+                    className="text-xs md:text-sm opacity-70 uppercase font-medium shrink-0"
                   >
                     {text}
                   </span>
@@ -88,7 +88,7 @@ export default function Navbar({ children }: NavbarProps) {
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="icon-menu block"
+              className="icon-menu block size-6 md:size-8"
             >
               <line x1="3" y1="12" x2="21" y2="12"></line>
               <line x1="3" y1="6" x2="21" y2="6"></line>
@@ -104,7 +104,7 @@ export default function Navbar({ children }: NavbarProps) {
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="icon-close hidden"
+              className="icon-close hidden size-6 md:size-8"
             >
               <line x1="18" y1="6" x2="6" y2="18"></line>
               <line x1="6" y1="6" x2="18" y2="18"></line>

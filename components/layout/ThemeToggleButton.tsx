@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import NavItem from "./NavItem";
+import RollingText from "./RollingText";
 
 export default function ThemeToggleButton() {
   const [theme, setTheme] = useState("light");
@@ -40,7 +41,7 @@ export default function ThemeToggleButton() {
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="h-8 group-hover:h-7 transition-all duration-300 ease-in-out w-auto"
+              className="h-8 group-hover:h-7 md:h-10 md:group-hover:h-9 transition-all duration-300 ease-in-out w-auto"
             >
               <circle cx="12" cy="12" r="5"></circle>
               <line x1="12" y1="1" x2="12" y2="3"></line>
@@ -61,16 +62,14 @@ export default function ThemeToggleButton() {
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="h-8 group-hover:h-7 transition-all duration-300 ease-in-out w-auto"
+              className="h-8 group-hover:h-7 md:h-10 md:group-hover:h-9 transition-all duration-300 ease-in-out w-auto"
             >
               <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
             </svg>
           )
         }
       >
-        <span className="text-xl font-medium transition-opacity duration-300 ease-in-out group-hover:opacity-70">
-          Theme
-        </span>
+        <RollingText text="Theme" className="text-xl font-medium" />
       </NavItem>
     </button>
   );
