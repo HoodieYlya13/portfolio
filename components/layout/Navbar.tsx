@@ -10,6 +10,11 @@ export default function Navbar({ children }: NavbarProps) {
     <>
       <input type="checkbox" id="menu-toggle" className="hidden peer" />
       
+      <label 
+        htmlFor="menu-toggle" 
+        className="fixed inset-0 z-40 hidden peer-checked:block cursor-default"
+      />
+      
       <div className="fixed bottom-4 left-1/2 -translate-x-1/2 w-[95%] max-w-2xl backdrop-blur-md text-background rounded-xl shadow-lg z-50 flex flex-col overflow-hidden transition-colors duration-500 ease-in-out bg-foreground/40 peer-checked:bg-foreground/70 peer-checked:[&_.icon-close]:block peer-checked:[&_.icon-menu]:hidden peer-checked:[&_.menu-content]:grid-rows-[1fr] peer-checked:[&_.line-sep]:scale-x-100 peer-checked:[&_.line-sep]:delay-500">
         
         <div className="transition-[grid-template-rows] duration-500 ease-in-out grid grid-rows-[0fr] menu-content">
