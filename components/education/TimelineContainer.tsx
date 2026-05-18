@@ -50,7 +50,7 @@ export default function TimelineContainer({ children }: { children: React.ReactN
   }, []);
 
   return (
-    <div ref={containerRef} className="relative max-w-5xl mx-auto sm:py-16 px-4">
+    <div ref={containerRef} className="relative max-w-5xl mx-auto pb-16 sm:py-16 px-4">
       <div className="space-y-16 relative">
         <div className="absolute left-0 md:left-1/2 transform -translate-x-1/2 top-0 bottom-0 w-0.5 bg-border/50">
           <div 
