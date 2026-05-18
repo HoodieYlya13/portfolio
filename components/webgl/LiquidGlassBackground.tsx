@@ -77,7 +77,7 @@ const fragmentShader = `
     // Base color is the background
     vec3 color = u_color_bg;
     
-    // Mix in the primary highlight color (Apple Blue)
+    // Mix in the primary highlight color (Apple Orange)
     color = mix(color, u_color_primary, final_noise * 0.5);
     
     // Mix in the secondary depth color based on bands
@@ -136,7 +136,7 @@ function BackgroundMesh() {
       const style = getComputedStyle(document.documentElement);
       const bg = style.getPropertyValue("--background").trim();
       const primary =
-        style.getPropertyValue("--apple-blue").trim() ||
+        style.getPropertyValue("--apple-orange").trim() ||
         style.getPropertyValue("--primary").trim();
 
       const isDark = document.documentElement.classList.contains("dark");

@@ -89,7 +89,7 @@ body {
   --popover: #FFFCFC;
   --popover-foreground: var(--apple-dark-gray);
   
-  --primary: var(--apple-blue);
+  --primary: var(--apple-orange);
   --primary-foreground: #FFFCFC;
   
   --secondary: var(--apple-light-gray);
@@ -99,13 +99,13 @@ body {
   --muted-foreground: var(--apple-mid-gray);
   
   --accent: var(--apple-light-gray);
-  --accent-foreground: var(--apple-blue);
+  --accent-foreground: var(--apple-orange);
   
   --destructive: var(--apple-red);
   
   --border: var(--apple-light-gray);
   --input: var(--apple-light-gray);
-  --ring: var(--apple-blue);
+  --ring: var(--apple-orange);
   
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
@@ -116,12 +116,12 @@ body {
   
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: var(--apple-dark-gray);
-  --sidebar-primary: var(--apple-blue);
+  --sidebar-primary: var(--apple-orange);
   --sidebar-primary-foreground: #FFFCFC;
   --sidebar-accent: var(--apple-light-gray);
   --sidebar-accent-foreground: var(--apple-dark-gray);
   --sidebar-border: var(--apple-light-gray);
-  --sidebar-ring: var(--apple-blue);
+  --sidebar-ring: var(--apple-orange);
 }
 
 .dark {
@@ -134,7 +134,7 @@ body {
   --popover: var(--apple-dark-gray-2);
   --popover-foreground: #FFFCFC;
   
-  --primary: var(--apple-blue);
+  --primary: var(--apple-orange);
   --primary-foreground: #FFFCFC;
   
   --secondary: var(--apple-dark-gray-2);
@@ -144,13 +144,13 @@ body {
   --muted-foreground: var(--apple-mid-gray);
   
   --accent: var(--apple-dark-gray-2);
-  --accent-foreground: var(--apple-blue);
+  --accent-foreground: var(--apple-orange);
   
   --destructive: var(--apple-red);
   
   --border: var(--apple-dark-gray-2);
   --input: var(--apple-dark-gray-2);
-  --ring: var(--apple-blue);
+  --ring: var(--apple-orange);
   
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
@@ -160,12 +160,12 @@ body {
   
   --sidebar: var(--apple-dark-gray);
   --sidebar-foreground: #FFFCFC;
-  --sidebar-primary: var(--apple-blue);
+  --sidebar-primary: var(--apple-orange);
   --sidebar-primary-foreground: #FFFCFC;
   --sidebar-accent: var(--apple-dark-gray-2);
   --sidebar-accent-foreground: #FFFCFC;
   --sidebar-border: var(--apple-dark-gray-2);
-  --sidebar-ring: var(--apple-blue);
+  --sidebar-ring: var(--apple-orange);
 }
 
 @layer base {

@@ -35,7 +35,7 @@ export default function RootLayout({
       <head>
         <ThemeScript />
       </head>
-      <body className="min-h-full flex flex-col">
+      <body className="min-h-full flex flex-col relative">
         <GetInTouchButton />
         <div className="min-h-screen min-h-dvh">{children}</div>
         <Navbar />

@@ -14,8 +14,8 @@ export default function ThemeScript() {
             let theme;
             if (parts.length === 2) theme = parts.pop().split(";").shift();
             
-            if (theme === "dark") document.documentElement.classList.add("dark");
-            else document.documentElement.classList.remove("dark");
+            if (theme === "light") document.documentElement.classList.remove("dark");
+            else document.documentElement.classList.add("dark");
           })()
         `,
       }}
