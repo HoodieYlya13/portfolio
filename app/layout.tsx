@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "../components/layout/Navbar";
 import ThemeScript from "@/components/layout/ThemeScript";
 import GetInTouchButton from "@/components/layout/GetInTouchButton";
+import Footer from "../components/layout/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,8 +37,9 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col">
         <GetInTouchButton />
-        {children}
+        <div className="min-h-screen min-h-dvh">{children}</div>
         <Navbar />
+        <Footer />
       </body>
     </html>
   );
