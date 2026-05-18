@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import NavItem from "./NavItem";
 import RollingText from "./RollingText";
@@ -9,7 +11,8 @@ export default function ThemeToggleButton() {
     const value = "; " + document.cookie;
     const parts = value.split("; theme=");
     let currentTheme = "light";
-    if (parts.length === 2) currentTheme = parts.pop()?.split(";").shift() || "light";
+    if (parts.length === 2)
+      currentTheme = parts.pop()?.split(";").shift() || "light";
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setTheme(currentTheme);
   }, []);
@@ -17,7 +20,7 @@ export default function ThemeToggleButton() {
   const handleThemeToggle = () => {
     const isDark = document.documentElement.classList.contains("dark");
     const newTheme = isDark ? "light" : "dark";
-    
+
     document.cookie = `theme=${newTheme};path=/;max-age=31536000`;
     setTheme(newTheme);
 
@@ -26,10 +29,7 @@ export default function ThemeToggleButton() {
   };
 
   return (
-    <button
-      onClick={handleThemeToggle}
-      className="w-full text-left"
-    >
+    <button onClick={handleThemeToggle} className="w-full text-left">
       <NavItem
         icon={
           theme === "light" ? (

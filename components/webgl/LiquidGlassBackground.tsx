@@ -199,11 +199,17 @@ function BackgroundMesh() {
 let globalCanvas: HTMLCanvasElement | null = null;
 let globalRoot: ReturnType<typeof createRoot> | null = null;
 
-export default function LiquidGlassBackground() {
+interface LiquidGlassBackgroundProps {
+  bottomFade?: boolean;
+}
+
+export default function LiquidGlassBackground({ bottomFade = false }: LiquidGlassBackgroundProps) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
+
+    const currentRef = ref.current;
 
     if (!globalCanvas) {
       globalCanvas = document.createElement("canvas");
@@ -213,26 +219,42 @@ export default function LiquidGlassBackground() {
       globalRoot = createRoot(globalCanvas);
       globalRoot.configure({
         camera: { fov: 90, position: [0, 0, 1] },
-        size: { width: window.innerWidth, height: window.innerHeight, top: 0, left: 0 },
+        size: { 
+          width: currentRef ? currentRef.clientWidth : window.innerWidth, 
+          height: currentRef ? currentRef.clientHeight : window.innerHeight, 
+          top: 0, 
+          left: 0 
+        },
       });
       globalRoot.render(<BackgroundMesh />);
     }
 
-    const currentRef = ref.current;
     if (currentRef) currentRef.appendChild(globalCanvas);
 
-    const handleResize = () => {
-      globalRoot?.configure({
-        size: { width: window.innerWidth, height: window.innerHeight, top: 0, left: 0 },
-      });
-    };
-    window.addEventListener("resize", handleResize);
+    const resizeObserver = new ResizeObserver((entries) => {
+      const entry = entries[0];
+      if (entry) {
+        const { width, height } = entry.contentRect;
+        globalRoot?.configure({
+          size: { width, height, top: 0, left: 0 },
+        });
+      }
+    });
+
+    if (currentRef) resizeObserver.observe(currentRef);
 
     return () => {
       if (currentRef && globalCanvas) currentRef.removeChild(globalCanvas);
-      window.removeEventListener("resize", handleResize);
+      resizeObserver.disconnect();
     };
   }, []);
 
-  return <div ref={ref} className="absolute inset-0 -z-10 w-full h-full" />;
+  return (
+    <>
+      <div ref={ref} className="absolute inset-0 -z-10 w-full h-full" />
+      {bottomFade && (
+        <div className="absolute bottom-0 left-0 right-0 h-48 bg-linear-to-t from-background to-transparent pointer-events-none -z-5" />
+      )}
+    </>
+  );
 }

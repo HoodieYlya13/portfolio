@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "../components/layout/Navbar";
-import MenuContent from "@/components/layout/MenuContent";
 import ThemeScript from "@/components/layout/ThemeScript";
 import GetInTouchButton from "@/components/layout/GetInTouchButton";
 
@@ -38,9 +37,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <GetInTouchButton />
         {children}
-        <Navbar>
-          <MenuContent />
-        </Navbar>
+        <Navbar />
       </body>
     </html>
   );
