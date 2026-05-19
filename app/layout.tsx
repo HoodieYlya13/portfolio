@@ -44,7 +44,9 @@ export default function RootLayout({
         </Suspense>
         <div className="min-h-screen min-h-dvh">{children}</div>
         {modal}
-        <Navbar />
+        <Suspense fallback={null}>
+          <Navbar />
+        </Suspense>
         <Footer />
       </body>
     </html>
