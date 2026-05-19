@@ -5,7 +5,9 @@ import { notFound } from "next/navigation";
 import { getGithubRepo } from "@/lib/github";
 import CloseButton from "@/components/projects/CloseButton";
 import ModalOverlay from "@/components/projects/ModalOverlay";
-import IframeDesktopPreview from "@/components/projects/IframeDesktopPreview";
+import { ProjectDemoPreview } from "@/components/projects/ProjectDemoPreview";
+import { ShopifyStorefrontEnterButton } from "@/components/projects/ShopifyStorefrontEnterButton";
+import { getShopifyStorefrontHost } from "@/lib/shopify-storefront-previews";
 
 interface ProjectModalProps {
   params: Promise<{ id: string }>;
@@ -23,6 +25,8 @@ async function ProjectModalDetail({ id }: { id: string }) {
     const match = repo.description.match(urlRegex);
     if (match) projectUrl = match[0];
   }
+
+  const shopifyHost = projectUrl ? getShopifyStorefrontHost(projectUrl) : undefined;
 
   return (
     <>
@@ -71,7 +75,13 @@ async function ProjectModalDetail({ id }: { id: string }) {
           View original on GitHub ↗
         </a>
         
-        {projectUrl && (
+        {projectUrl && shopifyHost && (
+          <ShopifyStorefrontEnterButton
+            host={shopifyHost}
+            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition duration-200 text-sm font-medium"
+          />
+        )}
+        {projectUrl && !shopifyHost && (
           <a
             href={projectUrl}
             target="_blank"
@@ -96,10 +106,10 @@ async function ProjectModalDetail({ id }: { id: string }) {
           <p className="text-xs text-gray-500 mb-4">
             URL: <a href={projectUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">{projectUrl}</a>
             <br />
-            <span className="italic">Note: If the preview below is blank, it may be due to the site&apos;s security policy preventing iframe embedding (X-Frame-Options).</span>
+            <span className="italic">Note: If the preview below is blank, it may be due to the site&apos;s security policy preventing iframe embedding (X-Frame-Options). Click on the URL above to view the site in a new tab.</span>
           </p>
           <div className="mt-4">
-            <IframeDesktopPreview src={projectUrl} title={`Live Demo for ${repo.name}`} />
+            <ProjectDemoPreview src={projectUrl} title={`Live Demo for ${repo.name}`} />
           </div>
         </div>
       )}
@@ -114,7 +124,6 @@ export default async function ProjectModal({ params }: ProjectModalProps) {
     <ModalOverlay>
       <div className="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 p-8 rounded-lg w-full shadow-2xl relative border border-gray-100 dark:border-gray-900">
         <div className="flex justify-end mb-2">
-          {/* Using custom CloseButton client component to trigger a router.back() history action */}
           <CloseButton />
         </div>
 
