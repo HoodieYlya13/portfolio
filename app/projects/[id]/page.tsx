@@ -103,7 +103,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   const { id } = await params;
 
   return (
-    <div className="p-8 md:p-12 max-w-3xl mx-auto pb-40">
+    <div className="p-8 md:pt-12 md:px-12 max-w-3xl mx-auto pb-40">
       <div className="mb-6">
         <Link href="/projects" className="inline-block text-blue-500 hover:underline text-sm font-medium">
           ← Back to Projects
