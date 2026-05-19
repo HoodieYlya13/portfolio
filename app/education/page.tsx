@@ -1,6 +1,7 @@
 import TimelineContainer from "@/components/education/TimelineContainer";
 import EducationCard from "@/components/education/EducationCard";
 import DotField from "@/components/education/DotField";
+import ResumeButton from "@/components/layout/ResumeButton";
 
 const educationData = [
   {
@@ -40,7 +41,7 @@ const educationData = [
 
 export default function EducationPage() {
   return (
-    <div className="min-h-screen bg-background py-20 relative overflow-hidden">
+    <div className="min-h-screen bg-background py-20 pb-40 relative overflow-hidden flex flex-col gap-8 sm:gap-16">
       <div className="absolute inset-0">
         <DotField
           dotRadius={1.5}
@@ -55,7 +56,7 @@ export default function EducationPage() {
         />
       </div>
 
-      <div className="max-w-4xl mx-auto text-center mb-8 sm:mb-16 px-4">
+      <div className="max-w-4xl mx-auto text-center px-4">
         <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-linear-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
           Education
         </h1>
@@ -78,6 +79,10 @@ export default function EducationPage() {
           />
         ))}
       </TimelineContainer>
+
+      <div className="flex justify-center">
+        <ResumeButton />
+      </div>
     </div>
   );
 }

@@ -4,7 +4,7 @@ import { Suspense } from "react";
 
 export default function Footer() {
   return (
-    <footer className="absolute bottom-0 w-full pt-20">
+    <footer className="absolute bottom-0 w-full h-40 flex justify-center items-end">
       <div 
         className="absolute inset-0 bg-linear-to-t from-background to-transparent backdrop-blur-lg"
         style={{
