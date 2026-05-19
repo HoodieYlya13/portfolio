@@ -13,7 +13,7 @@ export default function GetInTouchButton() {
     <Button
       asChild
       variant="glass"
-      className="fixed top-4 right-4 md:top-6 md:right-6 z-50"
+      className="fixed top-4 right-4 md:top-6 md:right-6 z-50 animate-drop-bounce"
     >
       <Link href="/contact" aria-label="Get in touch">
         <span>Get in touch</span>

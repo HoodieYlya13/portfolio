@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
@@ -23,8 +24,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  modal,
 }: {
   children: React.ReactNode;
+  modal: React.ReactNode;
 }) {
   return (
     <html
@@ -36,8 +39,11 @@ export default function RootLayout({
         <ThemeScript />
       </head>
       <body className="min-h-full flex flex-col relative">
-        <GetInTouchButton />
+        <Suspense fallback={null}>
+          <GetInTouchButton />
+        </Suspense>
         <div className="min-h-screen min-h-dvh">{children}</div>
+        {modal}
         <Navbar />
         <Footer />
       </body>
