@@ -99,15 +99,13 @@ export default function Navbar() {
             icon={
               <Link href="/" className="size-full block">
                 <video
+                  src="/memoji-video3.webm"
                   autoPlay
                   loop
                   muted
                   playsInline
                   className="size-full object-cover object-center"
-                >
-                  <source src="/memoji-video3.webm" type="video/webm" />
-                  <source src="/memoji-video3.mov" type="video/quicktime" />
-                </video>
+                />
               </Link>
             }
             className="flex-1 min-w-0"
