@@ -7,7 +7,6 @@ import { Mesh, PlaneGeometry, ShaderMaterial } from "three";
 
 extend({ Mesh, PlaneGeometry, ShaderMaterial });
 
-// Vertex shader that maps a plane to cover the full screen
 const vertexShader = `
   varying vec2 vUv;
   void main() {
@@ -16,7 +15,6 @@ const vertexShader = `
   }
 `;
 
-// Fragment shader that generates the liquid glass effect
 const fragmentShader = `
   uniform float u_time;
   uniform vec2 u_resolution;
@@ -95,7 +93,6 @@ function BackgroundMesh() {
   const materialRef = useRef<THREE.ShaderMaterial>(null);
   const { size, gl } = useThree();
 
-  // Initialize uniforms with default values
   const [uniforms] = useState(() => ({
     u_time: { value: 0 },
     u_resolution: {
@@ -109,13 +106,11 @@ function BackgroundMesh() {
     u_color_secondary: { value: new THREE.Color("#E5E5EA") },
   }));
 
-  // Update resolution and canvas size when size changes
   useEffect(() => {
     gl.setSize(size.width, size.height);
     uniforms.u_resolution.value.set(size.width, size.height);
   }, [size, uniforms, gl]);
 
-  // Read CSS variables and handle theme reactivity
   useEffect(() => {
     const cssColorToRgb = (cssColor: string) => {
       if (typeof window === "undefined") return { r: 1, g: 1, b: 1 };
@@ -158,10 +153,8 @@ function BackgroundMesh() {
       }
     };
 
-    // Initial read
     readColors();
 
-    // Observe theme changes on the html element
     const observer = new MutationObserver((mutations) => {
       mutations.forEach((mutation) => {
         if (mutation.attributeName === "class") readColors();
@@ -176,7 +169,6 @@ function BackgroundMesh() {
     return () => observer.disconnect();
   }, [uniforms]);
 
-  // Animation loop
   useFrame((_, delta) => {
     if (materialRef.current) materialRef.current.uniforms.u_time.value += delta;
   });
@@ -200,10 +192,12 @@ let globalCanvas: HTMLCanvasElement | null = null;
 let globalRoot: ReturnType<typeof createRoot> | null = null;
 
 interface LiquidGlassBackgroundProps {
-  bottomFadeHeight?: number;
+  fadeHeight?: number;
 }
 
-export default function LiquidGlassBackground({ bottomFadeHeight = 0 }: LiquidGlassBackgroundProps) {
+export default function LiquidGlassBackground({
+  fadeHeight = 0,
+}: LiquidGlassBackgroundProps) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -219,11 +213,11 @@ export default function LiquidGlassBackground({ bottomFadeHeight = 0 }: LiquidGl
       globalRoot = createRoot(globalCanvas);
       globalRoot.configure({
         camera: { fov: 90, position: [0, 0, 1] },
-        size: { 
-          width: currentRef ? currentRef.clientWidth : window.innerWidth, 
-          height: currentRef ? currentRef.clientHeight : window.innerHeight, 
-          top: 0, 
-          left: 0 
+        size: {
+          width: currentRef ? currentRef.clientWidth : window.innerWidth,
+          height: currentRef ? currentRef.clientHeight : window.innerHeight,
+          top: 0,
+          left: 0,
         },
       });
       globalRoot.render(<BackgroundMesh />);
@@ -252,10 +246,10 @@ export default function LiquidGlassBackground({ bottomFadeHeight = 0 }: LiquidGl
   return (
     <>
       <div ref={ref} className="absolute inset-0 -z-10 w-full h-full" />
-      {bottomFadeHeight && (
-        <div 
-          className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-background to-transparent pointer-events-none -z-5" 
-          style={{ height: `${bottomFadeHeight}rem` }}
+      {fadeHeight && (
+        <div
+          className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-background to-transparent pointer-events-none -z-5"
+          style={{ height: `${fadeHeight}rem` }}
         />
       )}
     </>
