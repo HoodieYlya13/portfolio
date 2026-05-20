@@ -226,5 +226,5 @@ body {
 
 .min-h-dynamic {
   min-height: calc(100vh + var(--fade-height));
-  min-height: calc(100lvh + var(--fade-height));
+  min-height: calc(100svh + var(--fade-height));
 }
