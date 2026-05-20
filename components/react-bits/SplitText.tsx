@@ -1,0 +1,218 @@
+"use client";
+
+import { useRef, useEffect, useState } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { SplitText as GSAPSplitText } from "gsap/SplitText";
+import { useGSAP } from "@gsap/react";
+
+gsap.registerPlugin(ScrollTrigger, GSAPSplitText, useGSAP);
+
+type SplitTextTag = "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p";
+
+export interface SplitTextProps {
+  text: string;
+  className?: string;
+  delay?: number;
+  duration?: number;
+  ease?: string;
+  splitType?: string;
+  from?: gsap.TweenVars;
+  to?: gsap.TweenVars;
+  threshold?: number;
+  rootMargin?: string;
+  textAlign?: React.CSSProperties["textAlign"];
+  tag?: SplitTextTag;
+  onLetterAnimationComplete?: () => void;
+  /** When true, plays on mount instead of waiting for scroll into view. */
+  immediate?: boolean;
+}
+
+type GSAPSplitInstance = InstanceType<typeof GSAPSplitText>;
+const splitInstanceMap = new WeakMap<HTMLElement, GSAPSplitInstance>();
+
+const SplitText = ({
+  text,
+  className = "",
+  delay = 50,
+  duration = 1.25,
+  ease = "power3.out",
+  splitType = "chars",
+  from = { opacity: 0, y: 40 },
+  to = { opacity: 1, y: 0 },
+  threshold = 0.1,
+  rootMargin = "-100px",
+  textAlign = "center",
+  tag = "p",
+  onLetterAnimationComplete,
+  immediate = false,
+}: SplitTextProps) => {
+  const ref = useRef<HTMLElement | null>(null);
+  const animationCompletedRef = useRef(false);
+  const onCompleteRef = useRef(onLetterAnimationComplete);
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
+  useEffect(() => {
+    onCompleteRef.current = onLetterAnimationComplete;
+  }, [onLetterAnimationComplete]);
+
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (document.fonts.status === "loaded") setFontsLoaded(true);
+    else document.fonts.ready.then(() => setFontsLoaded(true));
+  }, []);
+
+  useGSAP(
+    () => {
+      if (!ref.current || !text || !fontsLoaded) return;
+      if (animationCompletedRef.current) return;
+      const el = ref.current;
+
+      const existingInstance = splitInstanceMap.get(el);
+      if (existingInstance) {
+        try {
+          existingInstance.revert();
+        } catch {
+          /* noop */
+        }
+        splitInstanceMap.delete(el);
+      }
+
+      const startPct = (1 - threshold) * 100;
+      const marginMatch = /^(-?\d+(?:\.\d+)?)(px|em|rem|%)?$/.exec(rootMargin);
+      const marginValue = marginMatch ? parseFloat(marginMatch[1]) : 0;
+      const marginUnit = marginMatch ? marginMatch[2] || "px" : "px";
+      const sign =
+        marginValue === 0
+          ? ""
+          : marginValue < 0
+            ? `-=${Math.abs(marginValue)}${marginUnit}`
+            : `+=${marginValue}${marginUnit}`;
+      const start = `top ${startPct}%${sign}`;
+
+      let targets: Element[] | undefined;
+      const assignTargets = (self: InstanceType<typeof GSAPSplitText>) => {
+        if (splitType.includes("chars") && self.chars.length)
+          targets = self.chars;
+        if (!targets && splitType.includes("words") && self.words.length)
+          targets = self.words;
+        if (!targets && splitType.includes("lines") && self.lines.length)
+          targets = self.lines;
+        if (!targets) targets = self.chars || self.words || self.lines;
+      };
+
+      const splitInstance = new GSAPSplitText(el, {
+        type: splitType,
+        smartWrap: true,
+        autoSplit: splitType === "lines",
+        linesClass: "split-line",
+        wordsClass: "split-word",
+        charsClass: "split-char",
+        reduceWhiteSpace: false,
+        onSplit: (self) => {
+          assignTargets(self);
+          if (!targets?.length) return;
+
+          const tweenVars: gsap.TweenVars = {
+            ...to,
+            duration,
+            ease,
+            stagger: delay / 1000,
+            onComplete: () => {
+              animationCompletedRef.current = true;
+              onCompleteRef.current?.();
+            },
+            willChange: "transform, opacity",
+            force3D: true,
+          };
+
+          if (immediate) {
+            gsap.fromTo(targets, { ...from }, tweenVars);
+          } else {
+            gsap.fromTo(
+              targets,
+              { ...from },
+              {
+                ...tweenVars,
+                scrollTrigger: {
+                  trigger: el,
+                  start,
+                  once: true,
+                  fastScrollEnd: true,
+                  anticipatePin: 0.4,
+                },
+              },
+            );
+          }
+
+          return undefined;
+        },
+      });
+
+      splitInstanceMap.set(el, splitInstance);
+
+      return () => {
+        ScrollTrigger.getAll().forEach((st) => {
+          if (st.trigger === el) st.kill();
+        });
+        try {
+          splitInstance.revert();
+        } catch {
+          /* noop */
+        }
+        splitInstanceMap.delete(el);
+        animationCompletedRef.current = false;
+      };
+    },
+    {
+      dependencies: [
+        text,
+        delay,
+        duration,
+        ease,
+        splitType,
+        JSON.stringify(from),
+        JSON.stringify(to),
+        threshold,
+        rootMargin,
+        fontsLoaded,
+        immediate,
+      ],
+      scope: ref,
+    },
+  );
+
+  const style: React.CSSProperties = {
+    textAlign,
+    overflow: "hidden",
+    display: "inline-block",
+    whiteSpace: "normal",
+    wordWrap: "break-word",
+    willChange: "transform, opacity",
+  };
+
+  const classes = `split-parent ${className}`;
+  const setRef = (node: HTMLElement | null) => {
+    ref.current = node;
+  };
+  const sharedProps = { ref: setRef, style, className: classes, children: text };
+
+  switch (tag) {
+    case "h1":
+      return <h1 {...sharedProps} />;
+    case "h2":
+      return <h2 {...sharedProps} />;
+    case "h3":
+      return <h3 {...sharedProps} />;
+    case "h4":
+      return <h4 {...sharedProps} />;
+    case "h5":
+      return <h5 {...sharedProps} />;
+    case "h6":
+      return <h6 {...sharedProps} />;
+    default:
+      return <p {...sharedProps} />;
+  }
+};
+
+export default SplitText;

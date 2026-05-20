@@ -63,7 +63,7 @@ async function ProjectsContent() {
 
 export default function ProjectsPage() {
   return (
-    <div className="p-8 pb-40 max-w-4xl mx-auto">
+    <div className="p-8 padding-footer max-w-4xl mx-auto">
       <Suspense fallback={<div className="p-8 text-center text-gray-500">Loading...</div>}>
         <ProjectsContent />
       </Suspense>

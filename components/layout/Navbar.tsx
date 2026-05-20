@@ -5,6 +5,7 @@ import NavbarContainer from "./NavbarContainer";
 import MenuContent from "./MenuContent";
 import ThemeToggleButton from "./ThemeToggleButton";
 import RollingText from "./RollingText";
+import NavbarSlidingTitles from "./NavbarSlidingTitles";
 
 export default function Navbar() {
   const links = [
@@ -33,21 +34,6 @@ export default function Navbar() {
       src: "/img/logo.png",
       alt: "Contact Icon",
     },
-  ];
-
-  const titles = [
-    "Next.js Expert",
-    "•",
-    "Software Engineer",
-    "•",
-    "Full Stack Developer",
-    "•",
-    "Next.js Expert",
-    "•",
-    "Software Engineer",
-    "•",
-    "Full Stack Developer",
-    "•",
   ];
 
   return (
@@ -117,18 +103,7 @@ export default function Navbar() {
                 Ylya Martchenko
               </div>
             </Link>
-            <div className="overflow-hidden whitespace-nowrap w-full mask-marquee">
-              <div className="scroll-marquee gap-2 items-center">
-                {titles.map((text, index) => (
-                  <span
-                    key={index}
-                    className="text-xs md:text-sm opacity-70 uppercase font-medium shrink-0"
-                  >
-                    {text}
-                  </span>
-                ))}
-              </div>
-            </div>
+            <NavbarSlidingTitles />
           </NavItem>
 
           <label

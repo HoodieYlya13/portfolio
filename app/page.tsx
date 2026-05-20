@@ -4,7 +4,7 @@ export default function Page() {
   const fadeHeight = 12;
 
   return (
-    <div className="flex flex-col pb-40">
+    <div className="flex flex-col padding-footer">
       <div
         className="relative flex items-center justify-center min-h-dynamic pb-(--fade-height)"
         style={{ "--fade-height": `${fadeHeight}rem` } as React.CSSProperties}

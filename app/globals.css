@@ -122,6 +122,32 @@ body {
   --sidebar-accent-foreground: var(--apple-dark-gray);
   --sidebar-border: var(--apple-light-gray);
   --sidebar-ring: var(--apple-orange);
+
+  --footer-height: 17.5rem;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --footer-height: 20rem;
+  }
+}
+
+@media (min-width: 768px) {
+  :root {
+    --footer-height: 22.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --footer-height: 25rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  :root {
+    --footer-height: 27.5rem;
+  }
 }
 
 .dark {
@@ -227,4 +253,12 @@ body {
 .min-h-dynamic {
   min-height: calc(100vh + var(--fade-height));
   min-height: calc(100svh + var(--fade-height));
+}
+
+footer {
+  height: var(--footer-height);
+}
+
+.padding-footer {
+  padding-bottom: var(--footer-height);
 }

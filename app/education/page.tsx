@@ -46,7 +46,7 @@ async function EducationContent() {
 
 export default function EducationPage() {
   return (
-    <div className="min-h-screen bg-background py-20 pb-40 relative overflow-hidden flex flex-col gap-8 sm:gap-16">
+    <div className="min-h-screen bg-background py-20 padding-footer relative overflow-hidden flex flex-col gap-8 sm:gap-16">
       <div className="absolute inset-0">
         <DotField
           dotRadius={1.5}
