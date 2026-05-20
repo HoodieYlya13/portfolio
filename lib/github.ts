@@ -1,5 +1,8 @@
 // TODO: style this
 
+import { promises as fs } from "fs";
+import path from "path";
+
 export interface Repository {
   name: string;
   description: string | null;
@@ -39,133 +42,146 @@ export const FALLBACK_PROFILE: GithubProfile = {
 export const FALLBACK_REPOS: Repository[] = [
   {
     name: "codemafia",
-    description: "A modern, reverse-engineered revival of Code Mafia. Built with Next.js 16, React 19, Tailwind v4, WebSockets (PartyKit), and in-browser Python (Pyodide).",
+    description:
+      "A modern, reverse-engineered revival of Code Mafia. Built with Next.js 16, React 19, Tailwind v4, WebSockets (PartyKit), and in-browser Python (Pyodide).",
     html_url: "https://github.com/HoodieYlya13/codemafia",
     language: "JavaScript",
     stargazers_count: 4,
     forks_count: 1,
     fork: false,
-    updated_at: "2026-05-11T12:00:00Z"
+    updated_at: "2026-05-11T12:00:00Z",
   },
   {
     name: "insta-v2",
-    description: "🚀 InstaV2: The Next.js 16 & React 19 Best Practices Playground. A high-performance Instagram clone demonstrating the cutting-edge features of Next.js 16 and React 19.",
+    description:
+      "🚀 InstaV2: The Next.js 16 & React 19 Best Practices Playground. A high-performance Instagram clone demonstrating the cutting-edge features of Next.js 16 and React 19.",
     html_url: "https://github.com/HoodieYlya13/insta-v2",
     language: "TypeScript",
     fork: false,
     stargazers_count: 0,
     forks_count: 0,
-    updated_at: "2026-05-07T12:00:00Z"
+    updated_at: "2026-05-07T12:00:00Z",
   },
   {
     name: "schumacher-knepper-theme-dev",
-    description: "Development fork of the Schumacher-Knepper theme. Used for testing and staging before pushing to my client's production repository. (password = 123)",
+    description:
+      "Development fork of the Schumacher-Knepper theme. Used for testing and staging before pushing to my client's production repository. (password = 123)",
     html_url: "https://github.com/HoodieYlya13/schumacher-knepper-theme-dev",
     language: "Liquid",
     fork: true,
     stargazers_count: 0,
     forks_count: 0,
-    updated_at: "2026-05-17T12:00:00Z"
+    updated_at: "2026-05-17T12:00:00Z",
   },
   {
     name: "vibe-heist",
-    description: "Public entry point for Vibe Heist. Orchestrates submodules for the WebGPU engine, web portal, and the private game client. (In Development)",
+    description:
+      "Public entry point for Vibe Heist. Orchestrates submodules for the WebGPU engine, web portal, and the private game client. (In Development)",
     html_url: "https://github.com/HoodieYlya13/vibe-heist",
     language: "Shell",
     fork: false,
     stargazers_count: 0,
     forks_count: 0,
-    updated_at: "2026-05-17T12:00:00Z"
+    updated_at: "2026-05-17T12:00:00Z",
   },
   {
     name: "poly-livre-fullstack",
-    description: "A modern full-stack book management platform built with Java 21, Spring Boot 3, Next.js 16, and Tailwind CSS. Features a Hexagonal Architecture backend and a responsive, dockerized environment.",
+    description:
+      "A modern full-stack book management platform built with Java 21, Spring Boot 3, Next.js 16, and Tailwind CSS. Features a Hexagonal Architecture backend and a responsive, dockerized environment.",
     html_url: "https://github.com/HoodieYlya13/poly-livre-fullstack",
     language: "TypeScript / Java",
     fork: false,
     stargazers_count: 0,
     forks_count: 0,
-    updated_at: "2026-05-12T12:00:00Z"
+    updated_at: "2026-05-12T12:00:00Z",
   },
   {
     name: "dockercraft",
-    description: "Dockercraft revival: Manage Minecraft servers with Docker on any system, including native support for ARM (Apple Silicon) and standard x86 architectures.",
+    description:
+      "Dockercraft revival: Manage Minecraft servers with Docker on any system, including native support for ARM (Apple Silicon) and standard x86 architectures.",
     html_url: "https://github.com/HoodieYlya13/dockercraft",
     language: "Lua",
     fork: true,
     stargazers_count: 0,
     forks_count: 1,
-    updated_at: "2025-12-12T12:00:00Z"
+    updated_at: "2025-12-12T12:00:00Z",
   },
   {
     name: "vibe-heist-web",
-    description: "The official web portal and launcher for Vibe Heist. Built with Next.js 16 to serve as the secure container for the high-fidelity WebGPU & WASM open-world simulation. (In Development)",
+    description:
+      "The official web portal and launcher for Vibe Heist. Built with Next.js 16 to serve as the secure container for the high-fidelity WebGPU & WASM open-world simulation. (In Development)",
     html_url: "https://github.com/HoodieYlya13/vibe-heist-web",
     language: "TypeScript",
     fork: false,
     stargazers_count: 0,
     forks_count: 0,
-    updated_at: "2026-05-17T12:00:00Z"
+    updated_at: "2026-05-17T12:00:00Z",
   },
   {
     name: "eclokit",
-    description: "AI-Native Open-Source Next.js commerce. Powered by Stripe. Ultra fast with typesafe Commerce SDK. Built for AI development (Claude, Codex, Cursor).",
+    description:
+      "AI-Native Open-Source Next.js commerce. Powered by Stripe. Ultra fast with typesafe Commerce SDK. Built for AI development (Claude, Codex, Cursor).",
     html_url: "https://github.com/HoodieYlya13/eclokit",
     language: "MDX",
     fork: true,
     stargazers_count: 0,
     forks_count: 0,
-    updated_at: "2026-04-27T12:00:00Z"
+    updated_at: "2026-04-27T12:00:00Z",
   },
   {
     name: "vibe-engine",
-    description: "A high-performance, browser-based physics engine written in Rust and compiled to WebAssembly. Powered by Rapier3D for vehicle dynamics and designed for next-gen WebGPU rendering. (In Development)",
+    description:
+      "A high-performance, browser-based physics engine written in Rust and compiled to WebAssembly. Powered by Rapier3D for vehicle dynamics and designed for next-gen WebGPU rendering. (In Development)",
     html_url: "https://github.com/HoodieYlya13/vibe-engine",
     language: "Rust",
     fork: false,
     stargazers_count: 0,
     forks_count: 0,
-    updated_at: "2026-02-12T12:00:00Z"
+    updated_at: "2026-02-12T12:00:00Z",
   },
   {
     name: "css-playground",
-    description: "A minimalist, interactive CSS playground for experimenting with layouts, animations, and modern styling techniques.",
+    description:
+      "A minimalist, interactive CSS playground for experimenting with layouts, animations, and modern styling techniques.",
     html_url: "https://github.com/HoodieYlya13/css-playground",
     language: "CSS",
     fork: false,
     stargazers_count: 0,
     forks_count: 0,
-    updated_at: "2026-02-12T12:00:00Z"
+    updated_at: "2026-02-12T12:00:00Z",
   },
   {
     name: "poly-livre-frontend",
-    description: "Frontend repository for the Poly Livre book management platform.",
+    description:
+      "Frontend repository for the Poly Livre book management platform.",
     html_url: "https://github.com/HoodieYlya13/poly-livre-frontend",
     language: "TypeScript",
     fork: false,
     stargazers_count: 1,
     forks_count: 0,
-    updated_at: "2026-01-23T12:00:00Z"
+    updated_at: "2026-01-23T12:00:00Z",
   },
   {
     name: "poly-livre-backend",
-    description: "Backend repository for the Poly Livre book management platform.",
+    description:
+      "Backend repository for the Poly Livre book management platform.",
     html_url: "https://github.com/HoodieYlya13/poly-livre-backend",
     language: "Java",
     fork: false,
     stargazers_count: 1,
     forks_count: 0,
-    updated_at: "2026-01-23T12:00:00Z"
+    updated_at: "2026-01-23T12:00:00Z",
   },
   {
     name: "passkey-auth-template",
-    description: "Template repository demonstrating Passkey authentication implementation.",
+    description:
+      "Template repository demonstrating Passkey authentication implementation.",
     html_url: "https://github.com/HoodieYlya13/passkey-auth-template",
     language: "TypeScript",
     fork: false,
     stargazers_count: 0,
     forks_count: 0,
-    updated_at: "2026-01-18T12:00:00Z"
+    updated_at: "2026-01-18T12:00:00Z",
   },
   {
     name: "config",
@@ -175,27 +191,30 @@ export const FALLBACK_REPOS: Repository[] = [
     fork: false,
     stargazers_count: 0,
     forks_count: 0,
-    updated_at: "2026-01-17T12:00:00Z"
+    updated_at: "2026-01-17T12:00:00Z",
   },
   {
     name: "poly-livre-fullstack-infrastructure",
-    description: "Infrastructure configurations and deployment setups for the Poly Livre stack.",
-    html_url: "https://github.com/HoodieYlya13/poly-livre-fullstack-infrastructure",
+    description:
+      "Infrastructure configurations and deployment setups for the Poly Livre stack.",
+    html_url:
+      "https://github.com/HoodieYlya13/poly-livre-fullstack-infrastructure",
     language: "Makefile",
     fork: false,
     stargazers_count: 1,
     forks_count: 0,
-    updated_at: "2026-01-15T12:00:00Z"
+    updated_at: "2026-01-15T12:00:00Z",
   },
   {
     name: "honey-pot",
-    description: "A Next.js Honey Pot application designed to lure attackers, simulate vulnerabilities (like shell access), and log their activities for security analysis.",
+    description:
+      "A Next.js Honey Pot application designed to lure attackers, simulate vulnerabilities (like shell access), and log their activities for security analysis.",
     html_url: "https://github.com/HoodieYlya13/honey-pot",
     language: "TypeScript",
     fork: false,
     stargazers_count: 0,
     forks_count: 0,
-    updated_at: "2025-12-04T12:00:00Z"
+    updated_at: "2025-12-04T12:00:00Z",
   },
   {
     name: "whistleblower",
@@ -205,7 +224,7 @@ export const FALLBACK_REPOS: Repository[] = [
     fork: false,
     stargazers_count: 0,
     forks_count: 0,
-    updated_at: "2025-01-27T12:00:00Z"
+    updated_at: "2025-01-27T12:00:00Z",
   },
   {
     name: "clock",
@@ -215,7 +234,7 @@ export const FALLBACK_REPOS: Repository[] = [
     fork: false,
     stargazers_count: 0,
     forks_count: 0,
-    updated_at: "2024-06-11T12:00:00Z"
+    updated_at: "2024-06-11T12:00:00Z",
   },
   {
     name: "to-do-list",
@@ -225,7 +244,7 @@ export const FALLBACK_REPOS: Repository[] = [
     fork: false,
     stargazers_count: 0,
     forks_count: 0,
-    updated_at: "2024-06-10T12:00:00Z"
+    updated_at: "2024-06-10T12:00:00Z",
   },
   {
     name: "guess-number",
@@ -235,15 +254,15 @@ export const FALLBACK_REPOS: Repository[] = [
     fork: false,
     stargazers_count: 0,
     forks_count: 0,
-    updated_at: "2024-06-07T12:00:00Z"
-  }
+    updated_at: "2024-06-07T12:00:00Z",
+  },
 ];
 
 export async function getGithubData() {
   const username = "HoodieYlya13";
   const headers: Record<string, string> = {
     "User-Agent": "portfolio-app-nextjs",
-    "Accept": "application/vnd.github.v3+json",
+    Accept: "application/vnd.github.v3+json",
   };
 
   if (process.env.GITHUB_TOKEN) {
@@ -256,14 +275,19 @@ export async function getGithubData() {
         headers,
         next: { revalidate: 3600 },
       }),
-      fetch(`https://api.github.com/users/${username}/repos?per_page=100&sort=updated`, {
-        headers,
-        next: { revalidate: 3600 },
-      }),
+      fetch(
+        `https://api.github.com/users/${username}/repos?per_page=100&sort=updated`,
+        {
+          headers,
+          next: { revalidate: 3600 },
+        },
+      ),
     ]);
 
     if (!profileRes.ok || !reposRes.ok) {
-      throw new Error(`GitHub API returned status: ${profileRes.status} / ${reposRes.status}`);
+      throw new Error(
+        `GitHub API returned status: ${profileRes.status} / ${reposRes.status}`,
+      );
     }
 
     const profileData = await profileRes.json();
@@ -305,7 +329,10 @@ export async function getGithubData() {
       isLive: true,
     };
   } catch (error) {
-    console.error("Failed fetching live GitHub data, falling back to static:", error);
+    console.error(
+      "Failed fetching live GitHub data, falling back to static:",
+      error,
+    );
     return {
       profile: FALLBACK_PROFILE,
       repositories: FALLBACK_REPOS,
@@ -318,22 +345,22 @@ export async function getGithubRepo(name: string) {
   const username = "HoodieYlya13";
   const headers: Record<string, string> = {
     "User-Agent": "portfolio-app-nextjs",
-    "Accept": "application/vnd.github.v3+json",
+    Accept: "application/vnd.github.v3+json",
   };
 
-  if (process.env.GITHUB_TOKEN) {
+  if (process.env.GITHUB_TOKEN)
     headers["Authorization"] = `token ${process.env.GITHUB_TOKEN}`;
-  }
 
   try {
-    const res = await fetch(`https://api.github.com/repos/${username}/${name}`, {
-      headers,
-      next: { revalidate: 3600 },
-    });
+    const res = await fetch(
+      `https://api.github.com/repos/${username}/${name}`,
+      {
+        headers,
+        next: { revalidate: 3600 },
+      },
+    );
 
-    if (!res.ok) {
-      throw new Error(`GitHub API returned status: ${res.status}`);
-    }
+    if (!res.ok) throw new Error(`GitHub API returned status: ${res.status}`);
 
     const repo = await res.json();
     return {
@@ -352,10 +379,92 @@ export async function getGithubRepo(name: string) {
     };
   } catch (error) {
     console.error(`Failed fetching live repo ${name}, using static:`, error);
-    const fallback = FALLBACK_REPOS.find((r) => r.name.toLowerCase() === name.toLowerCase());
+    const fallback = FALLBACK_REPOS.find(
+      (r) => r.name.toLowerCase() === name.toLowerCase(),
+    );
     return {
       repo: fallback || null,
       isLive: false,
     };
+  }
+}
+
+export interface FullProfileData {
+  personal_info: {
+    full_name: string;
+    birthday: string;
+    nationality: string;
+    current_location: string;
+    status: string;
+  };
+  professional_summary: {
+    coding_experience_since: number;
+    roles: string[];
+    specializations: string[];
+    languages: string[];
+    availability: {
+      locations_interest: string[];
+      fields_interest: string[];
+    };
+  };
+  skills: {
+    technical_stack: string[];
+    languages_and_tools: string[];
+    soft_skills: string[];
+  };
+  contacts: Array<{ name: string; value: string; icon: string }>;
+  education: Array<{
+    year: string;
+    title: string;
+    school: string;
+    location: string;
+    description: string;
+    is_hero?: boolean;
+  }>;
+  experience: Array<{
+    period: string;
+    title: string;
+    organization: string;
+    description: string[];
+    additional_info?: { project_url: string; note: string };
+  }>;
+  links: { portfolio: string; resume: string };
+}
+
+export async function getFullProfile(): Promise<FullProfileData | null> {
+  const remoteUrl =
+    "https://raw.githubusercontent.com/HoodieYlya13/HoodieYlya13/main/profile.json";
+
+  try {
+    const res = await fetch(remoteUrl, {
+      next: { revalidate: 3600 },
+    });
+
+    if (!res.ok)
+      throw new Error(`GitHub raw responded with status: ${res.status}`);
+
+    return await res.json();
+  } catch (remoteError) {
+    console.error(
+      "Failed fetching profile from GitHub, trying local fallback:",
+      remoteError,
+    );
+
+    try {
+      const filePath = path.join(
+        process.cwd(),
+        "public",
+        "info",
+        "profile.json",
+      );
+      const fileContents = await fs.readFile(filePath, "utf8");
+      return JSON.parse(fileContents);
+    } catch (localError) {
+      console.error(
+        "Critical: Local profile fallback also failed:",
+        localError,
+      );
+      return null;
+    }
   }
 }

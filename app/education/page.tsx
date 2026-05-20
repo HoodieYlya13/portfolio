@@ -1,58 +1,46 @@
 import { Suspense } from "react";
 import TimelineContainer from "@/components/education/TimelineContainer";
 import EducationCard from "@/components/education/EducationCard";
+import LanguagesSection from "@/components/education/LanguagesSection";
+import CodingSince from "@/components/education/CodingSince";
+import ScrollReveal from "@/components/education/ScrollReveal";
 import DotField from "@/components/education/DotField";
 import ResumeButton from "@/components/layout/ResumeButton";
+import { getFullProfile } from "@/lib/github";
 
-interface EducationItem {
-  year: string;
-  title: string;
-  school: string;
-  location: string;
-  description: string;
-  is_hero?: boolean;
-}
-
-async function fetchEducationData(): Promise<EducationItem[] | null> {
-  try {
-    const res = await fetch(
-      "https://raw.githubusercontent.com/HoodieYlya13/HoodieYlya13/main/profile.json",
-      {
-        next: {
-          revalidate: 3600,
-        },
-      },
-    );
-
-    if (!res.ok) throw new Error("Failed to fetch portfolio data");
-
-    const data = await res.json();
-    return data.education || [];
-  } catch (error) {
-    console.error("Education fetch error:", error);
-    return null;
-  }
-}
-
-async function EducationTimeline() {
-  const educationData = await fetchEducationData();
-  if (!educationData) return null;
+async function EducationContent() {
+  const profileData = await getFullProfile();
+  const educationData = profileData?.education || [];
+  const languages = profileData?.professional_summary?.languages || [];
+  const codingSince = profileData?.professional_summary?.coding_experience_since;
 
   return (
-    <TimelineContainer>
-      {educationData.map((item, index) => (
-        <EducationCard
-          key={index}
-          year={item.year}
-          title={item.title}
-          school={item.school}
-          location={item.location}
-          description={item.description}
-          align={index % 2 === 0 ? "left" : "right"}
-          isHero={item.is_hero}
-        />
-      ))}
-    </TimelineContainer>
+    <>
+      {educationData.length > 0 && (
+        <TimelineContainer>
+          {educationData.map((item, index) => (
+            <EducationCard
+              key={index}
+              year={item.year}
+              title={item.title}
+              school={item.school}
+              location={item.location}
+              description={item.description}
+              align={index % 2 === 0 ? "left" : "right"}
+              isHero={item.is_hero}
+            />
+          ))}
+        </TimelineContainer>
+      )}
+
+      {languages.length > 0 && <LanguagesSection languages={languages} />}
+
+      {codingSince != null && <CodingSince since={codingSince} />}
+
+      <ScrollReveal className="flex justify-center">
+        <ResumeButton />
+      </ScrollReveal>
+    </>
   );
 }
 
@@ -83,12 +71,8 @@ export default function EducationPage() {
       </div>
 
       <Suspense fallback={null}>
-        <EducationTimeline />
+        <EducationContent />
       </Suspense>
-
-      <div className="flex justify-center">
-        <ResumeButton />
-      </div>
     </div>
   );
 }
