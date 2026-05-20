@@ -16,7 +16,7 @@ export default function Error({
   }, [error]);
 
   return (
-    <main className="relative min-h-screen flex flex-col items-center justify-center p-4 overflow-hidden">
+    <section className="relative min-h-screen flex flex-col items-center justify-center p-4 overflow-hidden pb-40 sm:pb-0">
       <LiquidGlassBackground />
       
       <div className="z-10 backdrop-blur-md bg-foreground/40 text-background p-8 rounded-xl shadow-lg max-w-md w-full text-center">
@@ -29,6 +29,6 @@ export default function Error({
           Try again
         </Button>
       </div>
-    </main>
+    </section>
   );
 }

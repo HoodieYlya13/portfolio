@@ -1,4 +1,4 @@
-import LiquidGlassBackground from "@/components/webgl/LiquidGlassBackground";
+import HomeHero from "@/components/home/HomeHero";
 
 export default function Page() {
   const fadeHeight = 12;
@@ -9,11 +9,13 @@ export default function Page() {
         className="relative flex items-center justify-center min-h-dynamic pb-(--fade-height)"
         style={{ "--fade-height": `${fadeHeight}rem` } as React.CSSProperties}
       >
-        <LiquidGlassBackground fadeHeight={fadeHeight} />
-        <div className="relative text-center">HERO PLACEHOLDER</div>
+        <HomeHero fadeHeight={fadeHeight} />
       </div>
 
-      <div className="relative flex items-center justify-center text-center h-60">
+      <div
+        id="classic-background"
+        className="relative flex items-center justify-center text-center h-60 scroll-mt-8"
+      >
         PLACEHOLDER 2
       </div>
     </div>

@@ -17,6 +17,7 @@ const vertexShader = `
 
 const fragmentShader = `
   uniform float u_time;
+  uniform float u_intro_progress;
   uniform vec2 u_resolution;
   uniform vec3 u_color_bg;
   uniform vec3 u_color_primary;
@@ -85,16 +86,43 @@ const fragmentShader = `
     float specular = pow(max(0.0, bands), 12.0) * 0.15;
     color += vec3(specular);
     
+    // --- Organic Propagation Mask ---
+    vec2 centerUv = vUv - vec2(0.5);
+    centerUv.x *= aspect;
+    float dist = length(centerUv);
+
+    float maxDist = length(vec2(0.5 * aspect, 0.5));
+    
+    // We heavily influence the expansion threshold using the fluid's own noise footprint (n2 and n3)
+    // This makes the center expand outward irregularly along the fluid shapes.
+    float noiseInfluence = (n2 * 0.25 + n3 * 0.15);
+    
+    // Remap u_intro_progress so it completely sweeps past the corners even with noise distortion
+    float targetProgress = u_intro_progress * (maxDist + 0.4);
+    
+    // Organic threshold edge
+    float mask = smoothstep(targetProgress, targetProgress - 0.3, dist + noiseInfluence);
+
+    // Dynamic blend from pure background color into the moving shader texture
+    color = mix(u_color_bg, color, mask);
+    
     gl_FragColor = vec4(color, 1.0);
   }
 `;
 
-function BackgroundMesh() {
+interface BackgroundMeshProps {
+  animateIn: boolean;
+  runId: number;
+}
+
+function BackgroundMesh({ animateIn, runId }: BackgroundMeshProps) {
   const materialRef = useRef<THREE.ShaderMaterial>(null);
+  const startAnimationRef = useRef(false);
   const { size, gl } = useThree();
 
   const [uniforms] = useState(() => ({
     u_time: { value: 0 },
+    u_intro_progress: { value: animateIn ? 0.0 : 1.0 },
     u_resolution: {
       value: new THREE.Vector2(
         typeof window !== "undefined" ? window.innerWidth : 1000,
@@ -107,9 +135,25 @@ function BackgroundMesh() {
   }));
 
   useEffect(() => {
+    if (!animateIn) return;
+
+    startAnimationRef.current = false;
+    const material = materialRef.current;
+    if (material) material.uniforms.u_intro_progress.value = 0;
+
+    const timer = window.setTimeout(() => {
+      startAnimationRef.current = true;
+    }, 600);
+
+    return () => window.clearTimeout(timer);
+  }, [animateIn, runId]);
+
+  useEffect(() => {
     gl.setSize(size.width, size.height);
-    uniforms.u_resolution.value.set(size.width, size.height);
-  }, [size, uniforms, gl]);
+    const material = materialRef.current;
+    if (material)
+      material.uniforms.u_resolution.value.set(size.width, size.height);
+  }, [size, gl]);
 
   useEffect(() => {
     const cssColorToRgb = (cssColor: string) => {
@@ -126,7 +170,8 @@ function BackgroundMesh() {
     };
 
     const readColors = () => {
-      if (typeof window === "undefined") return;
+      const material = materialRef.current;
+      if (!material || typeof window === "undefined") return;
 
       const style = getComputedStyle(document.documentElement);
       const bg = style.getPropertyValue("--background").trim();
@@ -141,15 +186,15 @@ function BackgroundMesh() {
 
       if (bg) {
         const rgb = cssColorToRgb(bg);
-        uniforms.u_color_bg.value.setRGB(rgb.r, rgb.g, rgb.b);
+        material.uniforms.u_color_bg.value.setRGB(rgb.r, rgb.g, rgb.b);
       }
       if (primary) {
         const rgb = cssColorToRgb(primary);
-        uniforms.u_color_primary.value.setRGB(rgb.r, rgb.g, rgb.b);
+        material.uniforms.u_color_primary.value.setRGB(rgb.r, rgb.g, rgb.b);
       }
       if (secondary) {
         const rgb = cssColorToRgb(secondary);
-        uniforms.u_color_secondary.value.setRGB(rgb.r, rgb.g, rgb.b);
+        material.uniforms.u_color_secondary.value.setRGB(rgb.r, rgb.g, rgb.b);
       }
     };
 
@@ -167,10 +212,23 @@ function BackgroundMesh() {
     });
 
     return () => observer.disconnect();
-  }, [uniforms]);
+  }, []);
 
   useFrame((_, delta) => {
-    if (materialRef.current) materialRef.current.uniforms.u_time.value += delta;
+    const material = materialRef.current;
+    if (!material) return;
+
+    material.uniforms.u_time.value += delta;
+
+    if (
+      animateIn &&
+      startAnimationRef.current &&
+      material.uniforms.u_intro_progress.value < 1.0
+    ) {
+      material.uniforms.u_intro_progress.value += delta * 0.55;
+      if (material.uniforms.u_intro_progress.value > 1.0)
+        material.uniforms.u_intro_progress.value = 1.0;
+    }
   });
 
   return (
@@ -193,12 +251,23 @@ let globalRoot: ReturnType<typeof createRoot> | null = null;
 
 interface LiquidGlassBackgroundProps {
   fadeHeight?: number;
+  animateIn?: boolean;
+  restartKey?: number;
 }
 
 export default function LiquidGlassBackground({
   fadeHeight = 0,
+  animateIn = false,
+  restartKey = 0,
 }: LiquidGlassBackgroundProps) {
   const ref = useRef<HTMLDivElement>(null);
+  const meshKey = animateIn ? `intro-${restartKey}` : "ambient";
+
+  useEffect(() => {
+    globalRoot?.render(
+      <BackgroundMesh key={meshKey} animateIn={animateIn} runId={restartKey} />,
+    );
+  }, [animateIn, meshKey, restartKey]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -220,8 +289,11 @@ export default function LiquidGlassBackground({
           left: 0,
         },
       });
-      globalRoot.render(<BackgroundMesh />);
     }
+
+    globalRoot?.render(
+      <BackgroundMesh key={meshKey} animateIn={animateIn} runId={restartKey} />,
+    );
 
     if (currentRef) currentRef.appendChild(globalCanvas);
 
@@ -240,13 +312,19 @@ export default function LiquidGlassBackground({
     return () => {
       if (currentRef && globalCanvas) currentRef.removeChild(globalCanvas);
       resizeObserver.disconnect();
+
+      if (animateIn) {
+        globalRoot?.unmount();
+        globalRoot = null;
+        globalCanvas = null;
+      }
     };
-  }, []);
+  }, [animateIn, meshKey, restartKey]);
 
   return (
     <>
       <div ref={ref} className="absolute inset-0 -z-10 w-full h-full" />
-      {fadeHeight && (
+      {fadeHeight > 0 && (
         <div
           className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-background to-transparent pointer-events-none -z-5"
           style={{ height: `${fadeHeight}rem` }}
