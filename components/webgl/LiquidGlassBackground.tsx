@@ -200,10 +200,10 @@ let globalCanvas: HTMLCanvasElement | null = null;
 let globalRoot: ReturnType<typeof createRoot> | null = null;
 
 interface LiquidGlassBackgroundProps {
-  bottomFade?: boolean;
+  bottomFadeHeight?: number;
 }
 
-export default function LiquidGlassBackground({ bottomFade = false }: LiquidGlassBackgroundProps) {
+export default function LiquidGlassBackground({ bottomFadeHeight = 0 }: LiquidGlassBackgroundProps) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -252,8 +252,11 @@ export default function LiquidGlassBackground({ bottomFade = false }: LiquidGlas
   return (
     <>
       <div ref={ref} className="absolute inset-0 -z-10 w-full h-full" />
-      {bottomFade && (
-        <div className="absolute bottom-0 left-0 right-0 h-48 bg-linear-to-t from-background to-transparent pointer-events-none -z-5" />
+      {bottomFadeHeight && (
+        <div 
+          className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-background to-transparent pointer-events-none -z-5" 
+          style={{ height: `${bottomFadeHeight}rem` }}
+        />
       )}
     </>
   );
