@@ -1,43 +1,60 @@
+import { Suspense } from "react";
 import TimelineContainer from "@/components/education/TimelineContainer";
 import EducationCard from "@/components/education/EducationCard";
 import DotField from "@/components/education/DotField";
 import ResumeButton from "@/components/layout/ResumeButton";
 
-const educationData = [
-  {
-    year: "2023 - 2026",
-    title: "Engineer in IARN (Informatics, Automatic, Robotics, Networks)",
-    school: "Polytech Nancy",
-    location: "Vandœuvre-lès-Nancy",
-    description:
-      "Specializing in computer science, automation, robotics, and networks. This advanced engineering degree focuses on integrating software with hardware systems.",
-    isHero: true,
-  },
-  {
-    year: "2022 - 2023",
-    title: "Diploma of Higher Education in Engineering Science",
-    school: "F.R.U. Mathematics, computer science, mechanics",
-    location: "Metz",
-    description:
-      "Focused on foundational engineering principles including advanced mathematics, computer science fundamentals, and classical mechanics.",
-  },
-  {
-    year: "2021 - 2022",
-    title: "BTEC Higher National Diploma in Physics Measures",
-    school: "U.I.T. Department of Measures",
-    location: "Metz",
-    description:
-      "Studies in physical measurements, instrumentation, and applied physics. Developed strong practical skills in data acquisition and analysis.",
-  },
-  {
-    year: "2019 - 2021",
-    title: "PeiP (Polytech engineering schools course)",
-    school: "Polytech Nancy",
-    location: "Vandœuvre-lès-Nancy",
-    description:
-      "Preparatory cycle for the Polytech network engineering schools, focusing on intensive mathematics, physics, and introductory engineering concepts.",
-  },
-];
+interface EducationItem {
+  year: string;
+  title: string;
+  school: string;
+  location: string;
+  description: string;
+  is_hero?: boolean;
+}
+
+async function fetchEducationData(): Promise<EducationItem[] | null> {
+  try {
+    const res = await fetch(
+      "https://raw.githubusercontent.com/HoodieYlya13/HoodieYlya13/main/profile.json",
+      {
+        next: {
+          revalidate: 3600,
+        },
+      },
+    );
+
+    if (!res.ok) throw new Error("Failed to fetch portfolio data");
+
+    const data = await res.json();
+    return data.education || [];
+  } catch (error) {
+    console.error("Education fetch error:", error);
+    return null;
+  }
+}
+
+async function EducationTimeline() {
+  const educationData = await fetchEducationData();
+  if (!educationData) return null;
+
+  return (
+    <TimelineContainer>
+      {educationData.map((item, index) => (
+        <EducationCard
+          key={index}
+          year={item.year}
+          title={item.title}
+          school={item.school}
+          location={item.location}
+          description={item.description}
+          align={index % 2 === 0 ? "left" : "right"}
+          isHero={item.is_hero}
+        />
+      ))}
+    </TimelineContainer>
+  );
+}
 
 export default function EducationPage() {
   return (
@@ -65,20 +82,9 @@ export default function EducationPage() {
         </p>
       </div>
 
-      <TimelineContainer>
-        {educationData.map((item, index) => (
-          <EducationCard
-            key={index}
-            year={item.year}
-            title={item.title}
-            school={item.school}
-            location={item.location}
-            description={item.description}
-            align={index % 2 === 0 ? "left" : "right"}
-            isHero={item.isHero}
-          />
-        ))}
-      </TimelineContainer>
+      <Suspense fallback={null}>
+        <EducationTimeline />
+      </Suspense>
 
       <div className="flex justify-center">
         <ResumeButton />
