@@ -10,9 +10,9 @@ import { getFullProfile } from "@/lib/github";
 
 async function EducationContent() {
   const profileData = await getFullProfile();
-  const educationData = profileData?.education || [];
-  const languages = profileData?.professional_summary?.languages || [];
-  const codingSince = profileData?.professional_summary?.coding_experience_since;
+  const educationData = profileData?.academic_history || [];
+  const languages = profileData?.communication?.languages || [];
+  const codingSince = profileData?.identity?.coding_experience_since || 2019;
 
   return (
     <>
@@ -21,13 +21,13 @@ async function EducationContent() {
           {educationData.map((item, index) => (
             <EducationCard
               key={index}
-              year={item.year}
-              title={item.title}
-              school={item.school}
+              range={item.range}
+              degree={item.degree}
+              institution={item.institution}
               location={item.location}
-              description={item.description}
+              summary={item.summary}
               align={index % 2 === 0 ? "left" : "right"}
-              isHero={item.is_hero}
+              isHero={item.main}
             />
           ))}
         </TimelineContainer>

@@ -34,10 +34,10 @@ export async function sendContactEmail(data: ContactFormData) {
 
   try {
     const { error } = await resend.emails.send({
-      from: "Portfolio Contact Form <onboarding@resend.dev>",
+      from: "Portfolio Website <contact@noreply.hy13dev.com>",
       to: "ylyamartchenko@gmail.com",
       replyTo: email,
-      subject: `💼 New Portfolio Message from ${firstName} ${lastName}`,
+      subject: `New Portfolio Message from ${firstName} ${lastName}`,
       html: `
         <div style="font-family: sans-serif; max-width: 600px; color: #333; line-height: 1.6;">
           <h2 style="color: #2563eb; border-bottom: 1px solid #eee; padding-bottom: 10px;">New Portfolio Inquiry</h2>

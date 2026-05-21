@@ -442,45 +442,72 @@ export async function getGithubRepo(name: string) {
 }
 
 export interface FullProfileData {
-  personal_info: {
-    full_name: string;
+  identity: {
+    name: string;
     birthday: string;
     nationality: string;
     current_location: string;
-    status: string;
-  };
-  professional_summary: {
+    current_status: string;
     coding_experience_since: number;
-    roles: string[];
-    specializations: string[];
-    languages: string[];
-    availability: {
-      locations_interest: string[];
-      fields_interest: string[];
+  };
+  hero_marquee: string[];
+  communication: {
+    languages: Array<{
+      name: string;
+      cefr: string;
+      label: string;
+    }>;
+    channels: Array<{
+      platform: string;
+      value: string;
+      icon: string;
+    }>;
+    links: {
+      live_portfolio: string;
+      downloadable_resume: string;
     };
   };
-  skills: {
-    technical_stack: string[];
-    languages_and_tools: string[];
-    soft_skills: string[];
+  placement_preferences: {
+    target_regions: string[];
+    preference: string;
+    technical_domains: string[];
   };
-  contacts: Array<{ name: string; value: string; icon: string }>;
-  education: Array<{
-    year: string;
-    title: string;
-    school: string;
+  skills_matrix: {
+    primary_web_stack: string[];
+    backend_and_data: string[];
+    polyglot_languages: string[];
+    devops_and_systems: string[];
+    ai_engineering: string[];
+    ecosystem_tools: string[];
+    leadership_traits: string[];
+  };
+  timeline_engineering: Array<{
+    range: string;
+    role: string;
+    company: string;
     location: string;
-    description: string;
-    is_hero?: boolean;
+    bullets: string[];
+    main?: boolean;
+    meta?: {
+      project_url: string;
+      note: string;
+    };
   }>;
-  experience: Array<{
-    period: string;
-    title: string;
-    organization: string;
-    description: string[];
-    additional_info?: { project_url: string; note: string };
+  timeline_foundational: Array<{
+    range: string;
+    role: string;
+    company: string;
+    location: string;
+    bullets: string[];
   }>;
-  links: { portfolio: string; resume: string };
+  academic_history: Array<{
+    range: string;
+    degree: string;
+    institution: string;
+    location: string;
+    summary: string;
+    main?: boolean;
+  }>;
   pinned_repositories?: string[];
 }
 

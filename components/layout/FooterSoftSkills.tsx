@@ -6,23 +6,25 @@ import SplitText from "@/components/react-bits/SplitText";
 const ROTATE_MS = 3000;
 
 interface FooterSoftSkillsProps {
-  skills: string[];
+  leadershipTraits: string[];
 }
 
-export default function FooterSoftSkills({ skills }: FooterSoftSkillsProps) {
+export default function FooterSoftSkills({
+  leadershipTraits,
+}: FooterSoftSkillsProps) {
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    if (skills.length <= 1) return;
+    if (leadershipTraits.length <= 1) return;
 
     const interval = setInterval(() => {
-      setIndex((current) => (current + 1) % skills.length);
+      setIndex((current) => (current + 1) % leadershipTraits.length);
     }, ROTATE_MS);
 
     return () => clearInterval(interval);
-  }, [skills]);
+  }, [leadershipTraits]);
 
-  if (skills.length === 0) return null;
+  if (leadershipTraits.length === 0) return null;
 
   return (
     <div
@@ -31,10 +33,10 @@ export default function FooterSoftSkills({ skills }: FooterSoftSkillsProps) {
       aria-atomic="true"
     >
       <SplitText
-        key={skills[index]}
-        text={skills[index]}
+        key={leadershipTraits[index]}
+        text={leadershipTraits[index]}
         tag="p"
-        className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-foreground"
+        className="text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-foreground"
         delay={35}
         duration={0.55}
         ease="power3.out"

@@ -2,21 +2,21 @@ import { cn } from "@/lib/utils";
 import { MapPin, Calendar } from "lucide-react";
 
 interface EducationCardProps {
-  year: string;
-  title: string;
-  school: string;
+  range: string;
+  degree: string;
+  institution: string;
   location: string;
-  description: string;
+  summary: string;
   align: "left" | "right";
   isHero?: boolean;
 }
 
 export default function EducationCard({
-  year,
-  title,
-  school,
+  range,
+  degree,
+  institution,
   location,
-  description,
+  summary,
   align,
   isHero = false,
 }: EducationCardProps) {
@@ -57,14 +57,14 @@ export default function EducationCard({
           )}
         >
           <Calendar className="w-4 h-4" />
-          <span>{year}</span>
+          <span>{range}</span>
         </div>
 
-        <h3 className="text-xl font-bold mb-1 text-foreground">{title}</h3>
+        <h3 className="text-xl font-bold mb-1 text-foreground">{degree}</h3>
 
-        <div className="text-primary font-medium mb-3">{school}</div>
+        <div className="text-primary font-medium mb-3">{institution}</div>
 
-        <p className="text-muted-foreground text-sm mb-4">{description}</p>
+        <p className="text-muted-foreground text-sm mb-4">{summary}</p>
 
         <div
           className={cn(

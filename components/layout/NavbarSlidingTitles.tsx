@@ -3,35 +3,31 @@ import { getFullProfile } from "@/lib/github";
 export default async function NavbarSlidingTitles() {
   const profileData = await getFullProfile();
 
-  let titles: string[] = [];
+  const fallbackTitles = [
+    "Full Stack Developer",
+    "•",
+    "Senior Software Engineer",
+    "•",
+    "Next.js & React Expert",
+    "•",
+    "GenAI & RAG Systems Engineer",
+    "•",
+  ];
 
-  if (profileData?.professional_summary) {
-    const { roles, specializations } = profileData.professional_summary;
-    const baseItems = [...roles, ...specializations];
-    const singleLoop = baseItems.flatMap((item) => [item, "•"]);
+  let titles: string[] = fallbackTitles;
+
+  if (profileData?.hero_marquee?.length) {
+    const singleLoop = profileData.hero_marquee.flatMap((item) => [item, "•"]);
+
     titles = [...singleLoop, ...singleLoop];
-  } else
-    titles = [
-      "Next.js Expert",
-      "•",
-      "Software Engineer",
-      "•",
-      "Full Stack Developer",
-      "•",
-      "Next.js Expert",
-      "•",
-      "Software Engineer",
-      "•",
-      "Full Stack Developer",
-      "•",
-    ];
+  }
 
   return (
     <div className="overflow-hidden whitespace-nowrap w-full mask-marquee">
       <div className="scroll-marquee gap-2 items-center">
         {titles.map((text, index) => (
           <span
-            key={index}
+            key={`${text}-${index}`}
             className="text-xs md:text-sm opacity-70 uppercase font-medium shrink-0"
           >
             {text}
