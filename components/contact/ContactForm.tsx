@@ -1,19 +1,17 @@
-// TODO: style this
-
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, CheckCircle2, AlertCircle, Send } from "lucide-react";
+import { Loader2, Send } from "lucide-react";
+import { toast } from "sonner";
+import { gsap } from "gsap";
 import { sendContactEmail } from "@/app/actions/contact";
 import { contactSchema, type ContactFormData } from "@/app/actions/schemas";
+import SplitText from "@/components/react-bits/SplitText";
 
 export function ContactForm() {
-  const [serverStatus, setServerStatus] = useState<{
-    type: "success" | "error" | null;
-    message: string | null;
-  }>({ type: null, message: null });
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const {
     register,
@@ -24,87 +22,90 @@ export function ContactForm() {
     resolver: zodResolver(contactSchema),
   });
 
+  useEffect(() => {
+    if (containerRef.current)
+      gsap.fromTo(
+        containerRef.current,
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.8, ease: "power3.out", delay: 0.1 },
+      );
+  }, []);
+
   const onSubmit = async (data: ContactFormData) => {
-    setServerStatus({ type: null, message: null });
+    const toastId = toast.loading("Transmitting message payload...");
 
-    const result = await sendContactEmail(data);
+    try {
+      const result = await sendContactEmail(data);
 
-    if (result.success) {
-      setServerStatus({
-        type: "success",
-        message:
-          "Message sent successfully! I'll get back to you as soon as possible. ✅",
-      });
-      reset();
-    } else {
-      setServerStatus({
-        type: "error",
-        message: result.error || "Something went wrong. Please try again.",
+      if (result.success) {
+        toast.success("Message sent successfully! I'll get back to you soon.", {
+          id: toastId,
+        });
+        reset();
+      } else
+        toast.error(result.error || "Something went wrong. Please try again.", {
+          id: toastId,
+        });
+    } catch {
+      toast.error("Internal server error. Please try again later.", {
+        id: toastId,
       });
     }
   };
 
   return (
-    <div className="w-full max-w-xl bg-neutral-900/40 backdrop-blur-xl border border-neutral-800/80 p-8 rounded-2xl shadow-2xl transition-all duration-300 hover:border-neutral-700/50">
+    <div
+      ref={containerRef}
+      className="w-full max-w-xl bg-card/65 dark:bg-card/25 backdrop-blur-md border border-border/80 dark:border-border/40 p-8 rounded-2xl shadow-xl transition-all duration-300 hover:border-primary/40 dark:hover:border-primary/30 opacity-0"
+    >
       <div className="mb-6">
-        <h2 className="text-2xl font-bold text-neutral-100 tracking-tight">
-          Get in Touch
-        </h2>
-        <p className="text-sm text-neutral-400 mt-1">
+        <SplitText
+          text="Get in Touch"
+          className="text-2xl font-bold text-foreground tracking-tight"
+          delay={35}
+          duration={0.7}
+          ease="power3.out"
+          tag="h2"
+          immediate
+        />
+        <p className="text-sm text-muted-foreground mt-1.5">
           Have an opportunity or a question? Drop me a line directly.
         </p>
       </div>
 
-      {serverStatus.type && (
-        <div
-          className={`mb-6 p-4 rounded-xl flex items-start gap-3 border text-sm transition-all duration-300 ${
-            serverStatus.type === "success"
-              ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
-              : "bg-rose-500/10 border-rose-500/20 text-rose-400"
-          }`}
-        >
-          {serverStatus.type === "success" ? (
-            <CheckCircle2 className="w-5 h-5 shrink-0 mt-0.5" />
-          ) : (
-            <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
-          )}
-          <p>{serverStatus.message}</p>
-        </div>
-      )}
-
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold tracking-wide text-neutral-400 uppercase">
+            <label className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
               First Name
             </label>
             <input
               {...register("firstName")}
               type="text"
               disabled={isSubmitting}
-              className="w-full bg-neutral-950/50 border border-neutral-800 rounded-xl px-4 py-3 text-sm text-neutral-100 placeholder-neutral-600 focus:outline-hidden focus:border-blue-500/80 focus:ring-1 focus:ring-blue-500/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+              className="w-full bg-background/55 dark:bg-black/15 border border-border/80 dark:border-border/45 rounded-xl px-4 py-3 text-sm text-foreground placeholder-muted-foreground/60 focus:outline-hidden focus:border-primary/80 focus:ring-2 focus:ring-primary/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
               placeholder="John"
             />
             {errors.firstName && (
-              <span className="text-xs text-rose-400 font-medium pl-1">
+              <span className="text-xs text-destructive font-medium pl-1 animate-fadeIn">
                 {errors.firstName.message}
               </span>
             )}
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold tracking-wide text-neutral-400 uppercase">
+            <label className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
               Last Name
             </label>
             <input
               {...register("lastName")}
               type="text"
               disabled={isSubmitting}
-              className="w-full bg-neutral-950/50 border border-neutral-800 rounded-xl px-4 py-3 text-sm text-neutral-100 placeholder-neutral-600 focus:outline-hidden focus:border-blue-500/80 focus:ring-1 focus:ring-blue-500/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+              className="w-full bg-background/55 dark:bg-black/15 border border-border/80 dark:border-border/45 rounded-xl px-4 py-3 text-sm text-foreground placeholder-muted-foreground/60 focus:outline-hidden focus:border-primary/80 focus:ring-2 focus:ring-primary/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
               placeholder="Doe"
             />
             {errors.lastName && (
-              <span className="text-xs text-rose-400 font-medium pl-1">
+              <span className="text-xs text-destructive font-medium pl-1 animate-fadeIn">
                 {errors.lastName.message}
               </span>
             )}
@@ -112,36 +113,36 @@ export function ContactForm() {
         </div>
 
         <div className="space-y-1.5">
-          <label className="text-xs font-semibold tracking-wide text-neutral-400 uppercase">
+          <label className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
             Email Address
           </label>
           <input
             {...register("email")}
             type="email"
             disabled={isSubmitting}
-            className="w-full bg-neutral-950/50 border border-neutral-800 rounded-xl px-4 py-3 text-sm text-neutral-100 placeholder-neutral-600 focus:outline-hidden focus:border-blue-500/80 focus:ring-1 focus:ring-blue-500/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+            className="w-full bg-background/55 dark:bg-black/15 border border-border/80 dark:border-border/45 rounded-xl px-4 py-3 text-sm text-foreground placeholder-muted-foreground/60 focus:outline-hidden focus:border-primary/80 focus:ring-2 focus:ring-primary/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
             placeholder="johndoe@example.com"
           />
           {errors.email && (
-            <span className="text-xs text-rose-400 font-medium pl-1">
+            <span className="text-xs text-destructive font-medium pl-1 animate-fadeIn">
               {errors.email.message}
             </span>
           )}
         </div>
 
         <div className="space-y-1.5">
-          <label className="text-xs font-semibold tracking-wide text-neutral-400 uppercase">
+          <label className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
             Message
           </label>
           <textarea
             {...register("message")}
             rows={5}
             disabled={isSubmitting}
-            className="w-full bg-neutral-950/50 border border-neutral-800 rounded-xl p-4 text-sm text-neutral-100 placeholder-neutral-600 resize-none focus:outline-hidden focus:border-blue-500/80 focus:ring-1 focus:ring-blue-500/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+            className="w-full bg-background/55 dark:bg-black/15 border border-border/80 dark:border-border/45 rounded-xl p-4 text-sm text-foreground placeholder-muted-foreground/60 resize-none focus:outline-hidden focus:border-primary/80 focus:ring-2 focus:ring-primary/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
             placeholder="Tell me about your project stack requirements..."
           />
           {errors.message && (
-            <span className="text-xs text-rose-400 font-medium pl-1">
+            <span className="text-xs text-destructive font-medium pl-1 animate-fadeIn">
               {errors.message.message}
             </span>
           )}
@@ -150,16 +151,16 @@ export function ContactForm() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full font-semibold text-sm bg-neutral-100 text-neutral-950 h-12 rounded-xl flex items-center justify-center gap-2 hover:bg-neutral-200 focus:outline-hidden focus:ring-2 focus:ring-neutral-400/50 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+          className="w-full font-semibold text-sm bg-primary hover:bg-primary/95 text-primary-foreground h-12 rounded-xl flex items-center justify-center gap-2 hover:scale-[1.01] active:scale-[0.99] focus:outline-hidden focus:ring-2 focus:ring-primary/30 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
         >
           {isSubmitting ? (
             <>
-              <Loader2 className="w-4 h-4 animate-spin text-neutral-800" />
+              <Loader2 className="w-4 h-4 animate-spin text-primary-foreground" />
               <span>Transmitting Security Payload...</span>
             </>
           ) : (
             <>
-              <Send className="w-4 h-4 text-neutral-800" />
+              <Send className="w-4 h-4 text-primary-foreground" />
               <span>Send Message</span>
             </>
           )}

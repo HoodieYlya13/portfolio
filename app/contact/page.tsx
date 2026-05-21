@@ -1,5 +1,3 @@
-// TODO: style this
-
 import LiquidGlassBackground from "@/components/webgl/LiquidGlassBackground";
 import { ContactForm } from "@/components/contact/ContactForm";
 

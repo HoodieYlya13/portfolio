@@ -6,6 +6,7 @@ import Navbar from "../components/layout/Navbar";
 import ThemeScript from "@/components/layout/ThemeScript";
 import GetInTouchButton from "@/components/layout/GetInTouchButton";
 import Footer from "../components/layout/Footer";
+import ThemeToaster from "@/components/layout/ThemeToaster";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,6 +41,7 @@ export default function RootLayout({
         <ThemeScript />
       </head>
       <body className="min-h-full flex flex-col relative">
+        <ThemeToaster />
         <Suspense fallback={null}>
           <GetInTouchButton />
         </Suspense>

@@ -4,7 +4,6 @@ import { PinnedProjects } from "@/components/home/PinnedProjects";
 
 export default function Page() {
   const fadeHeight = 12;
-  const targetOffset = fadeHeight / 2;
 
   return (
     <div
@@ -12,7 +11,6 @@ export default function Page() {
       style={
         {
           "--fade-height": `${fadeHeight}rem`,
-          "--target-offset": `${targetOffset}rem`,
         } as React.CSSProperties
       }
     >
@@ -21,10 +19,7 @@ export default function Page() {
       </div>
 
       <div className="relative flex items-center justify-center text-center min-h-screen min-h-dvh padding-footer pt-(--fade-height)">
-        <div
-          id="classic-background"
-          className="absolute top-(--target-offset)"
-        />
+        <div id="classic-background" className="absolute top-(--fade-height)" />
 
         <DotField fadeTop />
 
