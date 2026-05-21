@@ -1,8 +1,19 @@
 'use client';
 
 import React, { useEffect, useRef, useState } from 'react';
+import { cn } from '@/lib/utils';
 
-export default function TimelineContainer({ children }: { children: React.ReactNode }) {
+interface TimelineContainerProps {
+  children: React.ReactNode;
+  lineColor?: string;
+  glowColor?: string;
+}
+
+export default function TimelineContainer({
+  children,
+  lineColor = "from-primary to-apple-orange",
+  glowColor = "shadow-[0_0_15px_rgba(0,122,255,0.8)]",
+}: TimelineContainerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [fillHeight, setFillHeight] = useState(0);
 
@@ -54,7 +65,11 @@ export default function TimelineContainer({ children }: { children: React.ReactN
       <div className="space-y-16 relative">
         <div className="absolute left-0 md:left-1/2 transform -translate-x-1/2 top-0 bottom-0 w-0.5 bg-border/50">
           <div 
-            className="absolute top-0 left-0 w-full bg-linear-to-b from-primary to-apple-orange transition-all duration-100 ease-out shadow-[0_0_15px_rgba(0,122,255,0.8)]"
+            className={cn(
+              "absolute top-0 left-0 w-full bg-linear-to-b transition-all duration-100 ease-out",
+              lineColor,
+              glowColor
+            )}
             style={{ height: `${fillHeight}%` }}
           />
         </div>

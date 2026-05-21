@@ -1,9 +1,9 @@
 import { Suspense } from "react";
-import TimelineContainer from "@/components/education/TimelineContainer";
-import EducationCard from "@/components/education/EducationCard";
+import TimelineContainer from "@/components/timeline/TimelineContainer";
+import TimelineCard from "@/components/timeline/TimelineCard";
 import LanguagesSection from "@/components/education/LanguagesSection";
 import CodingSince from "@/components/education/CodingSince";
-import ScrollReveal from "@/components/education/ScrollReveal";
+import ScrollReveal from "@/components/timeline/ScrollReveal";
 import DotField from "@/components/education/DotField";
 import ResumeButton from "@/components/layout/ResumeButton";
 import { getFullProfile } from "@/lib/github";
@@ -19,11 +19,11 @@ async function EducationContent() {
       {educationData.length > 0 && (
         <TimelineContainer>
           {educationData.map((item, index) => (
-            <EducationCard
+            <TimelineCard
               key={index}
               range={item.range}
-              degree={item.degree}
-              institution={item.institution}
+              title={item.degree}
+              subtitle={item.institution}
               location={item.location}
               summary={item.summary}
               align={index % 2 === 0 ? "left" : "right"}

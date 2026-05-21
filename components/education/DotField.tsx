@@ -287,8 +287,17 @@ export default function DotField({
       rafRef.current = requestAnimationFrame(tick);
     }
 
+    const parent = canvas.parentElement;
     doResize();
-    window.addEventListener("resize", resize);
+
+    let resizeObserver: ResizeObserver | null = null;
+    if (parent && typeof ResizeObserver !== "undefined") {
+      resizeObserver = new ResizeObserver(() => {
+        resize();
+      });
+      resizeObserver.observe(parent);
+    } else window.addEventListener("resize", resize);
+
     window.addEventListener("mousemove", onMouseMove, { passive: true });
     rafRef.current = requestAnimationFrame(tick);
 
@@ -296,7 +305,8 @@ export default function DotField({
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       clearInterval(speedInterval);
       clearTimeout(resizeTimer);
-      window.removeEventListener("resize", resize);
+      if (resizeObserver) resizeObserver.disconnect();
+      else window.removeEventListener("resize", resize);
       window.removeEventListener("mousemove", onMouseMove);
     };
   }, []);

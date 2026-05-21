@@ -2,7 +2,7 @@
 
 import { Globe } from "lucide-react";
 import { cn } from "@/lib/utils";
-import ScrollReveal from "@/components/education/ScrollReveal";
+import ScrollReveal from "../timeline/ScrollReveal";
 
 interface LanguagesSectionProps {
   languages: Array<{

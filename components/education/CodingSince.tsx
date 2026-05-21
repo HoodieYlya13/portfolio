@@ -1,6 +1,6 @@
 import { Code2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import ScrollReveal from "@/components/education/ScrollReveal";
+import ScrollReveal from "../timeline/ScrollReveal";
 
 interface CodingSinceProps {
   since: number;
