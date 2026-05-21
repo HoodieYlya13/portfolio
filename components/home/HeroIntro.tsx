@@ -39,7 +39,7 @@ export default function HeroIntro({ restartKey }: HeroIntroProps) {
 
   const resetHidden = () => {
     const targets = [h2Ref.current, buttonRef.current, scrollRef.current].filter(
-      (el): el is HTMLElement => el !== null
+      (el) => el !== null
     );
     gsap.killTweensOf(targets);
     gsap.set(targets, { opacity: 0, y: 24 });
