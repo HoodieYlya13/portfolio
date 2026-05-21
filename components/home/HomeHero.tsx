@@ -15,6 +15,7 @@ export default function HomeHero({ fadeHeight }: HomeHeroProps) {
     <>
       <LiquidGlassBackground
         fadeHeight={fadeHeight}
+        invertFade
         animateIn
         restartKey={restartKey}
       />

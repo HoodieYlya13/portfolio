@@ -34,6 +34,12 @@ export default function Navbar() {
       src: "/img/logo.png",
       alt: "Contact Icon",
     },
+    {
+      name: "YlyaBot",
+      href: "/ylya-bot",
+      src: "/img/logo.png",
+      alt: "YlyaBot Icon",
+    },
   ];
 
   return (

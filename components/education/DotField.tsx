@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useEffect, useRef, useId } from 'react';
-import './DotField.css';
+import { useEffect, useRef, useId } from "react";
+import "./DotField.css";
 
 const TWO_PI = Math.PI * 2;
 
@@ -18,6 +18,8 @@ interface DotFieldProps {
   gradientFrom?: string;
   gradientTo?: string;
   glowColor?: string;
+  fadeTop?: boolean;
+  fadeBottom?: boolean;
   className?: string;
 }
 
@@ -42,40 +44,79 @@ export default function DotField({
   glowRadius = 160,
   sparkle = false,
   waveAmplitude = 0,
-  gradientFrom = 'rgba(168, 85, 247, 0.35)',
-  gradientTo = 'rgba(180, 151, 207, 0.25)',
-  glowColor = '#120F17',
-  className = '',
+  gradientFrom = "rgba(168, 85, 247, 0.35)",
+  gradientTo = "rgba(180, 151, 207, 0.25)",
+  glowColor = "#120F17",
+  fadeTop = false,
+  fadeBottom = false,
+  className = "",
   ...rest
 }: DotFieldProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const glowRef = useRef<SVGCircleElement>(null);
   const dotsRef = useRef<Dot[]>([]);
-  const mouseRef = useRef({ x: -9999, y: -9999, prevX: -9999, prevY: -9999, speed: 0 });
+  const mouseRef = useRef({
+    x: -9999,
+    y: -9999,
+    prevX: -9999,
+    prevY: -9999,
+    speed: 0,
+  });
   const rafRef = useRef<number | null>(null);
   const sizeRef = useRef({ w: 0, h: 0, offsetX: 0, offsetY: 0 });
   const glowOpacity = useRef(0);
   const engagement = useRef(0);
-  
+
   const propsRef = useRef({
-    dotRadius, dotSpacing, cursorRadius, cursorForce, bulgeOnly, bulgeStrength, sparkle, waveAmplitude, gradientFrom, gradientTo
+    dotRadius,
+    dotSpacing,
+    cursorRadius,
+    cursorForce,
+    bulgeOnly,
+    bulgeStrength,
+    sparkle,
+    waveAmplitude,
+    gradientFrom,
+    gradientTo,
   });
-  
+
   useEffect(() => {
-    propsRef.current = { dotRadius, dotSpacing, cursorRadius, cursorForce, bulgeOnly, bulgeStrength, sparkle, waveAmplitude, gradientFrom, gradientTo };
-  }, [dotRadius, dotSpacing, cursorRadius, cursorForce, bulgeOnly, bulgeStrength, sparkle, waveAmplitude, gradientFrom, gradientTo]);
+    propsRef.current = {
+      dotRadius,
+      dotSpacing,
+      cursorRadius,
+      cursorForce,
+      bulgeOnly,
+      bulgeStrength,
+      sparkle,
+      waveAmplitude,
+      gradientFrom,
+      gradientTo,
+    };
+  }, [
+    dotRadius,
+    dotSpacing,
+    cursorRadius,
+    cursorForce,
+    bulgeOnly,
+    bulgeStrength,
+    sparkle,
+    waveAmplitude,
+    gradientFrom,
+    gradientTo,
+  ]);
 
   const id = useId();
-  const glowId = `dot-field-glow-${id.replace(/:/g, '')}`;
+  const glowId = `dot-field-glow-${id.replace(/:/g, "")}`;
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const glowEl = glowRef.current;
     if (!canvas) return;
-    const ctx = canvas.getContext('2d', { alpha: true });
+    const ctx = canvas.getContext("2d", { alpha: true });
     if (!ctx) return;
-    
+
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     let resizeTimer: NodeJS.Timeout;
 
@@ -164,8 +205,8 @@ export default function DotField({
       glowOpacity.current += (eng - glowOpacity.current) * 0.08;
 
       if (glowEl) {
-        glowEl.setAttribute('cx', m.x.toString());
-        glowEl.setAttribute('cy', m.y.toString());
+        glowEl.setAttribute("cx", m.x.toString());
+        glowEl.setAttribute("cy", m.y.toString());
         glowEl.style.opacity = glowOpacity.current.toString();
       }
 
@@ -227,7 +268,7 @@ export default function DotField({
 
           if (p.sparkle) {
             const hash = ((i * 2654435761) ^ (frameCount >> 3)) >>> 0;
-            if ((hash % 100) < 3) {
+            if (hash % 100 < 3) {
               ctx.moveTo(drawX + rad * 1.8, drawY);
               ctx.arc(drawX, drawY, rad * 1.8, 0, TWO_PI);
             } else {
@@ -247,38 +288,63 @@ export default function DotField({
     }
 
     doResize();
-    window.addEventListener('resize', resize);
-    window.addEventListener('mousemove', onMouseMove, { passive: true });
+    window.addEventListener("resize", resize);
+    window.addEventListener("mousemove", onMouseMove, { passive: true });
     rafRef.current = requestAnimationFrame(tick);
 
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       clearInterval(speedInterval);
       clearTimeout(resizeTimer);
-      window.removeEventListener('resize', resize);
-      window.removeEventListener('mousemove', onMouseMove);
+      window.removeEventListener("resize", resize);
+      window.removeEventListener("mousemove", onMouseMove);
     };
   }, []);
 
+  const getMaskStyle = () => {
+    if (!fadeTop && !fadeBottom) return {};
+
+    const topStop = fadeTop
+      ? "rgba(0,0,0,0) 0%, rgba(0,0,0,1) 20%"
+      : "rgba(0,0,0,1) 0%";
+    const bottomStop = fadeBottom
+      ? "rgba(0,0,0,1) 80%, rgba(0,0,0,0) 100%"
+      : "rgba(0,0,0,1) 100%";
+    const maskValue = `linear-gradient(to bottom, ${topStop}, ${bottomStop})`;
+
+    return {
+      maskImage: maskValue,
+      WebkitMaskImage: maskValue,
+    };
+  };
+
   return (
-    <div className={`dot-field-container ${className}`} {...rest}>
+    <div
+      className={`dot-field-container -z-20 ${className}`}
+      style={{
+        position: "absolute",
+        inset: 0,
+        ...getMaskStyle(),
+      }}
+      {...rest}
+    >
       <canvas
         ref={canvasRef}
         style={{
-          position: 'absolute',
+          position: "absolute",
           inset: 0,
-          width: '100%',
-          height: '100%',
+          width: "100%",
+          height: "100%",
         }}
       />
       <svg
         ref={svgRef}
         style={{
-          position: 'absolute',
+          position: "absolute",
           inset: 0,
-          width: '100%',
-          height: '100%',
-          pointerEvents: 'none',
+          width: "100%",
+          height: "100%",
+          pointerEvents: "none",
         }}
       >
         <defs>
@@ -293,7 +359,7 @@ export default function DotField({
           cy="-9999"
           r={glowRadius}
           fill={`url(#${glowId})`}
-          style={{ opacity: 0, willChange: 'opacity' }}
+          style={{ opacity: 0, willChange: "opacity" }}
         />
       </svg>
     </div>

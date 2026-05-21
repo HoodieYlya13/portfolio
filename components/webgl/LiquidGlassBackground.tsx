@@ -251,12 +251,14 @@ let globalRoot: ReturnType<typeof createRoot> | null = null;
 
 interface LiquidGlassBackgroundProps {
   fadeHeight?: number;
+  invertFade?: boolean;
   animateIn?: boolean;
   restartKey?: number;
 }
 
 export default function LiquidGlassBackground({
   fadeHeight = 0,
+  invertFade = false,
   animateIn = false,
   restartKey = 0,
 }: LiquidGlassBackgroundProps) {
@@ -267,7 +269,7 @@ export default function LiquidGlassBackground({
     globalRoot?.render(
       <BackgroundMesh key={meshKey} animateIn={animateIn} runId={restartKey} />,
     );
-  }, [animateIn, meshKey, restartKey]);
+  }, [animateIn, meshKey, restartKey, invertFade]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -323,8 +325,22 @@ export default function LiquidGlassBackground({
 
   return (
     <>
-      <div ref={ref} className="absolute inset-0 -z-10 w-full h-full" />
-      {fadeHeight > 0 && (
+      <div
+        ref={ref}
+        className="absolute inset-0 -z-10 w-full h-full"
+        style={
+          invertFade
+            ? {
+                maskImage:
+                  "linear-gradient(to bottom, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%)",
+                WebkitMaskImage:
+                  "linear-gradient(to bottom, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%)",
+              }
+            : undefined
+        }
+      />
+
+      {fadeHeight > 0 && !invertFade && (
         <div
           className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-background to-transparent pointer-events-none -z-5"
           style={{ height: `${fadeHeight}rem` }}
