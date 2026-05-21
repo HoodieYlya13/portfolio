@@ -320,7 +320,7 @@ export default function DotField({
 
   return (
     <div
-      className={`dot-field-container -z-20 ${className}`}
+      className={`dot-field-container ${className}`}
       style={{
         position: "absolute",
         inset: 0,
