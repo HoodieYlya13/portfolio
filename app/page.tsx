@@ -1,5 +1,6 @@
 import DotField from "@/components/education/DotField";
 import HomeHero from "@/components/home/HomeHero";
+import { PinnedProjects } from "@/components/home/PinnedProjects";
 
 export default function Page() {
   const fadeHeight = 12;
@@ -39,7 +40,8 @@ export default function Page() {
             fadeTop
           />
         </div>
-        PLACEHOLDER 2
+
+        <PinnedProjects />
       </div>
     </div>
   );

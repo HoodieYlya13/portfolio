@@ -8,11 +8,26 @@
   },
   "professional_summary": {
     "coding_experience_since": 2019,
-    "roles": ["Full Stack Developer", "Software Engineer"],
-    "specializations": ["Next.JS Expert", "React Expert", "AI/RAG Enthusiast"],
-    "languages": ["French (C2)", "English (C1)", "Russian (C1)"],
+    "roles": [
+      "Full Stack Developer",
+      "Software Engineer"
+    ],
+    "specializations": [
+      "Next.JS Expert",
+      "React Expert",
+      "AI/RAG Enthusiast"
+    ],
+    "languages": [
+      "French (C2)",
+      "English (C1)",
+      "Russian (C1)"
+    ],
     "availability": {
-      "locations_interest": ["Luxembourg", "Switzerland", "North America"],
+      "locations_interest": [
+        "Luxembourg",
+        "Switzerland",
+        "North America"
+      ],
       "fields_interest": [
         "Web Dev",
         "AI/RAG",
@@ -28,6 +43,8 @@
       "Next.JS",
       "React",
       "Angular",
+      "REST API",
+      "GraphQL",
       "Liquid",
       "TypeScript",
       "JavaScript",
@@ -48,6 +65,9 @@
       "Git",
       "GitHub",
       "GitLab",
+      "Postman",
+      "Bruno",
+      "Insomnia",
       "Linux",
       "MacOS",
       "Windows",
@@ -213,5 +233,13 @@
   "links": {
     "portfolio": "https://www.hy13dev.com",
     "resume": "https://www.hy13dev.com/Resume_Ylya_Martchenko.pdf"
-  }
+  },
+  "pinned_repositories": [
+    "codemafia",
+    "insta-v2",
+    "schumacher-knepper-theme-dev",
+    "vibe-heist",
+    "poly-livre-fullstack",
+    "dockercraft"
+  ]
 }

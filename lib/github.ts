@@ -258,16 +258,39 @@ export const FALLBACK_REPOS: Repository[] = [
   },
 ];
 
+const FALLBACK_PINNED_NAMES = [
+  "codemafia",
+  "insta-v2",
+  "schumacher-knepper-theme-dev",
+  "vibe-heist",
+  "poly-livre-fullstack",
+  "dockercraft",
+];
+
 export async function getGithubData() {
   const username = "HoodieYlya13";
   const headers: Record<string, string> = {
     "User-Agent": "portfolio-app-nextjs",
     Accept: "application/vnd.github.v3+json",
+    "X-GitHub-Api-Version": "2026-03-10",
   };
 
-  if (process.env.GITHUB_TOKEN) {
+  if (process.env.GITHUB_TOKEN)
     headers["Authorization"] = `token ${process.env.GITHUB_TOKEN}`;
+
+  let targetPinnedNames = FALLBACK_PINNED_NAMES;
+  try {
+    const profileJson = await getFullProfile();
+    if (profileJson && profileJson.pinned_repositories)
+      targetPinnedNames = profileJson.pinned_repositories;
+  } catch (e) {
+    console.warn(
+      "Failed retrieving dynamic pins list from profile.json, applying default keys fallback.",
+      e,
+    );
   }
+
+  const lowercasePins = targetPinnedNames.map((name) => name.toLowerCase());
 
   try {
     const [profileRes, reposRes] = await Promise.all([
@@ -284,11 +307,10 @@ export async function getGithubData() {
       ),
     ]);
 
-    if (!profileRes.ok || !reposRes.ok) {
+    if (!profileRes.ok || !reposRes.ok)
       throw new Error(
         `GitHub API returned status: ${profileRes.status} / ${reposRes.status}`,
       );
-    }
 
     const profileData = await profileRes.json();
     const reposData = (await reposRes.json()) as Array<{
@@ -303,6 +325,30 @@ export async function getGithubData() {
       homepage?: string | null;
     }>;
 
+    const allMappedRepos: Repository[] = reposData.map((repo) => ({
+      name: repo.name,
+      description: repo.description,
+      html_url: repo.html_url,
+      language: repo.language,
+      stargazers_count: repo.stargazers_count,
+      forks_count: repo.forks_count,
+      fork: repo.fork,
+      updated_at: repo.updated_at,
+      homepage: repo.homepage || null,
+    }));
+
+    const pinnedRepositories = allMappedRepos
+      .filter((repo) => lowercasePins.includes(repo.name.toLowerCase()))
+      .sort(
+        (a, b) =>
+          lowercasePins.indexOf(a.name.toLowerCase()) -
+          lowercasePins.indexOf(b.name.toLowerCase()),
+      );
+
+    const remainingRepositories = allMappedRepos.filter(
+      (repo) => !lowercasePins.includes(repo.name.toLowerCase()),
+    );
+
     return {
       profile: {
         username: profileData.login,
@@ -315,17 +361,8 @@ export async function getGithubData() {
         githubUrl: profileData.html_url,
         public_repos: profileData.public_repos,
       } as GithubProfile,
-      repositories: reposData.map((repo) => ({
-        name: repo.name,
-        description: repo.description,
-        html_url: repo.html_url,
-        language: repo.language,
-        stargazers_count: repo.stargazers_count,
-        forks_count: repo.forks_count,
-        fork: repo.fork,
-        updated_at: repo.updated_at,
-        homepage: repo.homepage || null,
-      })) as Repository[],
+      pinnedRepositories,
+      repositories: remainingRepositories,
       isLive: true,
     };
   } catch (error) {
@@ -333,9 +370,23 @@ export async function getGithubData() {
       "Failed fetching live GitHub data, falling back to static:",
       error,
     );
+
+    const fallbackPinned = FALLBACK_REPOS.filter((repo) =>
+      lowercasePins.includes(repo.name.toLowerCase()),
+    ).sort(
+      (a, b) =>
+        lowercasePins.indexOf(a.name.toLowerCase()) -
+        lowercasePins.indexOf(b.name.toLowerCase()),
+    );
+
+    const fallbackRemaining = FALLBACK_REPOS.filter(
+      (repo) => !lowercasePins.includes(repo.name.toLowerCase()),
+    );
+
     return {
       profile: FALLBACK_PROFILE,
-      repositories: FALLBACK_REPOS,
+      pinnedRepositories: fallbackPinned,
+      repositories: fallbackRemaining,
       isLive: false,
     };
   }
@@ -346,6 +397,7 @@ export async function getGithubRepo(name: string) {
   const headers: Record<string, string> = {
     "User-Agent": "portfolio-app-nextjs",
     Accept: "application/vnd.github.v3+json",
+    "X-GitHub-Api-Version": "2026-03-10",
   };
 
   if (process.env.GITHUB_TOKEN)
@@ -429,6 +481,7 @@ export interface FullProfileData {
     additional_info?: { project_url: string; note: string };
   }>;
   links: { portfolio: string; resume: string };
+  pinned_repositories?: string[];
 }
 
 export async function getFullProfile(): Promise<FullProfileData | null> {
