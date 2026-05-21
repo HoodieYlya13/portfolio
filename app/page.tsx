@@ -3,20 +3,28 @@ import HomeHero from "@/components/home/HomeHero";
 
 export default function Page() {
   const fadeHeight = 12;
+  const targetOffset = fadeHeight / 2;
 
   return (
     <div
       className="flex flex-col"
-      style={{ "--fade-height": `${fadeHeight}rem` } as React.CSSProperties}
+      style={
+        {
+          "--fade-height": `${fadeHeight}rem`,
+          "--target-offset": `${targetOffset}rem`,
+        } as React.CSSProperties
+      }
     >
       <div className="relative flex items-center justify-center min-h-dynamic pb-(--fade-height) -mb-(--fade-height)">
         <HomeHero fadeHeight={fadeHeight} />
       </div>
 
-      <div
-        id="classic-background"
-        className="relative flex items-center justify-center text-center min-h-screen min-h-dvh padding-footer pt-(--fade-height)"
-      >
+      <div className="relative flex items-center justify-center text-center min-h-screen min-h-dvh padding-footer pt-(--fade-height)">
+        <div
+          id="classic-background"
+          className="absolute top-(--target-offset)"
+        />
+
         <div className="absolute inset-0">
           <DotField
             dotRadius={1.5}

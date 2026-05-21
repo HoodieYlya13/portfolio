@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useLayoutEffect, useRef } from "react";
 import Link from "next/link";
 import { Bot, ChevronDown } from "lucide-react";
 import { gsap } from "gsap";
@@ -37,16 +37,25 @@ export default function HeroIntro({ restartKey }: HeroIntroProps) {
   const buttonRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLAnchorElement>(null);
 
-  useEffect(() => {
-    gsap.set([h2Ref.current, buttonRef.current, scrollRef.current], {
-      opacity: 0,
-      y: 24,
-    });
+  const resetHidden = () => {
+    const targets = [h2Ref.current, buttonRef.current, scrollRef.current].filter(
+      (el): el is HTMLElement => el !== null
+    );
+    gsap.killTweensOf(targets);
+    gsap.set(targets, { opacity: 0, y: 24 });
+  };
+
+  useLayoutEffect(() => {
+    resetHidden();
   }, [restartKey]);
 
   const handleH1Complete = () => {
+    const sequence = restartKey;
+
     reveal(h2Ref.current, () => {
+      if (sequence !== restartKey) return;
       reveal(buttonRef.current, () => {
+        if (sequence !== restartKey) return;
         reveal(scrollRef.current);
       });
     });
@@ -70,13 +79,13 @@ export default function HeroIntro({ restartKey }: HeroIntroProps) {
 
         <h2
           ref={h2Ref}
-          className="sm:text-lg md:text-xl lg:text-2xl xl:text-3xl"
+          className="sm:text-lg md:text-xl lg:text-2xl xl:text-3xl opacity-0"
         >
           Let my AI give you a custom summary.
         </h2>
       </div>
 
-      <div ref={buttonRef}>
+      <div ref={buttonRef} className="opacity-0">
         <Button
           asChild
           variant="glass"
@@ -93,7 +102,7 @@ export default function HeroIntro({ restartKey }: HeroIntroProps) {
       <a
         ref={scrollRef}
         href="#classic-background"
-        className="inline-flex items-center gap-1.5 text-sm text-foreground/60 hover:text-foreground/90 transition-colors group"
+        className="inline-flex items-center gap-1.5 text-sm text-foreground/60 hover:text-foreground/90 transition-colors group opacity-0"
       >
         Or scroll to read my classic background
         <ChevronDown className="size-4 transition-transform duration-300 group-hover:translate-y-0.5" />

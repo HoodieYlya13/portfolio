@@ -11,23 +11,26 @@ export function useRouteRestartKey(route = "/") {
   const [restartKey, setRestartKey] = useState(0);
 
   useEffect(() => {
+    let shouldRestart = false;
+
     if (
       prevPathname.current !== null &&
       prevPathname.current !== route &&
       pathname === route
     )
-      setRestartKey((key) => key + 1);
+      shouldRestart = true;
 
     prevPathname.current = pathname;
+
+    if (sessionStorage.getItem(LEFT_HOME_KEY) === "1") {
+      sessionStorage.removeItem(LEFT_HOME_KEY);
+      shouldRestart = true;
+    }
+
+    if (shouldRestart) setRestartKey((key) => key + 1);
   }, [pathname, route]);
 
   useEffect(() => {
-    if (sessionStorage.getItem(LEFT_HOME_KEY) === "1") {
-      sessionStorage.removeItem(LEFT_HOME_KEY);
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setRestartKey((key) => key + 1);
-    }
-
     return () => {
       sessionStorage.setItem(LEFT_HOME_KEY, "1");
     };
