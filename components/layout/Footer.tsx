@@ -14,7 +14,7 @@ export default function Footer() {
         }}
       />
 
-      <div className="relative z-10 w-full flex flex-col items-center gap-10 py-6 pointer-events-auto">
+      <div className="relative w-full flex flex-col items-center gap-10 py-6 pointer-events-auto">
         <Suspense fallback={null}>
           <FooterProfile />
         </Suspense>

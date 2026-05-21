@@ -44,7 +44,7 @@ export async function ShopifyStaticStorePreview({
   );
 
   return (
-    <div className="w-full overflow-hidden rounded-lg border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-950">
+    <div className="w-full overflow-hidden border border-gray-200 bg-white dark:border-gray-800 dark:bg-gray-950">
       <ShopifyPasswordEnterForm
         className="block"
         host={host}

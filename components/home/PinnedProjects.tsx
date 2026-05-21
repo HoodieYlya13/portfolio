@@ -1,91 +1,92 @@
-// TODO: style this
-
+import Link from "next/link";
 import { getGithubData } from "@/lib/github";
-import { Folder, Star, GitFork, ArrowUpRight } from "lucide-react";
+import { ProjectCard } from "@/components/projects/ProjectCard";
+import { Button } from "@/components/ui/button";
+import ResumeButton from "@/components/layout/ResumeButton";
+import { FolderGit2, Briefcase, FileText } from "lucide-react";
 
 export async function PinnedProjects() {
   const { pinnedRepositories, isLive } = await getGithubData();
 
-  if (!pinnedRepositories || pinnedRepositories.length === 0) {
-    return null;
-  }
+  if (!pinnedRepositories || pinnedRepositories.length === 0) return null;
 
   return (
-    <section className="py-12 max-w-6xl mx-auto px-4">
-      <div className="flex items-center justify-between mb-8">
+    <section className="py-16 max-w-6xl mx-auto px-6">
+      <div className="flex flex-col items-center text-center gap-4 mb-10 max-w-2xl mx-auto">
+        <h2 className="text-3xl font-bold tracking-tight text-foreground">
+          Featured Projects
+        </h2>
+
         <div>
-          <h2 className="text-3xl font-bold tracking-tight text-neutral-100">
-            Featured Projects
-          </h2>
-          <p className="text-neutral-400 mt-2 text-sm">
-            Flagship applications dynamically synchronized from my GitHub
-            overview.
-          </p>
+          <span
+            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border ${
+              isLive
+                ? "bg-apple-green/10 text-apple-green border-apple-green/20"
+                : "bg-primary/10 text-primary border-primary/20"
+            }`}
+          >
+            <span
+              className={`w-1.5 h-1.5 rounded-full ${
+                isLive
+                  ? "bg-apple-green animate-pulse"
+                  : "bg-primary"
+              }`}
+            />
+            {isLive ? "Live Sync Active" : "Cached Static"}
+          </span>
         </div>
 
-        <span
-          className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${
-            isLive
-              ? "bg-emerald-500/10 text-emerald-400"
-              : "bg-amber-500/10 text-amber-400"
-          }`}
-        >
-          <span
-            className={`w-1.5 h-1.5 rounded-full ${isLive ? "bg-emerald-400 animate-pulse" : "bg-amber-400"}`}
-          />
-          {isLive ? "Live Sync" : "Cached Static"}
-        </span>
+        <p className="text-muted-foreground text-sm leading-relaxed mt-1">
+          Flagship applications dynamically synchronized from my GitHub
+          overview, showcasing clean code and modern architectures.
+        </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {pinnedRepositories.map((repo) => (
-          <a
-            key={repo.name}
-            href={repo.html_url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group relative flex flex-col justify-between p-6 bg-neutral-900/50 border border-neutral-800 rounded-xl hover:border-neutral-700 hover:bg-neutral-900 transition-all duration-300 overflow-hidden"
-          >
-            <div className="absolute inset-0 bg-linear-to-br from-blue-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
-
-            <div>
-              <div className="flex items-center justify-between mb-4 text-neutral-400 group-hover:text-neutral-200 transition-colors">
-                <Folder className="w-6 h-6 stroke-[1.5]" />
-                <ArrowUpRight className="w-5 h-5 opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300" />
-              </div>
-
-              <h3 className="text-lg font-semibold text-neutral-100 group-hover:text-blue-400 transition-colors duration-200">
-                {repo.name}
-              </h3>
-              <p className="text-sm text-neutral-400 mt-2 line-clamp-3 leading-relaxed">
-                {repo.description || "No description provided."}
-              </p>
-            </div>
-
-            <div className="mt-6 pt-4 border-t border-neutral-800/60 flex items-center justify-between text-xs text-neutral-400 font-medium">
-              {repo.language && (
-                <span className="inline-flex items-center px-2 py-0.5 rounded bg-neutral-800 text-neutral-300 border border-neutral-700/50">
-                  {repo.language}
-                </span>
-              )}
-
-              <div className="flex items-center gap-4">
-                {repo.stargazers_count > 0 && (
-                  <span className="flex items-center gap-1 hover:text-amber-400 transition-colors">
-                    <Star className="w-4 h-4 fill-current text-amber-500/80" />
-                    {repo.stargazers_count}
-                  </span>
-                )}
-                {repo.forks_count > 0 && (
-                  <span className="flex items-center gap-1 hover:text-blue-400 transition-colors">
-                    <GitFork className="w-4 h-4 text-neutral-500" />
-                    {repo.forks_count}
-                  </span>
-                )}
-              </div>
-            </div>
-          </a>
+          <ProjectCard key={repo.name} repo={repo} />
         ))}
+      </div>
+
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mt-16 pt-6 border-t border-border/50 max-w-2xl mx-auto">
+        <Button
+          asChild
+          variant="default"
+          size="lg"
+          className="w-full sm:w-auto min-h-11 px-6 rounded-xl hover:scale-105 active:scale-95 transition-all duration-300 font-semibold shadow-xs shadow-primary/10 cursor-pointer"
+        >
+          <Link
+            href="/projects"
+            className="flex items-center justify-center gap-2"
+          >
+            <FolderGit2 className="w-4 h-4" />
+            <span>See all my projects</span>
+          </Link>
+        </Button>
+
+        <Button
+          asChild
+          variant="outline"
+          size="lg"
+          className="w-full sm:w-auto min-h-11 px-6 rounded-xl hover:scale-105 active:scale-95 transition-all duration-300 font-semibold cursor-pointer"
+        >
+          <Link
+            href="/experience"
+            className="flex items-center justify-center gap-2"
+          >
+            <Briefcase className="w-4 h-4" />
+            <span>View my career</span>
+          </Link>
+        </Button>
+
+        <ResumeButton
+          variant="outline"
+          size="lg"
+          icon={FileText}
+          className="w-full sm:w-auto min-h-11 px-6 rounded-xl hover:scale-105 active:scale-95 transition-all duration-300 font-semibold cursor-pointer"
+        >
+          View my resume
+        </ResumeButton>
       </div>
     </section>
   );

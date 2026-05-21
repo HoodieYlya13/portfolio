@@ -1,72 +1,138 @@
-// TODO: style this
-
 import { Suspense } from "react";
-import Link from "next/link";
 import { getGithubData } from "@/lib/github";
+import { ProjectCard } from "@/components/projects/ProjectCard";
+import { FolderGit2 } from "lucide-react";
+import { GithubIcon } from "@/components/icons/Brands";
 
 async function ProjectsContent() {
-  const { profile, repositories, isLive } = await getGithubData();
+  const { profile, pinnedRepositories, repositories, isLive } = await getGithubData();
 
   return (
-    <>
-      <div className="mb-4">
-        <p className="text-sm">
-          Status:{" "}
-          {isLive ? (
-            <span className="text-green-500 font-medium">● Live GitHub API Data (Cached 1hr)</span>
-          ) : (
-            <span className="text-amber-500 font-medium">● Fallback Offline Data (API rate-limit / unavailable)</span>
-          )}
-        </p>
+    <div className="space-y-16">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-8 border-b border-foreground/10">
+        <div>
+          <span className="text-xs font-bold uppercase tracking-wider text-primary mb-2 block">
+            Portfolio
+          </span>
+          <h1 className="text-4xl md:text-5xl font-black tracking-tight text-foreground">
+            Projects & Repositories
+          </h1>
+          <p className="text-muted-foreground mt-3 text-sm md:text-base max-w-2xl leading-relaxed">
+            Explore my digital workspace. Here you&apos;ll find flagship full-stack web applications, compiled WebAssembly tools, open-source libraries, and experimental side-projects.
+          </p>
+          
+          <div className="flex flex-wrap gap-x-6 gap-y-2 mt-4 text-xs text-muted-foreground font-medium">
+            <span className="flex items-center gap-1.5">
+              <strong>Total Public Repositories:</strong> {profile.public_repos}
+            </span>
+            <span className="hidden sm:inline text-foreground/20">•</span>
+            <span className="flex items-center gap-1.5">
+              <strong>Followers:</strong> {profile.followers}
+            </span>
+            <span className="hidden sm:inline text-foreground/20">•</span>
+            <a 
+              href={profile.githubUrl} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="inline-flex items-center gap-1 text-primary hover:underline font-semibold"
+            >
+              <GithubIcon className="w-3.5 h-3.5" />
+              <span>github.com/{profile.username}</span>
+            </a>
+          </div>
+        </div>
+
+        <div className="self-start md:self-end">
+          <span
+            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border ${
+              isLive
+                ? "bg-apple-green/10 text-apple-green border-apple-green/20"
+                : "bg-primary/10 text-primary border-primary/20"
+            }`}
+          >
+            <span
+              className={`w-1.5 h-1.5 rounded-full ${
+                isLive
+                  ? "bg-apple-green animate-pulse"
+                  : "bg-primary"
+              }`}
+            />
+            {isLive ? "Live Sync Active" : "Fallback Static Cache"}
+          </span>
+        </div>
       </div>
 
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold mb-2">{profile.name}&apos;s Projects</h1>
-        <p className="mb-1"><strong>GitHub:</strong> <a href={profile.githubUrl} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">{profile.githubUrl}</a></p>
-        <p className="text-sm text-gray-500">
-          <strong>Total Public Repositories:</strong> {profile.public_repos} | <strong>Followers:</strong> {profile.followers}
-        </p>
+      {pinnedRepositories && pinnedRepositories.length > 0 && (
+        <section className="space-y-6">
+          <div className="flex items-center gap-2">
+            <FolderGit2 className="w-5 h-5 text-primary" />
+            <h2 className="text-xl font-bold tracking-tight text-foreground">
+              Featured Work
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {pinnedRepositories.map((repo) => (
+              <ProjectCard key={repo.name} repo={repo} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {repositories && repositories.length > 0 && (
+        <section className="space-y-6">
+          <div className="flex items-center gap-2">
+            <GithubIcon className="w-5 h-5 text-primary" />
+            <h2 className="text-xl font-bold tracking-tight text-foreground">
+              Other Repositories & Utilities ({repositories.length})
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {repositories.map((repo) => (
+              <ProjectCard key={repo.name} repo={repo} />
+            ))}
+          </div>
+        </section>
+      )}
+    </div>
+  );
+}
+
+function ProjectsLoadingFallback() {
+  return (
+    <div className="space-y-12 animate-pulse">
+      <div className="space-y-4 pb-8 border-b border-foreground/10">
+        <div className="h-4 w-24 bg-foreground/10 rounded" />
+        <div className="h-10 w-2/3 bg-foreground/15 rounded" />
+        <div className="h-4 w-full md:w-1/2 bg-foreground/10 rounded" />
       </div>
 
-      <hr className="border-gray-200 my-6" />
-
-      <div>
-        <h2 className="text-2xl font-semibold mb-4">Repositories ({repositories.length})</h2>
-        <ul className="list-none pl-0 space-y-6">
-          {repositories.map((repo) => (
-            <li key={repo.name} className="border-b border-gray-100 pb-6">
-              <h3 className="mb-2">
-                <Link href={`/projects/${repo.name}`} scroll={false} className="text-xl font-bold text-blue-600 hover:underline">
-                  {repo.name}
-                </Link>{" "}
-                {repo.fork && <span className="text-xs text-gray-400 font-normal italic">[Forked]</span>}
-              </h3>
-              {repo.description ? <p className="text-gray-700 mb-2">{repo.description}</p> : <p className="text-gray-400 italic mb-2">No description provided.</p>}
-              <p className="text-sm text-gray-500 mb-2">
-                <strong>Language:</strong> {repo.language || "Not specified"} |{" "}
-                ⭐ Stars: {repo.stargazers_count} |{" "}
-                🍴 Forks: {repo.forks_count} |{" "}
-                Last Updated: {new Date(repo.updated_at).toLocaleDateString()}
-              </p>
-              <p>
-                <a href={repo.html_url} target="_blank" rel="noopener noreferrer" className="text-sm text-blue-500 hover:underline">
-                  View original on GitHub ↗
-                </a>
-              </p>
-            </li>
+      <div className="space-y-6">
+        <div className="h-6 w-32 bg-foreground/10 rounded" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <div 
+              key={i} 
+              className="h-44 p-6 rounded-2xl border border-foreground/5 bg-card/10 flex flex-col justify-between"
+            >
+              <div className="space-y-3">
+                <div className="h-6 w-1/2 bg-foreground/10 rounded animate-pulse" />
+                <div className="h-4 w-5/6 bg-foreground/5 rounded animate-pulse" />
+              </div>
+              <div className="h-4 w-1/4 bg-foreground/10 rounded animate-pulse" />
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
-    </>
+    </div>
   );
 }
 
 export default function ProjectsPage() {
   return (
-    <div className="p-8 padding-footer max-w-4xl mx-auto">
-      <Suspense fallback={<div className="p-8 text-center text-gray-500">Loading...</div>}>
+    <section className="min-h-screen px-6 py-12 md:py-20 max-w-6xl mx-auto padding-footer">
+      <Suspense fallback={<ProjectsLoadingFallback />}>
         <ProjectsContent />
       </Suspense>
-    </div>
+    </section>
   );
 }

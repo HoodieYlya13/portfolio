@@ -45,7 +45,7 @@ export function ContactForm() {
   };
 
   return (
-    <div className="w-full max-w-xl bg-neutral-900/40 backdrop-blur-xl border border-neutral-800/80 p-8 rounded-2xl shadow-2xl z-10 transition-all duration-300 hover:border-neutral-700/50">
+    <div className="w-full max-w-xl bg-neutral-900/40 backdrop-blur-xl border border-neutral-800/80 p-8 rounded-2xl shadow-2xl transition-all duration-300 hover:border-neutral-700/50">
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-neutral-100 tracking-tight">
           Get in Touch

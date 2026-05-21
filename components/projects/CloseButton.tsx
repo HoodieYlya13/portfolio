@@ -10,7 +10,7 @@ export default function CloseButton() {
   return (
     <button
       onClick={handleClose}
-      className="text-2xl font-bold text-gray-400 hover:text-gray-700 dark:hover:text-white transition duration-200 leading-none cursor-pointer border-none bg-transparent p-0"
+      className="text-2xl font-semibold text-muted-foreground hover:text-foreground transition-all duration-300 leading-none cursor-pointer border-none bg-transparent p-0 hover:scale-110 active:scale-95"
       aria-label="Close modal"
     >
       ✕

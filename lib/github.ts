@@ -1,5 +1,3 @@
-// TODO: style this
-
 import { promises as fs } from "fs";
 import path from "path";
 
@@ -50,6 +48,7 @@ export const FALLBACK_REPOS: Repository[] = [
     forks_count: 1,
     fork: false,
     updated_at: "2026-05-11T12:00:00Z",
+    homepage: "https://vibecoder.hy13dev.com",
   },
   {
     name: "insta-v2",
@@ -61,6 +60,7 @@ export const FALLBACK_REPOS: Repository[] = [
     stargazers_count: 0,
     forks_count: 0,
     updated_at: "2026-05-07T12:00:00Z",
+    homepage: "https://insta-v2-nine.vercel.app",
   },
   {
     name: "schumacher-knepper-theme-dev",
@@ -72,6 +72,7 @@ export const FALLBACK_REPOS: Repository[] = [
     stargazers_count: 0,
     forks_count: 0,
     updated_at: "2026-05-17T12:00:00Z",
+    homepage: "https://schumacher-knepper-v2.myshopify.com",
   },
   {
     name: "vibe-heist",
@@ -83,6 +84,7 @@ export const FALLBACK_REPOS: Repository[] = [
     stargazers_count: 0,
     forks_count: 0,
     updated_at: "2026-05-17T12:00:00Z",
+    homepage: "https://vibe-heist.hy13dev.com",
   },
   {
     name: "poly-livre-fullstack",
@@ -116,6 +118,7 @@ export const FALLBACK_REPOS: Repository[] = [
     stargazers_count: 0,
     forks_count: 0,
     updated_at: "2026-05-17T12:00:00Z",
+    homepage: "https://vibe-heist.hy13dev.com",
   },
   {
     name: "eclokit",
@@ -127,6 +130,7 @@ export const FALLBACK_REPOS: Repository[] = [
     stargazers_count: 0,
     forks_count: 0,
     updated_at: "2026-04-27T12:00:00Z",
+    homepage: "https://eclokit.vercel.app",
   },
   {
     name: "vibe-engine",
@@ -138,6 +142,7 @@ export const FALLBACK_REPOS: Repository[] = [
     stargazers_count: 0,
     forks_count: 0,
     updated_at: "2026-02-12T12:00:00Z",
+    homepage: "https://vibe-heist.hy13dev.com",
   },
   {
     name: "css-playground",
@@ -182,6 +187,7 @@ export const FALLBACK_REPOS: Repository[] = [
     stargazers_count: 0,
     forks_count: 0,
     updated_at: "2026-01-18T12:00:00Z",
+    homepage: "https://passkey-auth-template.hy13dev.com",
   },
   {
     name: "config",
@@ -225,6 +231,7 @@ export const FALLBACK_REPOS: Repository[] = [
     stargazers_count: 0,
     forks_count: 0,
     updated_at: "2025-01-27T12:00:00Z",
+    homepage: "https://whistleblower-dun.vercel.app",
   },
   {
     name: "clock",

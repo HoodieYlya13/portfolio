@@ -47,19 +47,7 @@ async function EducationContent() {
 export default function EducationPage() {
   return (
     <div className="min-h-screen bg-background py-20 padding-footer relative overflow-hidden flex flex-col gap-8 sm:gap-16">
-      <div className="absolute inset-0">
-        <DotField
-          dotRadius={1.5}
-          dotSpacing={14}
-          bulgeStrength={67}
-          glowRadius={160}
-          sparkle={false}
-          waveAmplitude={0}
-          gradientFrom="rgba(255, 100, 0, 0.6)"
-          gradientTo="rgba(255, 50, 0, 0.2)"
-          glowColor="rgba(255, 100, 0, 0.3)"
-        />
-      </div>
+      <DotField />
 
       <div className="max-w-4xl mx-auto text-center px-4">
         <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-linear-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">

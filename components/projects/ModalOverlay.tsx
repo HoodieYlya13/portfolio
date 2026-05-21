@@ -27,8 +27,8 @@ export default function ModalOverlay({ children }: ModalOverlayProps) {
   }, [isOpen]);
 
   const handleClose = () => {
+    window.dispatchEvent(new CustomEvent("close-portfolio-modal"));
     setIsOpen(false);
-    router.replace("/projects");
   };
 
   useEffect(() => {
@@ -39,7 +39,7 @@ export default function ModalOverlay({ children }: ModalOverlayProps) {
   useEffect(() => {
     const handleCloseEvent = () => {
       setIsOpen(false);
-      router.replace("/projects");
+      router.back();
     };
 
     window.addEventListener("close-portfolio-modal", handleCloseEvent);

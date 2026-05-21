@@ -19,7 +19,7 @@ export default function Error({
     <section className="relative min-h-screen flex flex-col items-center justify-center p-4 overflow-hidden pb-40 sm:pb-0">
       <LiquidGlassBackground />
       
-      <div className="z-10 backdrop-blur-md bg-foreground/40 text-background p-8 rounded-xl shadow-lg max-w-md w-full text-center">
+      <div className="backdrop-blur-md bg-foreground/40 text-background p-8 rounded-xl shadow-lg max-w-md w-full text-center">
         <h1 className="text-6xl font-bold mb-2 font-display">Oops!</h1>
         <h2 className="text-xl font-semibold mb-4">Something went wrong!</h2>
         <p className="text-sm opacity-70 mb-6">

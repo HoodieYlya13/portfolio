@@ -1,5 +1,3 @@
-// TODO: style this
-
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -9,7 +7,10 @@ interface IframeDesktopPreviewProps {
   title: string;
 }
 
-export default function IframeDesktopPreview({ src, title }: IframeDesktopPreviewProps) {
+export default function IframeDesktopPreview({
+  src,
+  title,
+}: IframeDesktopPreviewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(0.6);
   const [containerHeight, setContainerHeight] = useState(480);
@@ -46,7 +47,7 @@ export default function IframeDesktopPreview({ src, title }: IframeDesktopPrevie
     <div
       ref={containerRef}
       style={{ height: `${containerHeight}px` }}
-      className="w-full overflow-hidden relative border border-gray-200 dark:border-gray-800 rounded-lg bg-white transition-all duration-300"
+      className="w-full overflow-hidden relative bg-card transition-all duration-300"
     >
       <iframe
         src={src}

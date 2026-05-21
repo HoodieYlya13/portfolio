@@ -56,7 +56,7 @@ export default function TimelineCard({
     >
       <div
         className={cn(
-          "absolute w-4 h-4 rounded-full border-2 border-primary bg-background z-10 top-6",
+          "absolute w-4 h-4 rounded-full border-2 border-primary bg-background top-6",
           "-left-2",
           isLeft ? "md:left-auto md:-right-10" : "md:-left-10",
         )}

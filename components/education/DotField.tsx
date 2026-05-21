@@ -21,6 +21,7 @@ interface DotFieldProps {
   fadeTop?: boolean;
   fadeBottom?: boolean;
   className?: string;
+  asBackground?: boolean;
 }
 
 interface Dot {
@@ -44,11 +45,12 @@ export default function DotField({
   glowRadius = 160,
   sparkle = false,
   waveAmplitude = 0,
-  gradientFrom = "rgba(168, 85, 247, 0.35)",
-  gradientTo = "rgba(180, 151, 207, 0.25)",
-  glowColor = "#120F17",
+  gradientFrom = "rgba(255, 100, 0, 0.6)",
+  gradientTo = "rgba(255, 50, 0, 0.2)",
+  glowColor = "rgba(255, 100, 0, 0.3)",
   fadeTop = false,
   fadeBottom = false,
+  asBackground = true,
   className = "",
   ...rest
 }: DotFieldProps) {
@@ -332,8 +334,8 @@ export default function DotField({
     <div
       className={`dot-field-container ${className}`}
       style={{
-        position: "absolute",
-        inset: 0,
+        position: asBackground ? "absolute" : "relative",
+        ...(asBackground ? { inset: 0, pointerEvents: "none" } : {}),
         ...getMaskStyle(),
       }}
       {...rest}

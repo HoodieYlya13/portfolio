@@ -28,7 +28,7 @@ export default async function NavbarSlidingTitles() {
         {titles.map((text, index) => (
           <span
             key={`${text}-${index}`}
-            className="text-xs md:text-sm opacity-70 uppercase font-medium shrink-0"
+            className="text-xs md:text-sm opacity-70 font-medium shrink-0"
           >
             {text}
           </span>

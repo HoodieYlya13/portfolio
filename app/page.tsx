@@ -26,20 +26,7 @@ export default function Page() {
           className="absolute top-(--target-offset)"
         />
 
-        <div className="absolute inset-0">
-          <DotField
-            dotRadius={1.5}
-            dotSpacing={14}
-            bulgeStrength={67}
-            glowRadius={160}
-            sparkle={false}
-            waveAmplitude={0}
-            gradientFrom="rgba(255, 100, 0, 0.6)"
-            gradientTo="rgba(255, 50, 0, 0.2)"
-            glowColor="rgba(255, 100, 0, 0.3)"
-            fadeTop
-          />
-        </div>
+        <DotField fadeTop />
 
         <PinnedProjects />
       </div>

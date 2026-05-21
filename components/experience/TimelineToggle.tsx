@@ -29,7 +29,7 @@ export default function TimelineToggle({
         onClick={() => onChange("engineering")}
         aria-label="Toggle Engineering Experience"
         className={cn(
-          "relative z-10 flex-1 py-2.5 px-4 rounded-full flex items-center justify-center gap-2 text-sm font-semibold transition-colors duration-300 cursor-pointer",
+          "relative flex-1 py-2.5 px-4 rounded-full flex items-center justify-center gap-2 text-sm font-semibold transition-colors duration-300 cursor-pointer",
           isEngineering
             ? "text-primary-foreground font-bold"
             : "text-muted-foreground hover:text-foreground",
@@ -43,7 +43,7 @@ export default function TimelineToggle({
         onClick={() => onChange("foundational")}
         aria-label="Toggle Foundational Experience"
         className={cn(
-          "relative z-10 flex-1 py-2.5 px-4 rounded-full flex items-center justify-center gap-2 text-sm font-semibold transition-colors duration-300 cursor-pointer",
+          "relative flex-1 py-2.5 px-4 rounded-full flex items-center justify-center gap-2 text-sm font-semibold transition-colors duration-300 cursor-pointer",
           !isEngineering
             ? "text-primary-foreground font-bold"
             : "text-muted-foreground hover:text-foreground",
