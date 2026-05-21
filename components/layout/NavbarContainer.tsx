@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { usePathname } from "next/navigation";
 
 interface NavbarContainerProps {
   children: React.ReactNode;
@@ -10,9 +9,26 @@ interface NavbarContainerProps {
 export default function NavbarContainer({ children }: NavbarContainerProps) {
   const [visible, setVisible] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
-  const pathname = usePathname();
+  const [isModalOpen, setIsModalOpen] = useState(() => {
+    if (typeof window !== "undefined") {
+      return !!(window as unknown as { __portfolioModalOpen?: boolean }).__portfolioModalOpen;
+    }
+    return false;
+  });
 
-  const isProjectDetail = pathname.startsWith("/projects/") && pathname !== "/projects";
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const handleModalChange = (e: Event) => {
+        const customEvent = e as CustomEvent<{ open?: boolean }>;
+        setIsModalOpen(!!customEvent.detail?.open);
+      };
+
+      window.addEventListener("portfolio-modal-change", handleModalChange as EventListener);
+      return () => {
+        window.removeEventListener("portfolio-modal-change", handleModalChange as EventListener);
+      };
+    }
+  }, []);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -20,11 +36,11 @@ export default function NavbarContainer({ children }: NavbarContainerProps) {
   }, []);
 
   useEffect(() => {
-    if (!isProjectDetail) {
+    if (!isModalOpen) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setVisible(true);
     }
-  }, [isProjectDetail]);
+  }, [isModalOpen]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -57,7 +73,7 @@ export default function NavbarContainer({ children }: NavbarContainerProps) {
     }
   };
 
-  const isNavbarVisible = visible && !isProjectDetail;
+  const isNavbarVisible = visible && !isModalOpen;
 
   return (
     <div

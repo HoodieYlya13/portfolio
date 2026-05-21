@@ -19,7 +19,7 @@ export function ProjectCard({ repo, className }: ProjectCardProps) {
         "border border-border/80 dark:border-border/40 hover:border-primary/40 dark:hover:border-primary/30",
         "shadow-xs hover:shadow-xl hover:shadow-primary/5",
         "hover:scale-[1.02] overflow-hidden",
-        className
+        className,
       )}
     >
       <div className="absolute inset-0 bg-linear-to-br from-primary/5 dark:from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
@@ -33,7 +33,7 @@ export function ProjectCard({ repo, className }: ProjectCardProps) {
         <h3 className="text-lg font-bold text-foreground group-hover:text-primary transition-colors duration-200">
           {repo.name}
         </h3>
-        
+
         {repo.fork && (
           <span className="inline-block text-[10px] uppercase tracking-wider text-muted-foreground bg-muted/50 px-1.5 py-0.5 rounded-sm mt-1">
             Forked

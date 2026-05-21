@@ -7,10 +7,7 @@ import { gsap } from "gsap";
 import TextType from "@/components/react-bits/TextType";
 import { Button } from "@/components/ui/button";
 
-const reveal = (
-  el: HTMLElement | null,
-  onComplete?: () => void
-) => {
+const reveal = (el: HTMLElement | null, onComplete?: () => void) => {
   if (!el) {
     onComplete?.();
     return;
@@ -24,7 +21,7 @@ const reveal = (
       duration: 0.7,
       ease: "power3.out",
       onComplete,
-    }
+    },
   );
 };
 
@@ -35,12 +32,14 @@ interface HeroIntroProps {
 export default function HeroIntro({ restartKey }: HeroIntroProps) {
   const h2Ref = useRef<HTMLHeadingElement>(null);
   const buttonRef = useRef<HTMLDivElement>(null);
-  const scrollRef = useRef<HTMLAnchorElement>(null);
+  const scrollRef = useRef<HTMLButtonElement>(null);
 
   const resetHidden = () => {
-    const targets = [h2Ref.current, buttonRef.current, scrollRef.current].filter(
-      (el) => el !== null
-    );
+    const targets = [
+      h2Ref.current,
+      buttonRef.current,
+      scrollRef.current,
+    ].filter((el) => el !== null);
     gsap.killTweensOf(targets);
     gsap.set(targets, { opacity: 0, y: 24 });
   };
@@ -69,8 +68,8 @@ export default function HeroIntro({ restartKey }: HeroIntroProps) {
           as="h1"
           text="Don't have time to read through my resume?"
           loop={false}
-          typingSpeed={55}
-          initialDelay={400}
+          typingSpeed={45}
+          initialDelay={300}
           showCursor
           cursorCharacter="|"
           className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold"
@@ -99,14 +98,18 @@ export default function HeroIntro({ restartKey }: HeroIntroProps) {
         </Button>
       </div>
 
-      <a
+      <button
         ref={scrollRef}
-        href="#classic-background"
-        className="inline-flex items-center gap-1.5 text-sm text-foreground/60 hover:text-foreground/90 transition-colors group opacity-0"
+        onClick={(e) => {
+          e.preventDefault();
+          const target = document.getElementById("classic-background");
+          if (target) target.scrollIntoView({ behavior: "smooth" });
+        }}
+        className="inline-flex items-center gap-1.5 text-sm text-foreground/60 hover:text-foreground/90 transition-colors group opacity-0 border-none bg-transparent cursor-pointer font-medium"
       >
         Or scroll to read my classic background
         <ChevronDown className="size-4 transition-transform duration-300 group-hover:translate-y-0.5" />
-      </a>
+      </button>
     </div>
   );
 }

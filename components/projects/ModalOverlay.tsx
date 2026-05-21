@@ -37,6 +37,19 @@ export default function ModalOverlay({ children }: ModalOverlayProps) {
   }, [pathname]);
 
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      (window as unknown as { __portfolioModalOpen?: boolean }).__portfolioModalOpen = isOpen;
+      window.dispatchEvent(new CustomEvent("portfolio-modal-change", { detail: { open: isOpen } }));
+    }
+    return () => {
+      if (typeof window !== "undefined") {
+        (window as unknown as { __portfolioModalOpen?: boolean }).__portfolioModalOpen = false;
+        window.dispatchEvent(new CustomEvent("portfolio-modal-change", { detail: { open: false } }));
+      }
+    };
+  }, [isOpen]);
+
+  useEffect(() => {
     const handleCloseEvent = () => {
       setIsOpen(false);
       router.back();
