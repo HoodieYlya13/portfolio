@@ -270,3 +270,10 @@ footer {
 .padding-footer {
   padding-bottom: var(--footer-height);
 }
+
+html:has(#menu-toggle:checked),
+body:has(#menu-toggle:checked) {
+  overflow: hidden;
+  height: 100vh;
+  height: 100dvh;
+}

@@ -6,8 +6,8 @@ interface MenuContentProps {
 
 export default function MenuContent({ children }: MenuContentProps) {
   return (
-    <div className="transition-[grid-template-rows] duration-500 ease-in-out grid grid-rows-[0fr] menu-content">
-      <div className="overflow-hidden">
+    <div className="transition-[grid-template-rows] duration-500 ease-in-out grid grid-rows-[0fr] menu-content min-h-0">
+      <div className="overflow-y-auto max-h-[60vh] md:max-h-[70vh] overscroll-contain">
         <div className="p-2 pb-4 flex flex-col gap-3">
           {children}
         </div>
