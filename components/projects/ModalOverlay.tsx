@@ -1,5 +1,3 @@
-// TODO: style this
-
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
@@ -38,13 +36,23 @@ export default function ModalOverlay({ children }: ModalOverlayProps) {
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      (window as unknown as { __portfolioModalOpen?: boolean }).__portfolioModalOpen = isOpen;
-      window.dispatchEvent(new CustomEvent("portfolio-modal-change", { detail: { open: isOpen } }));
+      (
+        window as unknown as { __portfolioModalOpen?: boolean }
+      ).__portfolioModalOpen = isOpen;
+      window.dispatchEvent(
+        new CustomEvent("portfolio-modal-change", { detail: { open: isOpen } }),
+      );
     }
     return () => {
       if (typeof window !== "undefined") {
-        (window as unknown as { __portfolioModalOpen?: boolean }).__portfolioModalOpen = false;
-        window.dispatchEvent(new CustomEvent("portfolio-modal-change", { detail: { open: false } }));
+        (
+          window as unknown as { __portfolioModalOpen?: boolean }
+        ).__portfolioModalOpen = false;
+        window.dispatchEvent(
+          new CustomEvent("portfolio-modal-change", {
+            detail: { open: false },
+          }),
+        );
       }
     };
   }, [isOpen]);
@@ -73,9 +81,7 @@ export default function ModalOverlay({ children }: ModalOverlayProps) {
       onClick={handleOverlayClick}
       className="fixed inset-0 bg-black/60 backdrop-blur-md flex justify-center z-50 p-4 overflow-y-auto cursor-pointer transition-all duration-300"
     >
-      <div className="cursor-default w-full max-w-4xl my-auto py-8">
-        {children}
-      </div>
+      <div className="cursor-default w-full max-w-4xl my-auto">{children}</div>
     </div>
   );
 }
