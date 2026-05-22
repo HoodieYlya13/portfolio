@@ -1,12 +1,14 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 interface NavbarContainerProps {
   children: React.ReactNode;
 }
 
 export default function NavbarContainer({ children }: NavbarContainerProps) {
+  const pathname = usePathname();
   const [visible, setVisible] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(() => {
@@ -39,7 +41,7 @@ export default function NavbarContainer({ children }: NavbarContainerProps) {
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setVisible(true);
-  }, []);
+  }, [pathname]);
 
   useEffect(() => {
     if (!isModalOpen) {
@@ -54,6 +56,9 @@ export default function NavbarContainer({ children }: NavbarContainerProps) {
       const windowHeight = window.innerHeight;
       const documentHeight = document.documentElement.scrollHeight;
 
+      const isScrollable = documentHeight > windowHeight + 10;
+      if (!isScrollable) return;
+
       const isAtBottom = currentScrollY + windowHeight >= documentHeight - 10;
       const scrollingUp = currentScrollY < lastScrollY;
 
@@ -66,6 +71,49 @@ export default function NavbarContainer({ children }: NavbarContainerProps) {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [lastScrollY]);
+
+  useEffect(() => {
+    let touchStartY = 0;
+
+    const handleWheel = (e: WheelEvent) => {
+      const documentHeight = document.documentElement.scrollHeight;
+      const windowHeight = window.innerHeight;
+      const isScrollable = documentHeight > windowHeight + 10;
+
+      if (!isScrollable) {
+        if (e.deltaY > 5) setVisible(false);
+        else if (e.deltaY < -5) setVisible(true);
+      }
+    };
+
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartY = e.touches[0].clientY;
+    };
+
+    const handleTouchMove = (e: TouchEvent) => {
+      const documentHeight = document.documentElement.scrollHeight;
+      const windowHeight = window.innerHeight;
+      const isScrollable = documentHeight > windowHeight + 10;
+
+      if (!isScrollable) {
+        const currentY = e.touches[0].clientY;
+        const diffY = currentY - touchStartY;
+
+        if (diffY < -15) setVisible(false);
+        else if (diffY > 15) setVisible(true);
+      }
+    };
+
+    window.addEventListener("wheel", handleWheel, { passive: true });
+    window.addEventListener("touchstart", handleTouchStart, { passive: true });
+    window.addEventListener("touchmove", handleTouchMove, { passive: true });
+
+    return () => {
+      window.removeEventListener("wheel", handleWheel);
+      window.removeEventListener("touchstart", handleTouchStart);
+      window.removeEventListener("touchmove", handleTouchMove);
+    };
+  }, []);
 
   const handleLinkClick = (e: React.MouseEvent) => {
     const target = e.target as HTMLElement;
