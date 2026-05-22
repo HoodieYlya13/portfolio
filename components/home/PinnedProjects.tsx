@@ -11,7 +11,7 @@ export async function PinnedProjects() {
   if (!pinnedRepositories || pinnedRepositories.length === 0) return null;
 
   return (
-    <section className="py-16 max-w-6xl mx-auto px-6">
+    <section className="pt-16 max-w-6xl mx-auto px-6">
       <div className="flex flex-col items-center text-center gap-4 mb-10 max-w-2xl mx-auto">
         <h2 className="text-3xl font-bold tracking-tight text-foreground">
           Featured Projects

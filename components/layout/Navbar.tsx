@@ -84,7 +84,7 @@ export default function Navbar() {
           </div>
         </MenuContent>
 
-        <div className="px-2 pb-2 flex items-center justify-between relative pt-2 bottom-bar peer-checked:pt-4">
+        <div className="px-2 pb-2 flex items-center justify-between relative pt-2 bottom-bar">
           <div className="absolute top-0 left-[2.5%] w-[95%] h-px bg-background/20 dark:bg-foreground/20 transition-transform duration-250 ease-in-out origin-left scale-x-0 line-sep" />
 
           <NavItem

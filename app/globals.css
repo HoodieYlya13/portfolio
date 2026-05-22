@@ -282,3 +282,8 @@ footer {
     max-height: 70vh;
   }
 }
+
+html:has(#menu-toggle:checked) {
+  overflow: hidden;
+  height: 100%;
+}

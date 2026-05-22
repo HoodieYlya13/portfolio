@@ -4,10 +4,10 @@ import { Button } from "@/components/ui/button";
 
 export default function NotFound() {
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center p-4 overflow-hidden pb-40 sm:padding-footer z-10">
+    <section className="relative min-h-screen flex flex-col items-center justify-center p-4 overflow-hidden pb-40 sm:padding-footer">
       <LiquidGlassBackground />
       
-      <div className="backdrop-blur-md bg-foreground/40 text-background p-8 rounded-xl shadow-lg max-w-md w-full text-center">
+      <div className="backdrop-blur-md bg-foreground/40 text-background p-8 rounded-xl shadow-lg max-w-md w-full text-center z-10">
         <h1 className="text-8xl font-bold mb-2 font-display">404</h1>
         <h2 className="text-2xl font-semibold mb-4">Page Not Found</h2>
         <p className="text-sm opacity-70 mb-6">
