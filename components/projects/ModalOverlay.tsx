@@ -1,14 +1,15 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { usePathname } from "next/navigation";
+import { useSafeBack } from "@/components/layout/NavigationProvider";
 
 interface ModalOverlayProps {
   children: React.ReactNode;
 }
 
 export default function ModalOverlay({ children }: ModalOverlayProps) {
-  const router = useRouter();
+  const safeBack = useSafeBack();
   const pathname = usePathname();
   const overlayRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(true);
@@ -60,14 +61,14 @@ export default function ModalOverlay({ children }: ModalOverlayProps) {
   useEffect(() => {
     const handleCloseEvent = () => {
       setIsOpen(false);
-      router.back();
+      safeBack();
     };
 
     window.addEventListener("close-portfolio-modal", handleCloseEvent);
     return () => {
       window.removeEventListener("close-portfolio-modal", handleCloseEvent);
     };
-  }, [router]);
+  }, [safeBack]);
 
   const handleOverlayClick = (e: React.MouseEvent) => {
     if (e.target === overlayRef.current) handleClose();

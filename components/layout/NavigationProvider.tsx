@@ -1,0 +1,66 @@
+"use client";
+
+import React, { useEffect, Suspense } from "react";
+import { usePathname, useRouter } from "next/navigation";
+
+let inMemoryHistory: string[] = [];
+
+function getHistory(): string[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const stored = sessionStorage.getItem("nav_history");
+    return stored ? JSON.parse(stored) : inMemoryHistory;
+  } catch {
+    return inMemoryHistory;
+  }
+}
+
+function setHistory(history: string[]) {
+  inMemoryHistory = history;
+  if (typeof window === "undefined") return;
+  try {
+    sessionStorage.setItem("nav_history", JSON.stringify(history));
+  } catch (e) {
+    console.error("Failed to write nav_history:", e);
+  }
+}
+
+function NavigationTracker() {
+  const pathname = usePathname();
+
+  useEffect(() => {
+    const history = getHistory();
+    if (history[history.length - 1] !== pathname)
+      setHistory([...history, pathname]);
+  }, [pathname]);
+
+  return null;
+}
+
+export function NavigationProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <>
+      <Suspense fallback={null}>
+        <NavigationTracker />
+      </Suspense>
+      {children}
+    </>
+  );
+}
+
+export function useSafeBack() {
+  const router = useRouter();
+
+  return (fallbackRoute: string = "/") => {
+    const history = getHistory();
+    if (history.length > 1) {
+      const updated = history.slice(0, -1);
+      setHistory(updated);
+      router.back();
+    } else router.push(fallbackRoute);
+  };
+}

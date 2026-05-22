@@ -7,6 +7,7 @@ import ThemeScript from "@/components/layout/ThemeScript";
 import GetInTouchButton from "@/components/layout/GetInTouchButton";
 import Footer from "../components/layout/Footer";
 import ThemeToaster from "@/components/layout/ThemeToaster";
+import { NavigationProvider } from "@/components/layout/NavigationProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -42,15 +43,17 @@ export default function RootLayout({
       </head>
       <body className="min-h-full flex flex-col relative">
         <ThemeToaster />
-        <Suspense fallback={null}>
-          <GetInTouchButton />
-        </Suspense>
-        <div className="min-h-screen min-h-dvh">{children}</div>
-        {modal}
-        <Suspense fallback={null}>
-          <Navbar />
-        </Suspense>
-        <Footer />
+        <NavigationProvider>
+          <Suspense fallback={null}>
+            <GetInTouchButton />
+          </Suspense>
+          <div className="min-h-screen min-h-dvh">{children}</div>
+          {modal}
+          <Suspense fallback={null}>
+            <Navbar />
+          </Suspense>
+          <Footer />
+        </NavigationProvider>
       </body>
     </html>
   );

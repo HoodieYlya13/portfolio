@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
+import { useSafeBack } from "@/components/layout/NavigationProvider";
 import {
   Bot,
   User,
@@ -75,7 +75,7 @@ His primary contributions and engineering achievements at Equasens include:
 ];
 
 export default function YlyaBotPage() {
-  const router = useRouter();
+  const safeBack = useSafeBack();
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "welcome",
@@ -274,7 +274,7 @@ My live vector-database RAG neural channel is currently syncing. In the meantime
             <button
               onClick={(e) => {
                 e.preventDefault();
-                router.back();
+                safeBack();
               }}
               className="p-2 hover:bg-muted/50 rounded-lg text-muted-foreground hover:text-foreground transition-colors cursor-pointer border-none bg-transparent"
               aria-label="Go back"
