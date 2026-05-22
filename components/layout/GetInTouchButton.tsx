@@ -9,13 +9,18 @@ export default function GetInTouchButton() {
 
   if (pathname === "/contact" || pathname === "/ylya-bot") return null;
 
+  const handleCloseMenu = () => {
+    const checkbox = document.getElementById("menu-toggle") as HTMLInputElement;
+    if (checkbox) checkbox.checked = false;
+  };
+
   return (
     <Button
       asChild
       variant="glass"
       className="fixed top-4 right-4 md:top-6 md:right-6 z-50 animate-drop-bounce"
     >
-      <Link href="/contact" aria-label="Get in touch">
+      <Link href="/contact" aria-label="Get in touch" onClick={handleCloseMenu}>
         <span>Get in touch</span>
         <svg
           width="16"

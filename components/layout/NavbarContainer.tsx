@@ -42,13 +42,14 @@ export default function NavbarContainer({ children }: NavbarContainerProps) {
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setVisible(true);
+
+    const checkbox = document.getElementById("menu-toggle") as HTMLInputElement;
+    if (checkbox) checkbox.checked = false;
   }, [pathname]);
 
   useEffect(() => {
-    if (!isModalOpen) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setVisible(true);
-    }
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    if (!isModalOpen) setVisible(true);
   }, [isModalOpen]);
 
   useEffect(() => {
