@@ -87,17 +87,6 @@ export const FALLBACK_REPOS: Repository[] = [
     homepage: "https://vibe-heist.hy13dev.com",
   },
   {
-    name: "poly-livre-fullstack",
-    description:
-      "A modern full-stack book management platform built with Java 21, Spring Boot 3, Next.js 16, and Tailwind CSS. Features a Hexagonal Architecture backend and a responsive, dockerized environment.",
-    html_url: "https://github.com/HoodieYlya13/poly-livre-fullstack",
-    language: "TypeScript / Java",
-    fork: false,
-    stargazers_count: 0,
-    forks_count: 0,
-    updated_at: "2026-05-12T12:00:00Z",
-  },
-  {
     name: "dockercraft",
     description:
       "Dockercraft revival: Manage Minecraft servers with Docker on any system, including native support for ARM (Apple Silicon) and standard x86 architectures.",
@@ -202,7 +191,7 @@ export const FALLBACK_REPOS: Repository[] = [
   {
     name: "poly-livre-fullstack-infrastructure",
     description:
-      "Infrastructure configurations and deployment setups for the Poly Livre stack.",
+      "Unified infrastructure & orchestration hub for Liprerie. Integrates Next.js 16 and Spring Boot 3.5 submodules via a containerized local Docker dev stack, automated Makefile commands, and Kubernetes configs",
     html_url:
       "https://github.com/HoodieYlya13/poly-livre-fullstack-infrastructure",
     language: "Makefile",
@@ -286,18 +275,30 @@ export async function getGithubData() {
     headers["Authorization"] = `token ${process.env.GITHUB_TOKEN}`;
 
   let targetPinnedNames = FALLBACK_PINNED_NAMES;
+  let targetHonorableNames: string[] = [];
   try {
     const profileJson = await getFullProfile();
-    if (profileJson && profileJson.pinned_repositories)
-      targetPinnedNames = profileJson.pinned_repositories;
+    if (profileJson) {
+      if (profileJson.repositories) {
+        if (profileJson.repositories.pinned_repositories)
+          targetPinnedNames = profileJson.repositories.pinned_repositories;
+        if (profileJson.repositories.honorable_mentions_repositories)
+          targetHonorableNames =
+            profileJson.repositories.honorable_mentions_repositories;
+      } else if (profileJson.pinned_repositories)
+        targetPinnedNames = profileJson.pinned_repositories;
+    }
   } catch (e) {
     console.warn(
-      "Failed retrieving dynamic pins list from profile.json, applying default keys fallback.",
+      "Failed retrieving dynamic repositories lists from profile.json, applying default keys fallback.",
       e,
     );
   }
 
   const lowercasePins = targetPinnedNames.map((name) => name.toLowerCase());
+  const lowercaseHonorable = targetHonorableNames.map((name) =>
+    name.toLowerCase(),
+  );
 
   try {
     const [profileRes, reposRes] = await Promise.all([
@@ -352,8 +353,18 @@ export async function getGithubData() {
           lowercasePins.indexOf(b.name.toLowerCase()),
       );
 
+    const honorableRepositories = allMappedRepos
+      .filter((repo) => lowercaseHonorable.includes(repo.name.toLowerCase()))
+      .sort(
+        (a, b) =>
+          lowercaseHonorable.indexOf(a.name.toLowerCase()) -
+          lowercaseHonorable.indexOf(b.name.toLowerCase()),
+      );
+
     const remainingRepositories = allMappedRepos.filter(
-      (repo) => !lowercasePins.includes(repo.name.toLowerCase()),
+      (repo) =>
+        !lowercasePins.includes(repo.name.toLowerCase()) &&
+        !lowercaseHonorable.includes(repo.name.toLowerCase()),
     );
 
     return {
@@ -369,6 +380,7 @@ export async function getGithubData() {
         public_repos: profileData.public_repos,
       } as GithubProfile,
       pinnedRepositories,
+      honorableRepositories,
       repositories: remainingRepositories,
       isLive: true,
     };
@@ -386,13 +398,24 @@ export async function getGithubData() {
         lowercasePins.indexOf(b.name.toLowerCase()),
     );
 
+    const fallbackHonorable = FALLBACK_REPOS.filter((repo) =>
+      lowercaseHonorable.includes(repo.name.toLowerCase()),
+    ).sort(
+      (a, b) =>
+        lowercaseHonorable.indexOf(a.name.toLowerCase()) -
+        lowercaseHonorable.indexOf(b.name.toLowerCase()),
+    );
+
     const fallbackRemaining = FALLBACK_REPOS.filter(
-      (repo) => !lowercasePins.includes(repo.name.toLowerCase()),
+      (repo) =>
+        !lowercasePins.includes(repo.name.toLowerCase()) &&
+        !lowercaseHonorable.includes(repo.name.toLowerCase()),
     );
 
     return {
       profile: FALLBACK_PROFILE,
       pinnedRepositories: fallbackPinned,
+      honorableRepositories: fallbackHonorable,
       repositories: fallbackRemaining,
       isLive: false,
     };
@@ -516,6 +539,10 @@ export interface FullProfileData {
     main?: boolean;
   }>;
   pinned_repositories?: string[];
+  repositories?: {
+    pinned_repositories?: string[];
+    honorable_mentions_repositories?: string[];
+  };
 }
 
 export async function getFullProfile(): Promise<FullProfileData | null> {

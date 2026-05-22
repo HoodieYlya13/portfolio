@@ -1,11 +1,11 @@
 import { Suspense } from "react";
 import { getGithubData } from "@/lib/github";
 import { ProjectCard } from "@/components/projects/ProjectCard";
-import { FolderGit2 } from "lucide-react";
+import { FolderGit2, Award } from "lucide-react";
 import { GithubIcon } from "@/components/icons/Brands";
 
 async function ProjectsContent() {
-  const { profile, pinnedRepositories, repositories, isLive } = await getGithubData();
+  const { profile, pinnedRepositories, honorableRepositories, repositories, isLive } = await getGithubData();
 
   return (
     <div className="space-y-16">
@@ -72,6 +72,22 @@ async function ProjectsContent() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {pinnedRepositories.map((repo) => (
+              <ProjectCard key={repo.name} repo={repo} />
+            ))}
+          </div>
+        </section>
+      )}
+
+      {honorableRepositories && honorableRepositories.length > 0 && (
+        <section className="space-y-6">
+          <div className="flex items-center gap-2">
+            <Award className="w-5 h-5 text-primary" />
+            <h2 className="text-xl font-bold tracking-tight text-foreground">
+              Honorable Mentions
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {honorableRepositories.map((repo) => (
               <ProjectCard key={repo.name} repo={repo} />
             ))}
           </div>
