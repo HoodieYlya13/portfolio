@@ -9,6 +9,7 @@ interface NavbarContainerProps {
 
 export default function NavbarContainer({ children }: NavbarContainerProps) {
   const pathname = usePathname();
+
   const [visible, setVisible] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(() => {
@@ -126,6 +127,8 @@ export default function NavbarContainer({ children }: NavbarContainerProps) {
       if (checkbox) checkbox.checked = false;
     }
   };
+
+  if (pathname === "/ylya-bot") return null;
 
   const isNavbarVisible = visible && !isModalOpen;
 

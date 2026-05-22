@@ -1,4 +1,6 @@
-# 🌌 HoodieYlya13 — Centralized Engineering Profile & SSoT (Single Source of Truth)
+# Portfolio — HoodieYlya13
+
+## Centralized Engineering Profile & SSoT (Single Source of Truth)
 
 <div align="center">
   <img src="https://raw.githubusercontent.com/HoodieYlya13/HoodieYlya13/main/public/header.gif" alt="Ylya Martchenko - Full Stack Developer" width="100%" />

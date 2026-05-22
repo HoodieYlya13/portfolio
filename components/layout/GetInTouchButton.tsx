@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 export default function GetInTouchButton() {
   const pathname = usePathname();
 
-  if (pathname === "/contact") return null;
+  if (pathname === "/contact" || pathname === "/ylya-bot") return null;
 
   return (
     <Button
