@@ -67,7 +67,7 @@ export default function Navbar() {
                     alt={link.alt}
                     width={52}
                     height={52}
-                    className="object-contain size-13 group-hover:size-12 md:size-15 md:group-hover:size-14 transition-all duration-300 ease-in-out"
+                    className="object-contain size-13 group-hover:size-12 md:size-15 md:group-hover:size-14 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
                   />
                 }
               >
@@ -85,7 +85,7 @@ export default function Navbar() {
         </MenuContent>
 
         <div className="px-2 pb-2 flex items-center justify-between relative pt-2 bottom-bar peer-checked:pt-4">
-          <div className="absolute top-0 left-[2.5%] w-[95%] h-px bg-background/20 transition-transform duration-250 ease-in-out origin-left scale-x-0 line-sep" />
+          <div className="absolute top-0 left-[2.5%] w-[95%] h-px bg-background/20 dark:bg-foreground/20 transition-transform duration-250 ease-in-out origin-left scale-x-0 line-sep" />
 
           <NavItem
             icon={
@@ -114,7 +114,7 @@ export default function Navbar() {
 
           <label
             htmlFor="menu-toggle"
-            className="p-3 text-background focus:outline-none hover:text-background/70 transition-colors duration-300 ease-in-out cursor-pointer"
+            className="p-3 focus:outline-none hover:opacity-70 transition-opacity duration-300 ease-in-out cursor-pointer"
             aria-label="Toggle Menu"
           >
             {/* Hamburger Icon */}

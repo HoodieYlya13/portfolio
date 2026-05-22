@@ -10,9 +10,9 @@ export default function NavbarContainer({ children }: NavbarContainerProps) {
   const [visible, setVisible] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(() => {
-    if (typeof window !== "undefined") {
-      return !!(window as unknown as { __portfolioModalOpen?: boolean }).__portfolioModalOpen;
-    }
+    if (typeof window !== "undefined")
+      return !!(window as unknown as { __portfolioModalOpen?: boolean })
+        .__portfolioModalOpen;
     return false;
   });
 
@@ -23,9 +23,15 @@ export default function NavbarContainer({ children }: NavbarContainerProps) {
         setIsModalOpen(!!customEvent.detail?.open);
       };
 
-      window.addEventListener("portfolio-modal-change", handleModalChange as EventListener);
+      window.addEventListener(
+        "portfolio-modal-change",
+        handleModalChange as EventListener,
+      );
       return () => {
-        window.removeEventListener("portfolio-modal-change", handleModalChange as EventListener);
+        window.removeEventListener(
+          "portfolio-modal-change",
+          handleModalChange as EventListener,
+        );
       };
     }
   }, []);
@@ -77,7 +83,7 @@ export default function NavbarContainer({ children }: NavbarContainerProps) {
 
   return (
     <div
-      className="fixed bottom-4 md:bottom-6 left-1/2 w-[95%] max-w-2xl backdrop-blur-md text-background rounded-xl md:rounded-2xl shadow-lg z-50 flex flex-col overflow-hidden transition-all duration-500 ease-in-out bg-foreground/40 peer-checked:bg-foreground/70 peer-checked:[&_.icon-close]:block peer-checked:[&_.icon-menu]:hidden peer-checked:[&_.menu-content]:grid-rows-[1fr] peer-checked:[&_.line-sep]:scale-x-100 peer-checked:[&_.line-sep]:delay-500 peer-checked:[&_.menu-item]:translate-y-0 peer-checked:[&_.menu-item]:opacity-100"
+      className="fixed bottom-4 md:bottom-6 left-1/2 w-[95%] max-w-2xl backdrop-blur-md text-background dark:text-foreground rounded-xl md:rounded-2xl shadow-lg z-50 flex flex-col overflow-hidden transition-all duration-500 ease-in-out bg-foreground/40 peer-checked:bg-apple-dark-gray/70 peer-checked:[&_.icon-close]:block peer-checked:[&_.icon-menu]:hidden peer-checked:[&_.menu-content]:grid-rows-[1fr] peer-checked:[&_.line-sep]:scale-x-100 peer-checked:dark:[&_.line-sep]:bg-foreground/20 peer-checked:[&_.line-sep]:delay-500 peer-checked:[&_.menu-item]:translate-y-0 peer-checked:[&_.menu-item]:opacity-100"
       style={{
         transform: `translate(-50%, ${isNavbarVisible ? "0" : "calc(100% + 2rem)"})`,
       }}
@@ -87,4 +93,3 @@ export default function NavbarContainer({ children }: NavbarContainerProps) {
     </div>
   );
 }
-
