@@ -1,4 +1,3 @@
-
 [submodule "app/ylya-bot"]
 	path = app/ylya-bot
 	url = https://github.com/HoodieYlya13/ylya-bot.git
