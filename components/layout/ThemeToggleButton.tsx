@@ -41,7 +41,7 @@ export default function ThemeToggleButton() {
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="h-8 group-hover:h-7 md:h-10 md:group-hover:h-9 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] w-auto"
+              className="h-11 group-hover:h-10 md:h-13 md:group-hover:h-12 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] w-auto"
             >
               <circle cx="12" cy="12" r="5"></circle>
               <line x1="12" y1="1" x2="12" y2="3"></line>
@@ -62,7 +62,7 @@ export default function ThemeToggleButton() {
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="h-8 group-hover:h-7 md:h-10 md:group-hover:h-9 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] w-auto"
+              className="h-11 group-hover:h-10 md:h-13 md:group-hover:h-12 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] w-auto"
             >
               <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
             </svg>

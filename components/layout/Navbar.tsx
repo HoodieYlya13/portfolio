@@ -9,35 +9,35 @@ import NavbarSlidingTitles from "./NavbarSlidingTitles";
 
 export default function Navbar() {
   const links = [
-    { name: "Home", href: "/", src: "/img/logo.png", alt: "HY13dev Logo" },
+    { name: "Home", href: "/", src: "/logo.png", alt: "HY13dev Logo" },
     {
       name: "Projects",
       href: "/projects",
-      src: "/img/logo.png",
+      src: "/img/vibe-coder.png",
       alt: "Projects Icon",
     },
     {
       name: "Education",
       href: "/education",
-      src: "/img/logo.png",
+      src: "/img/logo-polytech.png",
       alt: "Education Icon",
     },
     {
       name: "Experience",
       href: "/experience",
-      src: "/img/logo.png",
+      src: "/img/logo-equasens.png",
       alt: "Experience Icon",
     },
     {
       name: "Contact",
       href: "/contact",
-      src: "/img/logo.png",
+      src: "/img/contact-me.png",
       alt: "Contact Icon",
     },
     {
       name: "YlyaBot",
       href: "/ylya-bot",
-      src: "/img/logo.png",
+      src: "/img/ylya-bot.png",
       alt: "YlyaBot Icon",
     },
   ];
@@ -97,8 +97,8 @@ export default function Navbar() {
                   playsInline
                   className="size-full object-cover object-center"
                 >
-                  <source src="/memoji-video3.mov" type="video/quicktime" />
-                  <source src="/memoji-video3.webm" type="video/webm" />
+                  <source src="/memoji-video.mov" type="video/quicktime" />
+                  <source src="/memoji-video.webm" type="video/webm" />
                 </video>
               </Link>
             }
