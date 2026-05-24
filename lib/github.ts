@@ -362,6 +362,20 @@ export const FALLBACK_REPOS: Repository[] = [
 
 const FALLBACK_PINNED_NAMES = ["teslimitless", "ylya-bot", "codemafia"];
 
+function sanitizeNewlines<T>(obj: T): T {
+  if (typeof obj === "string") return obj.replace(/\\n/g, "\n") as unknown as T;
+  if (Array.isArray(obj))
+    return obj.map((item) => sanitizeNewlines(item)) as unknown as T;
+  if (obj !== null && typeof obj === "object") {
+    const result: any = {};
+    for (const key in obj)
+      if (Object.prototype.hasOwnProperty.call(obj, key))
+        result[key] = sanitizeNewlines(obj[key]);
+    return result as T;
+  }
+  return obj;
+}
+
 async function fetchPortfolio(
   username: string,
   repoName: string,
@@ -379,7 +393,7 @@ async function fetchPortfolio(
       if (res.ok) {
         const json = await res.json();
         if (json && json.routing && json.project_meta)
-          return json as PortfolioProject;
+          return sanitizeNewlines(json) as PortfolioProject;
       }
     } catch {
       // Continue to next branch
@@ -400,7 +414,7 @@ async function fetchPortfolio(
     if (res.ok) {
       const json = await res.json();
       if (json && json.routing && json.project_meta)
-        return json as PortfolioProject;
+        return sanitizeNewlines(json) as PortfolioProject;
     }
   } catch {
     // Ignore

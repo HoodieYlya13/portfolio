@@ -125,7 +125,7 @@ export function ProjectDetailContent({
               <span>Project Overview</span>
             </h2>
             <div className="prose prose-neutral dark:prose-invert max-w-none">
-              <p className="text-base md:text-lg leading-relaxed text-foreground/80 font-medium">
+              <p className="text-base md:text-lg leading-relaxed text-foreground/80 font-medium whitespace-pre-line">
                 {portfolio?.comprehensive_description ||
                   repo.description ||
                   "No description provided for this repository."}
@@ -390,7 +390,7 @@ export function ProjectDetailContent({
                       <span className="font-bold text-apple-orange text-xs uppercase tracking-wider block">
                         Situation & Impediment
                       </span>
-                      <p className="text-xs text-muted-foreground leading-relaxed">
+                      <p className="text-xs text-muted-foreground leading-relaxed whitespace-pre-line">
                         {challenge.situation}
                       </p>
                     </div>
@@ -404,7 +404,7 @@ export function ProjectDetailContent({
                       <span className="font-bold text-apple-blue text-xs uppercase tracking-wider block">
                         Engineering Action
                       </span>
-                      <p className="text-xs text-muted-foreground leading-relaxed">
+                      <p className="text-xs text-muted-foreground leading-relaxed whitespace-pre-line">
                         {challenge.action}
                       </p>
                     </div>
@@ -418,7 +418,7 @@ export function ProjectDetailContent({
                       <span className="font-bold text-apple-green text-xs uppercase tracking-wider block">
                         Quantifiable Result
                       </span>
-                      <p className="text-xs text-muted-foreground leading-relaxed">
+                      <p className="text-xs text-muted-foreground leading-relaxed whitespace-pre-line">
                         {challenge.result}
                       </p>
                     </div>
@@ -445,7 +445,7 @@ export function ProjectDetailContent({
 
           <div className="grid grid-cols-1 gap-8 items-stretch">
             <div className="flex flex-col justify-center p-6 rounded-2xl bg-card/25 dark:bg-card/15 border border-border/50 dark:border-border/30">
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed font-medium">
+              <p className="text-sm md:text-base text-muted-foreground leading-relaxed font-medium whitespace-pre-line">
                 {portfolio.architectural_deep_dive.text}
               </p>
             </div>
@@ -486,7 +486,7 @@ export function ProjectDetailContent({
               <h3 className="font-extrabold text-foreground text-md">
                 Lessons Learned & Core Takeaways
               </h3>
-              <p className="text-sm text-muted-foreground leading-relaxed">
+              <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
                 {portfolio.lessons_learned}
               </p>
             </div>
