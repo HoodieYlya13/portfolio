@@ -19,7 +19,7 @@ export async function PinnedProjects() {
 
         <div>
           <span
-            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border ${
+            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border whitespace-nowrap ${
               isLive
                 ? "bg-apple-green/10 text-apple-green border-apple-green/20"
                 : "bg-primary/10 text-primary border-primary/20"
@@ -32,7 +32,7 @@ export async function PinnedProjects() {
                   : "bg-primary"
               }`}
             />
-            {isLive ? "Live Sync Active" : "Cached Static"}
+            {isLive ? "Live Sync" : "Cached Static"}
           </span>
         </div>
 

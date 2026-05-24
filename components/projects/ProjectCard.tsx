@@ -15,7 +15,7 @@ export function ProjectCard({ repo, className }: ProjectCardProps) {
       scroll={false}
       className={cn(
         "group relative flex flex-col justify-between p-6 rounded-2xl transition-all duration-300",
-        "bg-card/45 dark:bg-card/20 hover:bg-card/55 dark:hover:bg-card/30 backdrop-blur-none group-hover:backdrop-blur-xs",
+        "bg-card/45 dark:bg-card/20 hover:bg-card/55 dark:hover:bg-card/30 backdrop-blur-none",
         "border border-border/80 dark:border-border/40 hover:border-primary/40 dark:hover:border-primary/30",
         "shadow-xs hover:shadow-xl hover:shadow-primary/5",
         "hover:scale-[1.02] overflow-hidden",
@@ -31,7 +31,7 @@ export function ProjectCard({ repo, className }: ProjectCardProps) {
         </div>
 
         <h3 className="text-lg font-bold text-foreground group-hover:text-primary transition-colors duration-200">
-          {repo.name}
+          {repo.portfolio.routing.project_name || repo.name}
         </h3>
 
         {repo.fork && (
@@ -46,13 +46,24 @@ export function ProjectCard({ repo, className }: ProjectCardProps) {
       </div>
 
       <div className="mt-6 pt-4 border-t border-foreground/5 flex items-center justify-between text-xs text-muted-foreground font-medium">
-        {repo.language ? (
-          <span className="inline-flex items-center px-2 py-0.5 rounded bg-muted/65 text-foreground/80 border border-border/40">
-            {repo.language}
-          </span>
-        ) : (
-          <span className="text-foreground/40 italic">Not specified</span>
-        )}
+        <div className="flex flex-wrap gap-1.5 max-w-[65%]">
+          {repo.languages && repo.languages.length > 0 ? (
+            repo.languages.slice(0, 3).map((lang) => (
+              <span
+                key={lang}
+                className="inline-flex items-center px-1.5 py-0.5 rounded bg-muted/65 text-foreground/80 border border-border/40 text-[10px] font-semibold"
+              >
+                {lang}
+              </span>
+            ))
+          ) : repo.language ? (
+            <span className="inline-flex items-center px-1.5 py-0.5 rounded bg-muted/65 text-foreground/80 border border-border/40 text-[10px] font-semibold">
+              {repo.language}
+            </span>
+          ) : (
+            <span className="text-foreground/40 italic">Not specified</span>
+          )}
+        </div>
 
         <div className="flex items-center gap-4">
           {repo.stargazers_count > 0 && (

@@ -44,7 +44,7 @@ async function ProjectsContent() {
 
         <div className="self-start md:self-end">
           <span
-            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border ${
+            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border whitespace-nowrap ${
               isLive
                 ? "bg-apple-green/10 text-apple-green border-apple-green/20"
                 : "bg-primary/10 text-primary border-primary/20"
@@ -57,7 +57,7 @@ async function ProjectsContent() {
                   : "bg-primary"
               }`}
             />
-            {isLive ? "Live Sync Active" : "Fallback Static Cache"}
+            {isLive ? "Live Sync" : "Cached Static"}
           </span>
         </div>
       </div>
@@ -99,7 +99,7 @@ async function ProjectsContent() {
           <div className="flex items-center gap-2">
             <GithubIcon className="w-5 h-5 text-primary" />
             <h2 className="text-xl font-bold tracking-tight text-foreground">
-              Other Repositories & Utilities ({repositories.length})
+              Other Repositories ({repositories.length})
             </h2>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

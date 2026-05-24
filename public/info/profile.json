@@ -67,6 +67,7 @@
     "preference": "Hybrid / Remote",
     "technical_domains": [
       "Web Dev",
+      "Mobile Dev",
       "AI/RAG",
       "Cloud",
       "Space Engineering",
@@ -78,6 +79,7 @@
     "primary_web_stack": [
       "Next.js",
       "React",
+      "React Native",
       "Angular",
       "TypeScript",
       "JavaScript"
@@ -88,7 +90,8 @@
       "PostgreSQL",
       "MySQL",
       "GraphQL",
-      "REST API"
+      "REST API",
+      "RabbitMQ"
     ],
     "polyglot_languages": [
       "Python",
@@ -100,6 +103,7 @@
     ],
     "devops_and_systems": [
       "Docker",
+      "Kubernetes (K8s)",
       "Bash",
       "Linux",
       "MacOS",
@@ -133,7 +137,7 @@
       "location": "Villers-lès-Nancy",
       "bullets": [
         "Serving as a **Full Stack Developer** with a primary focus on scaling **Front-End** architecture using **Angular**, while advocating for **React**-based modular design patterns.",
-        "Designing and maintaining distributed backend systems using **Spring Boot** within a **microservices** architecture, ensuring seamless data flow via optimized **REST APIs**.",
+        "Designing and maintaining distributed backend systems using **Spring Boot** within a **microservices** architecture managed via **Kubernetes**, ensuring seamless asynchronous data flow via **RabbitMQ** and optimized **REST APIs**.",
         "Developing and scheduling automated **CRON jobs** for background data processing, system health checks, and asynchronous enterprise workflows."
       ],
       "main": true
