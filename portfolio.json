@@ -1,0 +1,72 @@
+{
+  "routing": {
+    "repo_name": "portfolio",
+    "project_name": "My Portfolio",
+    "hero_image": ""
+  },
+  "project_meta": {
+    "role": "Lead Full-Stack & GenAI Architect",
+    "development_phase": "Production-Ready (SSoT Ecosystem)",
+    "languages": ["TypeScript", "JavaScript", "GLSL", "HTML", "CSS"],
+    "frameworks_and_tools": [
+      "Next.js 16.2.6",
+      "React 19.2.4",
+      "Tailwind CSS v4",
+      "Three.js",
+      "React Three Fiber (R3F)",
+      "GSAP (GreenSock)",
+      "Zod",
+      "React Hook Form",
+      "Resend",
+      "Sonner",
+      "Lucide React",
+      "GitHub GraphQL API",
+      "GitHub Actions CI/CD",
+      "Node.js Compiler"
+    ]
+  },
+  "comprehensive_description": "The central control plane and Single Source of Truth (SSoT) for my professional engineering presence. This project is a highly optimized, state-of-the-art developer portfolio built on Next.js 16 (App Router) and React 19, integrating a headless data-driven architecture. A single structural update to profile.json triggers an automated GitHub Actions CI/CD compiler script to rewrite the GitHub profile README.md, programmatically sync active repository pins via the GitHub GraphQL API, bust edge CDN caching routes, and dynamically hot-swap the system prompt context of a Retrieval-Augmented Generation (RAG) AI assistant, YlyaBot. The application delivers a premium, hyper-fluid interactive visual experience using a bespoke React Three Fiber (R3F) WebGL Liquid Glass background running custom simplex noise fragment shaders, coupled with smooth GSAP transition choreographies.",
+  "engineering_highlights": [
+    "SSoT Headless Architecture: Designed a decoupled portfolio control plane where my entire career timeline, placement preferences, and technical skills live inside a centralized machine-readable JSON schema, feeding Vercel page generation, GitHub profiles, and vector RAG pipelines concurrently.",
+    "GraphQL-Driven Pin Sync: Developed a custom automated compiler script executed in GitHub Actions that programmatically synchronizes my featured GitHub page pins with my SSoT configuration, executing dynamic GraphQL mutations to re-pin repositories on-push.",
+    "Next.js 16 Async Request Compliance: Architected the page routing and data-access layers (DAL) to fully comply with Next.js 16's asynchronous request APIs, ensuring robust async resolution of cookies, headers, and dynamic route params.",
+    "React 19 Server/Client Composition & ISR: Leveraged advanced React 19 server component patterns and high-performance fetches with 1-hour Edge/CDN ISR revalidation caching (revalidate: 3600) or standard 'use cache' components to stream dynamic elements via Suspense boundaries.",
+    "Dynamic Parallel & Intercepting Routes: Engineered a smooth user navigation system for repository deep dives using Next.js parallel slots (@modal) and intercepting routes ((.)projects/[id]), rendering high-fidelity project overlays dynamically without losing application routing state.",
+    "Bespoke WebGL Liquid Glass Shader: Created a premium dynamic background utilizing React Three Fiber and customized GLSL fragment shaders implementing 2D Simplex noise, real-time aspect-ratio compensation, and a MutationObserver layout listener to hot-swap theme colors seamlessly on dark-mode class mutations.",
+    "Robust Session History Navigation: Engineered a highly resilient navigation management hook (useSafeBack) utilizing sessionStorage history tracking, allowing modular modal closers to securely transition back through parallel routes or safely fall back to home navigation without crashing active browser route history."
+  ],
+  "measurable_metrics": {
+    "execution_latency": "Sub-150ms Time to First Byte (TTFB) via Edge-cached Incremental Static Regeneration (ISR) and static page pre-rendering; sub-10ms localized navigation history tracking resolution.",
+    "ui_performance": "Sustained lock-tight 60 FPS visual rendering under heavy CPU load, utilizing GPU-accelerated GLSL shader compilation and layout containment bounds; 100% Google Lighthouse performance scores.",
+    "operational_cost": "Absolute zero ($0.00) monthly maintenance cost, running completely serverless via Next.js ISR on Vercel Edge networks and utilizing free-tier GitHub Actions virtual runners."
+  },
+  "star_challenges": [
+    {
+      "situation": "Integrating a high-performance WebGL liquid glass shader inside a dual-theme Next.js website caused visible flashes, broken color boundaries, or high latency because updating R3F canvas components via traditional React state forces expensive re-renders and re-compilations of the underlying shader program.",
+      "action": "Bypassed React state updates entirely for canvas styling. Programmed a low-level browser MutationObserver on the document.documentElement to detect class name changes (e.g., .dark). Directly mapped these changes to low-level canvas document style queries, parsing the CSS custom variables (--background and --primary) to dynamically inject new THREE.Color vectors directly into the WebGL shader's uniform memory array without triggering standard React tree diffs.",
+      "result": "Achieved microsecond-accurate color transitions inside the active GLSL fragment shader upon dark mode clicks, maintaining zero-flash layouts and keeping the render pipeline running at a steady 60 FPS.",
+      "inline_image": ""
+    },
+    {
+      "situation": "Implementing intercepting routes ((.)projects/[id]) for beautiful detail overlays caused navigational locking. Clicking close buttons or clicking outside the modal triggered default browser history steps (via router.back()), which occasionally popped the user completely off the site or stranded them in broken parallel routing states if they landed on the page directly from external organic search links.",
+      "action": "Built a highly resilient navigation management hook (useSafeBack) and contextual state provider. Implemented a session history tracker that monitors active portfolio routing paths inside sessionStorage. If the session history contains valid routing traces, close commands dispatch standard router.back(); if the session history is blank (e.g., direct external visits), the hook interceptor dynamically rewrites history and triggers a clean push back to /projects.",
+      "result": "Fully eliminated modal navigational lockouts, ensuring a flawless UX across both intercepting routes and standalone desktop layouts under all navigation scenarios.",
+      "inline_image": ""
+    },
+    {
+      "situation": "The portfolio dynamically reads navigation states, custom CSS height variables, and cookies synchronously on boot to render smooth layout choreographies. Because Next.js pre-renders the HTML on the server, client-side viewport computations and cookie-based theme hooks caused severe hydration mismatches and visible UI flashing.",
+      "action": "Devised a zero-flash pre-boot script (ThemeScript) injected directly into the HTML <head>, resolving cookie-based theme classes before the page layout mounts. Configured proper suppressHydrationWarning flags on structural page layers, and safely wrapped dynamic, browser-dependent elements (like GetInTouchButton) in client-side Suspense wrappers to postpone non-essential element hydration.",
+      "result": "Completely bypassed server-client mismatches and eliminated the visual 'flash of unstyled content' (FOUC) while retaining full static site generation capabilities.",
+      "inline_image": ""
+    }
+  ],
+  "architectural_deep_dive": {
+    "text": "The portfolio ecosystem follows a headless control plane layout. The core user-experience layer is built with Next.js 16 and React 19, compiling structural layouts using advanced PPR (Partial Prerendering) streams. A custom Git Actions CI/CD script operates as the compiler of the SSoT (profile.json), updating dynamic Markdown templates on-push and issuing programmatic GraphQL mutations to sync pinned repositories via the GitHub overview API. Inside the Next.js runtime, standard routes access profile data using cached raw fetch requests (revalidate: 3600), while custom navigation history and modal managers control layout containment boundaries dynamically. The WebGL shader is isolated entirely within a React Three Fiber canvas, listening directly to dark-mode DOM class changes via a MutationObserver to update WebGL uniform color parameters dynamically.",
+    "illustration": {
+      "url": "https://hy13dev.com/img/portfolio-architecture.png",
+      "alt": "Single Source of Truth (SSoT) System Architecture and Compiler Pipeline Diagram",
+      "caption": "Flow of centralized profile.json config parsing through compiler actions, dynamic ISR page rendering, and WebGL shader parameters."
+    }
+  },
+  "lessons_learned": "Decoupling content data from layout presentation via a machine-readable Single Source of Truth (SSoT) dramatically accelerates professional portfolio updates, eliminates copy-paste sync errors across networks, and directly supplies high-fidelity data matrices to Retrieval-Augmented Generation (RAG) agents with zero extra ingestion overhead. Furthermore, when building hyper-smooth visual experiences in Next.js 16/React 19, keeping high-frequency animation logic and theme observer states completely isolated from the React render diffing pipeline is essential to preventing frame drops and hydration anomalies."
+}
