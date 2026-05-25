@@ -657,7 +657,7 @@ export async function getGithubRepo(name: string) {
 
 export interface FullProfileData {
   identity: {
-    name: string;
+    full_name: string;
     birthday: string;
     nationality: string;
     current_location: string;
