@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { MapPin, Calendar, ExternalLink } from "lucide-react";
-import React from "react";
+import { renderTextWithInlineFormatting } from "@/components/ui/Markdown";
 
 export interface TimelineCardProps {
   range: string;
@@ -17,19 +17,7 @@ export interface TimelineCardProps {
   };
 }
 
-function formatTextWithBold(text: string): React.ReactNode[] {
-  const parts = text.split(/(\*\*.*?\*\*)/g);
-  return parts.map((part, index) => {
-    if (part.startsWith("**") && part.endsWith("**")) {
-      return (
-        <strong key={index} className="font-semibold text-foreground">
-          {part.slice(2, -2)}
-        </strong>
-      );
-    }
-    return part;
-  });
-}
+
 
 export default function TimelineCard({
   range,
@@ -88,7 +76,7 @@ export default function TimelineCard({
 
         {summary && (
           <p className="text-muted-foreground text-sm mb-4 leading-relaxed">
-            {summary}
+            {renderTextWithInlineFormatting(summary)}
           </p>
         )}
 
@@ -100,7 +88,7 @@ export default function TimelineCard({
             )}
           >
             {bullets.map((bullet, idx) => (
-              <li key={idx}>{formatTextWithBold(bullet)}</li>
+              <li key={idx}>{renderTextWithInlineFormatting(bullet)}</li>
             ))}
           </ul>
         )}

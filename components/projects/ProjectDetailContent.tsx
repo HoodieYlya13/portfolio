@@ -23,6 +23,7 @@ import { getShopifyStorefrontHost } from "@/lib/shopify-storefront-previews";
 import MockBrowserWrapper from "@/components/projects/MockBrowserWrapper";
 import { ProjectDemoPreview } from "@/components/projects/ProjectDemoPreview";
 import { Repository } from "@/lib/github";
+import { Markdown } from "@/components/ui/Markdown";
 
 interface ProjectDetailContentProps {
   repo: Repository;
@@ -125,11 +126,14 @@ export function ProjectDetailContent({
               <span>Project Overview</span>
             </h2>
             <div className="prose prose-neutral dark:prose-invert max-w-none">
-              <p className="text-base md:text-lg leading-relaxed text-foreground/80 font-medium whitespace-pre-line">
-                {portfolio?.comprehensive_description ||
+              <Markdown
+                content={
+                  portfolio?.comprehensive_description ||
                   repo.description ||
-                  "No description provided for this repository."}
-              </p>
+                  "No description provided for this repository."
+                }
+                className="text-base md:text-lg text-foreground/80 font-medium"
+              />
             </div>
           </section>
 
@@ -386,13 +390,14 @@ export function ProjectDetailContent({
                     <div className="shrink-0">
                       <AlertTriangle className="w-5 h-5 text-apple-orange" />
                     </div>
-                    <div className="space-y-1">
+                    <div className="space-y-1.5 flex-1">
                       <span className="font-bold text-apple-orange text-xs uppercase tracking-wider block">
                         Situation & Impediment
                       </span>
-                      <p className="text-xs text-muted-foreground leading-relaxed whitespace-pre-line">
-                        {challenge.situation}
-                      </p>
+                      <Markdown
+                        content={challenge.situation}
+                        className="text-xs text-muted-foreground"
+                      />
                     </div>
                   </div>
 
@@ -400,13 +405,14 @@ export function ProjectDetailContent({
                     <div className="shrink-0">
                       <Wrench className="w-5 h-5 text-apple-blue" />
                     </div>
-                    <div className="space-y-1">
+                    <div className="space-y-1.5 flex-1">
                       <span className="font-bold text-apple-blue text-xs uppercase tracking-wider block">
                         Engineering Action
                       </span>
-                      <p className="text-xs text-muted-foreground leading-relaxed whitespace-pre-line">
-                        {challenge.action}
-                      </p>
+                      <Markdown
+                        content={challenge.action}
+                        className="text-xs text-muted-foreground"
+                      />
                     </div>
                   </div>
 
@@ -414,13 +420,14 @@ export function ProjectDetailContent({
                     <div className="shrink-0">
                       <CheckCircle className="w-5 h-5 text-apple-green" />
                     </div>
-                    <div className="space-y-1">
+                    <div className="space-y-1.5 flex-1">
                       <span className="font-bold text-apple-green text-xs uppercase tracking-wider block">
                         Quantifiable Result
                       </span>
-                      <p className="text-xs text-muted-foreground leading-relaxed whitespace-pre-line">
-                        {challenge.result}
-                      </p>
+                      <Markdown
+                        content={challenge.result}
+                        className="text-xs text-muted-foreground"
+                      />
                     </div>
                   </div>
                 </div>
@@ -445,9 +452,10 @@ export function ProjectDetailContent({
 
           <div className="grid grid-cols-1 gap-8 items-stretch">
             <div className="flex flex-col justify-center p-6 rounded-2xl bg-card/25 dark:bg-card/15 border border-border/50 dark:border-border/30">
-              <p className="text-sm md:text-base text-muted-foreground leading-relaxed font-medium whitespace-pre-line">
-                {portfolio.architectural_deep_dive.text}
-              </p>
+              <Markdown
+                content={portfolio.architectural_deep_dive.text}
+                className="text-sm md:text-base text-muted-foreground font-medium"
+              />
             </div>
 
             {portfolio.architectural_deep_dive.illustration && (
@@ -486,9 +494,10 @@ export function ProjectDetailContent({
               <h3 className="font-extrabold text-foreground text-md">
                 Lessons Learned & Core Takeaways
               </h3>
-              <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
-                {portfolio.lessons_learned}
-              </p>
+              <Markdown
+                content={portfolio.lessons_learned}
+                className="text-sm text-muted-foreground"
+              />
             </div>
           </div>
         </section>

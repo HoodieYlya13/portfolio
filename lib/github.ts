@@ -367,10 +367,11 @@ function sanitizeNewlines<T>(obj: T): T {
   if (Array.isArray(obj))
     return obj.map((item) => sanitizeNewlines(item)) as unknown as T;
   if (obj !== null && typeof obj === "object") {
-    const result: any = {};
-    for (const key in obj)
-      if (Object.prototype.hasOwnProperty.call(obj, key))
-        result[key] = sanitizeNewlines(obj[key]);
+    const result: Record<string, unknown> = {};
+    const objAsRecord = obj as Record<string, unknown>;
+    for (const key in objAsRecord)
+      if (Object.prototype.hasOwnProperty.call(objAsRecord, key))
+        result[key] = sanitizeNewlines(objAsRecord[key]);
     return result as T;
   }
   return obj;
