@@ -4,17 +4,28 @@
 
 import { Resend } from "resend";
 import { contactSchema, type ContactFormData } from "./schemas";
+import { checkRateLimit } from "@/lib/ratelimit";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function sendContactEmail(data: ContactFormData) {
   const validatedFields = contactSchema.safeParse(data);
 
-  if (!validatedFields.success) {
+  if (!validatedFields.success)
     return {
       success: false,
       error: "Invalid form submission data. Please check your inputs.",
     };
+
+  try {
+    await checkRateLimit("contact");
+  } catch (err) {
+    if (err instanceof Error && err.message === "TOO_MANY_REQUESTS")
+      return {
+        success: false,
+        error: "Too many requests. Please slow down (max 2 messages/min).",
+      };
+    throw err;
   }
 
   const { firstName, lastName, email, message } = validatedFields.data;
