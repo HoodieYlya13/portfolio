@@ -70,4 +70,3 @@
   },
   "lessons_learned": "Decoupling content data from layout presentation via a machine-readable Single Source of Truth (SSoT) dramatically accelerates professional portfolio updates, eliminates copy-paste sync errors across networks, and directly supplies high-fidelity data matrices to Retrieval-Augmented Generation (RAG) agents with zero extra ingestion overhead. Furthermore, when building hyper-smooth visual experiences in Next.js 16/React 19, keeping high-frequency animation logic and theme observer states completely isolated from the React render diffing pipeline is essential to preventing frame drops and hydration anomalies."
 }
-
