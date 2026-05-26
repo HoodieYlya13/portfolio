@@ -83,7 +83,7 @@ export function ContactForm() {
               {...register("firstName")}
               type="text"
               disabled={isSubmitting}
-              className="w-full bg-background/70 dark:bg-black/40 border border-border/80 dark:border-border/45 rounded-xl px-4 py-3 text-sm text-foreground placeholder-muted-foreground/60 focus:outline-hidden focus:border-primary/80 focus:ring-2 focus:ring-primary/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+              className="w-full bg-background/70 dark:bg-black/40 border border-border/80 dark:border-border/45 rounded-xl px-4 py-3 text-[1rem] md:text-sm text-foreground placeholder-muted-foreground/60 focus:outline-hidden focus:border-primary/80 focus:ring-2 focus:ring-primary/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
               placeholder="John"
             />
             {errors.firstName && (
@@ -101,7 +101,7 @@ export function ContactForm() {
               {...register("lastName")}
               type="text"
               disabled={isSubmitting}
-              className="w-full bg-background/70 dark:bg-black/40 border border-border/80 dark:border-border/45 rounded-xl px-4 py-3 text-sm text-foreground placeholder-muted-foreground/60 focus:outline-hidden focus:border-primary/80 focus:ring-2 focus:ring-primary/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+              className="w-full bg-background/70 dark:bg-black/40 border border-border/80 dark:border-border/45 rounded-xl px-4 py-3 text-[1rem] md:text-sm text-foreground placeholder-muted-foreground/60 focus:outline-hidden focus:border-primary/80 focus:ring-2 focus:ring-primary/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
               placeholder="Doe"
             />
             {errors.lastName && (
@@ -120,7 +120,7 @@ export function ContactForm() {
             {...register("email")}
             type="email"
             disabled={isSubmitting}
-            className="w-full bg-background/70 dark:bg-black/40 border border-border/80 dark:border-border/45 rounded-xl px-4 py-3 text-sm text-foreground placeholder-muted-foreground/60 focus:outline-hidden focus:border-primary/80 focus:ring-2 focus:ring-primary/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+            className="w-full bg-background/70 dark:bg-black/40 border border-border/80 dark:border-border/45 rounded-xl px-4 py-3 text-[1rem] md:text-sm text-foreground placeholder-muted-foreground/60 focus:outline-hidden focus:border-primary/80 focus:ring-2 focus:ring-primary/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
             placeholder="johndoe@example.com"
           />
           {errors.email && (
@@ -138,7 +138,7 @@ export function ContactForm() {
             {...register("message")}
             rows={5}
             disabled={isSubmitting}
-            className="w-full bg-background/70 dark:bg-black/40 border border-border/80 dark:border-border/45 rounded-xl p-4 text-sm text-foreground placeholder-muted-foreground/60 resize-none focus:outline-hidden focus:border-primary/80 focus:ring-2 focus:ring-primary/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+            className="w-full bg-background/70 dark:bg-black/40 border border-border/80 dark:border-border/45 rounded-xl p-4 text-[1rem] md:text-sm text-foreground placeholder-muted-foreground/60 resize-none focus:outline-hidden focus:border-primary/80 focus:ring-2 focus:ring-primary/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
             placeholder="Tell me about your project stack requirements..."
           />
           {errors.message && (
