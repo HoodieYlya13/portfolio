@@ -1,5 +1,3 @@
-// TODO: style this
-
 export const SHOPIFY_STOREFRONT_PREVIEWS = {
   "schumacher-knepper-v2.myshopify.com": {
     imageSrc: "/img/schumacher-knepper.png",

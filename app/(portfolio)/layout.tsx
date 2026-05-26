@@ -16,7 +16,7 @@ export default function PortfolioLayout({
       <Suspense fallback={null}>
         <GetInTouchButton />
       </Suspense>
-      <div className="min-h-screen min-h-dvh">{children}</div>
+      <div className="flex-1 flex flex-col">{children}</div>
       {modal}
       <Suspense fallback={null}>
         <Navbar />

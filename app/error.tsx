@@ -16,7 +16,7 @@ export default function Error({
   }, [error]);
 
   return (
-    <section className="relative min-h-screen flex flex-col items-center justify-center p-4 overflow-hidden pb-40 sm:padding-footer xs:pt-20">
+    <section className="relative flex-1 flex flex-col items-center justify-center p-4">
       <LiquidGlassBackground />
       
       <div className="backdrop-blur-md bg-foreground/40 text-background p-8 rounded-xl shadow-lg max-w-md w-full text-center z-10">

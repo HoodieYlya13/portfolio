@@ -34,9 +34,9 @@ export default function RootLayout({
       <head>
         <ThemeScript />
       </head>
-      <body className="min-h-full flex flex-col relative">
+      <body className="min-h-full min-h-svh flex flex-col relative">
         <ThemeToaster />
-        <div className="min-h-screen min-h-svh">{children}</div>
+        <div className="flex-1 flex flex-col">{children}</div>
       </body>
     </html>
   );

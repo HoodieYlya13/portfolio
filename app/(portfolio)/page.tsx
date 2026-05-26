@@ -18,7 +18,7 @@ export default function Page() {
         <HomeHero fadeHeight={fadeHeight} />
       </div>
 
-      <div className="relative flex items-center justify-center text-center min-h-screen min-h-dvh padding-footer pt-(--fade-height)">
+      <div className="relative flex items-center justify-center text-center min-h-screen min-h-svh padding-footer pt-(--fade-height)">
         <div id="classic-background" className="absolute top-(--fade-height)" />
 
         <DotField fadeTop />
