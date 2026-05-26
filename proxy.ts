@@ -22,6 +22,8 @@ export async function proxy(req: NextRequest) {
       });
     }
 
+    // TODO: add metrics for ylya bot
+    // FIXME: wrong country retreived
     if (!existingCountry) {
       response.cookies.set("user_country", country, {
         path: "/",
