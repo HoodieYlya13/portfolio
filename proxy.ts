@@ -3,6 +3,9 @@ import { NextRequest, NextResponse } from "next/server";
 export async function proxy(req: NextRequest) {
   const response = NextResponse.next();
 
+  console.log("full req:", req);
+  console.log("headers", req.headers);
+
   const existingIp = req.cookies.get("user_ip")?.value;
   const existingCountry = req.cookies.get("user_country")?.value;
   if (!existingIp || !existingCountry) {
