@@ -23,7 +23,7 @@ export default async function ProjectModal({ params }: ProjectModalProps) {
 
   return (
     <ModalOverlay>
-      <div className="bg-background p-6 md:p-8 rounded-2xl w-full max-w-4xl shadow-2xl relative border border-border max-h-[90vh] max-h-[90svh] overflow-y-auto cursor-default">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-2rem)] md:w-full max-w-4xl max-h-[90%] overflow-y-auto cursor-default bg-background p-6 md:p-8 rounded-2xl shadow-2xl border border-border">
         <div className="flex justify-end mb-4">
           <CloseButton />
         </div>
