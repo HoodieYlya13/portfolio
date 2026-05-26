@@ -82,9 +82,7 @@ export default function ModalOverlay({ children }: ModalOverlayProps) {
       onClick={handleOverlayClick}
       className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-50 p-4 cursor-pointer transition-all duration-300"
     >
-      <div className="cursor-default w-full max-w-4xl max-h-[90vh] max-h-[90svh] flex flex-col justify-center">
-        {children}
-      </div>
+      {children}
     </div>
   );
 }
