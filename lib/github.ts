@@ -228,7 +228,7 @@ export const FALLBACK_REPOS: Repository[] = [
         execution_latency:
           "Under 150ms time-to-first-token token streaming; sub-10ms PostgreSQL hybrid retrieval time.",
         ui_performance:
-          "60 FPS responsive animations utilizing CSS theme variables and strict layout containment supporting dynamic mobile height calculations (dvh).",
+          "60 FPS responsive animations utilizing CSS theme variables and strict layout containment supporting dynamic mobile height calculations (svh).",
         operational_cost:
           "Under $0.01 per 100 recruiter conversational sessions with complete zero-dollar background database sync infrastructure.",
       },

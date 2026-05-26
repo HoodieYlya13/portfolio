@@ -7,6 +7,8 @@ import ScrollReveal from "@/components/timeline/ScrollReveal";
 import DotField from "@/components/education/DotField";
 import ResumeButton from "@/components/layout/ResumeButton";
 import { getFullProfile } from "@/lib/github";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
+
 
 async function EducationContent() {
   const profileData = await getFullProfile();
@@ -46,7 +48,7 @@ async function EducationContent() {
 
 export default function EducationPage() {
   return (
-    <div className="min-h-screen bg-background py-20 padding-footer relative overflow-hidden flex flex-col gap-8 sm:gap-16">
+    <div className="flex-1 py-20 padding-footer relative overflow-hidden flex flex-col gap-8 sm:gap-16">
       <DotField />
 
       <div className="max-w-4xl mx-auto text-center px-4">
@@ -58,7 +60,7 @@ export default function EducationPage() {
         </p>
       </div>
 
-      <Suspense fallback={null}>
+      <Suspense fallback={<LoadingSpinner />}>
         <EducationContent />
       </Suspense>
     </div>

@@ -21,7 +21,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   const { id } = await params;
 
   return (
-    <section className="min-h-screen px-6 py-12 md:py-20 max-w-5xl mx-auto padding-footer">
+    <section className="flex-1 flex flex-col px-6 py-12 md:py-20 max-w-5xl mx-auto padding-footer">
       <div className="mb-8">
         <Link 
           href="/projects" 

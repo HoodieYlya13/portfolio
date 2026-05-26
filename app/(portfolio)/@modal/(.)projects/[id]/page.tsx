@@ -4,6 +4,7 @@ import { getGithubRepo } from "@/lib/github";
 import CloseButton from "@/components/projects/CloseButton";
 import ModalOverlay from "@/components/projects/ModalOverlay";
 import { ProjectDetailContent } from "@/components/projects/ProjectDetailContent";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 
 interface ProjectModalProps {
   params: Promise<{ id: string }>;
@@ -22,17 +23,13 @@ export default async function ProjectModal({ params }: ProjectModalProps) {
 
   return (
     <ModalOverlay>
-      <div className="bg-background/95 dark:bg-background/95 backdrop-blur-xl text-foreground p-6 md:p-8 rounded-2xl w-full max-w-4xl shadow-2xl relative border border-border/80 max-h-[90vh] overflow-y-auto">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[calc(100%-2rem)] md:w-full max-w-4xl max-h-[90%] overflow-y-auto cursor-default bg-background p-6 md:p-8 rounded-2xl shadow-2xl border border-border">
         <div className="flex justify-end mb-4">
           <CloseButton />
         </div>
 
         <Suspense
-          fallback={
-            <div className="p-8 text-center text-muted-foreground animate-pulse">
-              Loading details...
-            </div>
-          }
+          fallback={<LoadingSpinner className="min-h-[50vh] min-h-[50svh]" />}
         >
           <ProjectModalDetail id={id} />
         </Suspense>

@@ -8,6 +8,8 @@ import ScrollReveal from "@/components/timeline/ScrollReveal";
 import DotField from "@/components/education/DotField";
 import ResumeButton from "@/components/layout/ResumeButton";
 import { getFullProfile } from "@/lib/github";
+import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
+
 
 async function EngineeringTimeline() {
   const profileData = await getFullProfile();
@@ -97,7 +99,7 @@ export default async function ExperiencePage() {
   };
 
   return (
-    <div className="min-h-screen bg-background py-20 padding-footer relative overflow-hidden flex flex-col gap-16 sm:gap-24">
+    <div className="flex-1 py-20 padding-footer relative overflow-hidden flex flex-col gap-16 sm:gap-24">
       <DotField />
 
       <div className="max-w-4xl mx-auto text-center px-4 relative">
@@ -110,15 +112,10 @@ export default async function ExperiencePage() {
       </div>
 
       <div className="relative">
-        <Suspense
-          fallback={
-            <div className="flex justify-center items-center py-20">
-              <div className="w-8 h-8 rounded-full border-4 border-primary border-t-transparent animate-spin" />
-            </div>
-          }
-        >
+        <Suspense fallback={<LoadingSpinner />}>
           <ExperienceContent />
         </Suspense>
+
       </div>
 
       <div className="relative">

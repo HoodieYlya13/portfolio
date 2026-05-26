@@ -145,7 +145,7 @@ function ProjectsLoadingFallback() {
 
 export default function ProjectsPage() {
   return (
-    <section className="min-h-screen px-6 py-12 md:py-20 max-w-6xl mx-auto padding-footer">
+    <section className="flex-1 flex flex-col w-full px-6 py-12 md:py-20 max-w-6xl mx-auto padding-footer">
       <Suspense fallback={<ProjectsLoadingFallback />}>
         <ProjectsContent />
       </Suspense>

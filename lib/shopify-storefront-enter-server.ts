@@ -1,5 +1,3 @@
-// TODO: style this
-
 import { SHOPIFY_STOREFRONT_PREVIEWS, type ShopifyStorefrontHost } from "./shopify-storefront-previews";
 
 const STOREFRONT_PASSWORDS: Record<ShopifyStorefrontHost, string> = {

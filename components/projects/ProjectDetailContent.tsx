@@ -385,7 +385,7 @@ export function ProjectDetailContent({
                   </h3>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
                   <div className="flex gap-3.5 p-5 rounded-2xl bg-apple-orange/5 dark:bg-apple-orange/5 border-l-4 border-apple-orange/60 dark:border-apple-orange/40">
                     <div className="shrink-0">
                       <AlertTriangle className="w-5 h-5 text-apple-orange" />

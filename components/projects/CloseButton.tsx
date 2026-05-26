@@ -1,5 +1,3 @@
-// TODO: style this
-
 "use client";
 
 export default function CloseButton() {
