@@ -356,7 +356,8 @@ export default function DotField({
 
   return (
     <div
-      className={`dot-field-container ${theme} ${className}`}
+      key={theme}
+      className={`dot-field-container ${className}`}
       style={{
         position: asBackground ? "absolute" : "relative",
         ...(asBackground ? { inset: 0, pointerEvents: "none" } : {}),
