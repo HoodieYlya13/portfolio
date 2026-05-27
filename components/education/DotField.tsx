@@ -349,8 +349,6 @@ export default function DotField({
     return {
       maskImage: maskValue,
       WebkitMaskImage: maskValue,
-      willChange: "transform" as const,
-      transform: "translate3d(0, 0, 0)",
     };
   };
 
@@ -361,6 +359,8 @@ export default function DotField({
       style={{
         position: asBackground ? "absolute" : "relative",
         ...(asBackground ? { inset: 0, pointerEvents: "none" } : {}),
+        willChange: "transform",
+        transform: "translate3d(0, 0, 0)",
         ...getMaskStyle(),
       }}
       {...rest}
