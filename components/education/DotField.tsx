@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useId } from "react";
+import { useEffect, useRef, useId, useState } from "react";
 import "./DotField.css";
 
 const TWO_PI = Math.PI * 2;
@@ -69,6 +69,26 @@ export default function DotField({
   const sizeRef = useRef({ w: 0, h: 0, offsetX: 0, offsetY: 0 });
   const glowOpacity = useRef(0);
   const engagement = useRef(0);
+  const [theme, setTheme] = useState<"light" | "dark">("dark");
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const isDark = document.documentElement.classList.contains("dark");
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setTheme(isDark ? "dark" : "light");
+
+    const observer = new MutationObserver(() => {
+      const isDarkNow = document.documentElement.classList.contains("dark");
+      setTheme(isDarkNow ? "dark" : "light");
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   const propsRef = useRef({
     dotRadius,
@@ -316,11 +336,13 @@ export default function DotField({
   const getMaskStyle = () => {
     if (!fadeTop && !fadeBottom) return {};
 
+    const delta = theme === "dark" ? 0 : 0.1;
+
     const topStop = fadeTop
-      ? "rgba(0,0,0,0) 0%, rgba(0,0,0,1) 20%"
+      ? `rgba(0,0,0,0) 0%, rgba(0,0,0,1) ${20 + delta}%`
       : "rgba(0,0,0,1) 0%";
     const bottomStop = fadeBottom
-      ? "rgba(0,0,0,1) 80%, rgba(0,0,0,0) 100%"
+      ? `rgba(0,0,0,1) ${80 + delta}%, rgba(0,0,0,0) 100%`
       : "rgba(0,0,0,1) 100%";
     const maskValue = `linear-gradient(to bottom, ${topStop}, ${bottomStop})`;
 
@@ -332,10 +354,13 @@ export default function DotField({
 
   return (
     <div
+      key={theme}
       className={`dot-field-container ${className}`}
       style={{
         position: asBackground ? "absolute" : "relative",
         ...(asBackground ? { inset: 0, pointerEvents: "none" } : {}),
+        willChange: "transform",
+        transform: "translate3d(0, 0, 0)",
         ...getMaskStyle(),
       }}
       {...rest}

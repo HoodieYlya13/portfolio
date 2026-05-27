@@ -264,6 +264,26 @@ export default function LiquidGlassBackground({
 }: LiquidGlassBackgroundProps) {
   const ref = useRef<HTMLDivElement>(null);
   const meshKey = animateIn ? `intro-${restartKey}` : "ambient";
+  const [theme, setTheme] = useState<"light" | "dark">("dark");
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const isDark = document.documentElement.classList.contains("dark");
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setTheme(isDark ? "dark" : "light");
+
+    const observer = new MutationObserver(() => {
+      const isDarkNow = document.documentElement.classList.contains("dark");
+      setTheme(isDarkNow ? "dark" : "light");
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     globalRoot?.render(
@@ -323,21 +343,24 @@ export default function LiquidGlassBackground({
     };
   }, [animateIn, meshKey, restartKey]);
 
+  const getMaskStyle = () => {
+    if (!invertFade) return undefined;
+    const delta = theme === "dark" ? 0 : 0.1;
+    const maskValue = `linear-gradient(to bottom, rgba(0,0,0,1) ${70 + delta}%, rgba(0,0,0,0) 100%)`;
+    return {
+      maskImage: maskValue,
+      WebkitMaskImage: maskValue,
+      willChange: "transform" as const,
+      transform: "translate3d(0, 0, 0)",
+    };
+  };
+
   return (
     <>
       <div
         ref={ref}
-        className="absolute inset-0 -z-10 w-full h-full"
-        style={
-          invertFade
-            ? {
-                maskImage:
-                  "linear-gradient(to bottom, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%)",
-                WebkitMaskImage:
-                  "linear-gradient(to bottom, rgba(0,0,0,1) 70%, rgba(0,0,0,0) 100%)",
-              }
-            : undefined
-        }
+        className={`absolute inset-0 -z-10 w-full h-full ${theme}`}
+        style={getMaskStyle()}
       />
 
       {fadeHeight > 0 && !invertFade && (
