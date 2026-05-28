@@ -318,16 +318,18 @@ export default function LoanneHelloPage() {
 
         const dpr =
           typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1;
-        canvas.width = viewport.width * dpr;
-        canvas.height = viewport.height * dpr;
 
-        canvas.style.width = `${viewport.width}px`;
-        canvas.style.height = `${viewport.height}px`;
+        // Double Buffering: Create an offscreen canvas to render the page in the background
+        const offscreenCanvas = document.createElement("canvas");
+        offscreenCanvas.width = viewport.width * dpr;
+        offscreenCanvas.height = viewport.height * dpr;
 
-        ctx.scale(dpr, dpr);
+        const offscreenCtx = offscreenCanvas.getContext("2d");
+        if (!offscreenCtx) return;
+        offscreenCtx.scale(dpr, dpr);
 
         const renderContext = {
-          canvasContext: ctx,
+          canvasContext: offscreenCtx,
           viewport: viewport,
         };
 
@@ -336,7 +338,17 @@ export default function LoanneHelloPage() {
 
         await renderTask.promise;
 
-        if (active) {
+        if (active && canvasRef.current) {
+          const visibleCanvas = canvasRef.current;
+          const visibleCtx = visibleCanvas.getContext("2d");
+          if (visibleCtx) {
+            // Match dimensions and instantly copy the rendered image from offscreen
+            visibleCanvas.width = offscreenCanvas.width;
+            visibleCanvas.height = offscreenCanvas.height;
+            visibleCanvas.style.width = `${viewport.width}px`;
+            visibleCanvas.style.height = `${viewport.height}px`;
+            visibleCtx.drawImage(offscreenCanvas, 0, 0);
+          }
           setIsRendering(false);
           renderTaskRef.current = null;
         }
@@ -392,8 +404,8 @@ export default function LoanneHelloPage() {
       <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full bg-[#417d43]/10 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] rounded-full bg-[#417d43]/5 blur-[100px] pointer-events-none" />
 
-      <header className="z-10 flex flex-col md:flex-row items-center justify-between gap-4 p-4 border-b border-zinc-900 bg-zinc-950/70 backdrop-blur-md">
-        <div className="flex items-center gap-3">
+      <header className="z-10 flex items-center justify-center sm:justify-between p-3 border-b border-zinc-900 bg-zinc-950/70 backdrop-blur-md">
+        <div className="hidden sm:flex items-center gap-3">
           <div>
             <div className="flex items-center gap-2">
               <span className="text-xs font-semibold uppercase tracking-wider text-[#417d43] bg-[#417d43]/10 px-2 py-0.5 rounded">
@@ -419,7 +431,7 @@ export default function LoanneHelloPage() {
                   }
                 }}
                 disabled={loadingPdf || isRendering}
-                className={`px-4 py-2 text-xs md:text-sm font-medium rounded-lg transition-all duration-300 ${
+                className={`px-4 py-1.5 text-xs sm:text-sm font-medium rounded-lg transition-all duration-300 ${
                   isActive
                     ? "bg-[#417d43] text-white shadow-md scale-[1.02]"
                     : "text-zinc-400 hover:text-zinc-200 disabled:opacity-50"
@@ -503,28 +515,18 @@ export default function LoanneHelloPage() {
                 className="block transition-transform duration-100 ease-out"
               />
 
-              {isRendering && (
-                <div className="absolute inset-0 flex items-center justify-center bg-black/10 backdrop-blur-[1px] transition">
-                  <div className="p-3 bg-zinc-950/80 rounded-xl border border-zinc-800 flex items-center gap-2 shadow-2xl">
-                    <Loader2 className="h-4 w-4 animate-spin text-[#417d43]" />
-                    <span className="text-xs text-zinc-400">
-                      Rendu de la page en cours...
-                    </span>
-                  </div>
-                </div>
-              )}
             </div>
           )}
         </div>
       </main>
 
       {!loadingLibrary && !loadingPdf && !error && pdfDoc && (
-        <div className="z-10 p-4 flex justify-center items-center pointer-events-none absolute bottom-0 left-0 right-0">
-          <div className="flex flex-wrap items-center gap-3 px-4 py-2.5 rounded-full bg-zinc-950/80 backdrop-blur-lg border border-zinc-800/80 shadow-2xl pointer-events-auto max-w-[95%] sm:max-w-max justify-center">
-            <div className="flex items-center gap-1.5 border-r border-zinc-800 pr-3">
+        <div className="z-10 p-3 flex justify-center items-center bg-zinc-950 border-t border-zinc-900 w-full">
+          <div className="flex flex-wrap items-center gap-3 px-4 py-2 rounded-full bg-zinc-900/60 border border-zinc-800 shadow-2xl max-w-[95%] sm:max-w-max justify-center">
+            <div className="flex items-center gap-1.5 sm:border-r sm:border-zinc-800 sm:pr-3">
               <button
                 onClick={prevPage}
-                disabled={pageNum <= 1 || isRendering}
+                disabled={pageNum <= 1}
                 aria-label="Previous page"
                 className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900 disabled:opacity-30 disabled:hover:bg-transparent transition"
               >
@@ -539,15 +541,33 @@ export default function LoanneHelloPage() {
 
               <button
                 onClick={nextPage}
-                disabled={pageNum >= numPages || isRendering}
+                disabled={pageNum >= numPages}
                 aria-label="Next page"
                 className="p-1.5 rounded-lg text-zinc-400 hover:text-zinc-100 hover:bg-zinc-900 disabled:opacity-30 disabled:hover:bg-transparent transition"
               >
                 <ChevronRight className="h-5 w-5" />
               </button>
+
+              <button
+                onClick={resetZoom}
+                disabled={zoom === 1.0}
+                aria-label="Reset zoom"
+                className="p-1.5 rounded-lg text-zinc-400 hover:text-[#417d43] hover:bg-zinc-900 disabled:opacity-20 transition sm:hidden border-l border-zinc-800/80 pl-1.5 ml-0.5"
+              >
+                <RotateCcw className="h-3.5 w-3.5" />
+              </button>
+
+              <a
+                href={currentPortfolio.url}
+                download
+                aria-label="Download portfolio PDF"
+                className="p-1.5 rounded-lg text-zinc-400 hover:text-[#417d43] hover:bg-zinc-900 transition sm:hidden"
+              >
+                <Download className="h-4 w-4" />
+              </a>
             </div>
 
-            <div className="flex items-center gap-1 border-r border-zinc-800 pr-3">
+            <div className="hidden sm:flex items-center gap-1 border-r border-zinc-800 pr-3">
               <button
                 onClick={zoomOut}
                 disabled={zoom <= 0.5}
@@ -580,7 +600,7 @@ export default function LoanneHelloPage() {
               </button>
             </div>
 
-            <div className="flex items-center gap-1.5">
+            <div className="hidden sm:flex items-center gap-1.5">
               <button
                 onClick={toggleFullscreen}
                 aria-label={isFullscreen ? "Exit full screen" : "Full screen"}
