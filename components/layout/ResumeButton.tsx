@@ -27,7 +27,7 @@ export default function ResumeButton({
   return (
     <Button asChild size={size} variant={variant} className={className}>
       <a
-        href="/Resume_Ylya_Martchenko.pdf"
+        href="https://resume.hy13dev.com"
         target="_blank"
         rel="noopener noreferrer"
         className="flex items-center gap-2"
