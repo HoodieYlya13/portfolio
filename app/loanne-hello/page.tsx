@@ -54,6 +54,11 @@ export default function LoanneHelloPage() {
   const viewerRef = useRef<HTMLDivElement>(null);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const renderTaskRef = useRef<any>(null);
+  const renderCacheRef = useRef<Record<number, HTMLCanvasElement>>({});
+  const lastZoomRef = useRef(1.0);
+  const lastWindowSizeRef = useRef({ width: 0, height: 0 });
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const lastDocRef = useRef<any>(null);
 
   const touchStartX = useRef<number>(0);
   const touchEndX = useRef<number>(0);
@@ -72,6 +77,7 @@ export default function LoanneHelloPage() {
   const handlePortfolioChange = (port: (typeof PORTFOLIOS)[0]) => {
     if (port.id === currentPortfolio.id) return;
 
+    renderCacheRef.current = {};
     setCurrentPortfolio(port);
     setLoadingPdf(true);
     setLoadingProgress(0);
@@ -280,6 +286,64 @@ export default function LoanneHelloPage() {
 
     let active = true;
 
+    const zoomChanged = lastZoomRef.current !== zoom;
+    const sizeChanged =
+      lastWindowSizeRef.current.width !== windowSize.width ||
+      lastWindowSizeRef.current.height !== windowSize.height;
+    const docChanged = lastDocRef.current !== pdfDoc;
+
+    if (zoomChanged || sizeChanged || docChanged) {
+      renderCacheRef.current = {};
+      lastZoomRef.current = zoom;
+      lastWindowSizeRef.current = windowSize;
+      lastDocRef.current = pdfDoc;
+    }
+
+    const dpr =
+      typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1;
+
+    const preloadAdjacentPages = async (
+      activePage: number,
+      maxPages: number,
+      currentScale: number
+    ) => {
+      const pagesToPreload = [activePage + 1, activePage - 1].filter(
+        (p) => p >= 1 && p <= maxPages && !renderCacheRef.current[p]
+      );
+
+      for (const p of pagesToPreload) {
+        if (!active) return;
+        if (renderCacheRef.current[p]) continue;
+
+        try {
+          const page = await pdfDoc.getPage(p);
+          if (!active) return;
+
+          const viewport = page.getViewport({ scale: currentScale });
+
+          const offscreenCanvas = document.createElement("canvas");
+          offscreenCanvas.width = viewport.width * dpr;
+          offscreenCanvas.height = viewport.height * dpr;
+
+          const offscreenCtx = offscreenCanvas.getContext("2d");
+          if (offscreenCtx) {
+            offscreenCtx.scale(dpr, dpr);
+            const renderContext = {
+              canvasContext: offscreenCtx,
+              viewport: viewport,
+            };
+            const renderTask = page.render(renderContext);
+            await renderTask.promise;
+            
+            if (active) {
+              renderCacheRef.current[p] = offscreenCanvas;
+            }
+          }
+        } catch {
+        }
+      }
+    };
+
     const triggerRender = async () => {
       if (renderTaskRef.current) {
         try {
@@ -289,14 +353,44 @@ export default function LoanneHelloPage() {
         }
       }
 
+      if (renderCacheRef.current[pageNum]) {
+        const cachedCanvas = renderCacheRef.current[pageNum];
+        if (active && canvasRef.current) {
+          const visibleCanvas = canvasRef.current;
+          const visibleCtx = visibleCanvas.getContext("2d");
+          if (visibleCtx) {
+            visibleCanvas.width = cachedCanvas.width;
+            visibleCanvas.height = cachedCanvas.height;
+            visibleCanvas.style.width = `${cachedCanvas.width / dpr}px`;
+            visibleCanvas.style.height = `${cachedCanvas.height / dpr}px`;
+            visibleCtx.drawImage(cachedCanvas, 0, 0);
+          }
+          setIsRendering(false);
+          renderTaskRef.current = null;
+          
+          const page = await pdfDoc.getPage(pageNum);
+          const unscaledViewport = page.getViewport({ scale: 1.0 });
+          const container = viewerRef.current;
+          const containerWidth = container ? container.clientWidth : 800;
+          const containerHeight = container ? container.clientHeight : 600;
+          const padX = containerWidth < 768 ? 16 : 48;
+          const padY = containerWidth < 768 ? 16 : 48;
+          const targetW = Math.max(containerWidth - padX, 200);
+          const targetH = Math.max(containerHeight - padY, 200);
+          const scaleX = targetW / unscaledViewport.width;
+          const scaleY = targetH / unscaledViewport.height;
+          const fitScale = Math.min(scaleX, scaleY);
+          const finalScale = fitScale * zoom;
+
+          preloadAdjacentPages(pageNum, numPages, finalScale);
+        }
+        return;
+      }
+
       try {
         setIsRendering(true);
         const page = await pdfDoc.getPage(pageNum);
         if (!active || !canvasRef.current) return;
-
-        const canvas = canvasRef.current;
-        const ctx = canvas.getContext("2d");
-        if (!ctx) return;
 
         const unscaledViewport = page.getViewport({ scale: 1.0 });
 
@@ -316,10 +410,6 @@ export default function LoanneHelloPage() {
         const finalScale = fitScale * zoom;
         const viewport = page.getViewport({ scale: finalScale });
 
-        const dpr =
-          typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1;
-
-        // Double Buffering: Create an offscreen canvas to render the page in the background
         const offscreenCanvas = document.createElement("canvas");
         offscreenCanvas.width = viewport.width * dpr;
         offscreenCanvas.height = viewport.height * dpr;
@@ -342,15 +432,19 @@ export default function LoanneHelloPage() {
           const visibleCanvas = canvasRef.current;
           const visibleCtx = visibleCanvas.getContext("2d");
           if (visibleCtx) {
-            // Match dimensions and instantly copy the rendered image from offscreen
             visibleCanvas.width = offscreenCanvas.width;
             visibleCanvas.height = offscreenCanvas.height;
             visibleCanvas.style.width = `${viewport.width}px`;
             visibleCanvas.style.height = `${viewport.height}px`;
             visibleCtx.drawImage(offscreenCanvas, 0, 0);
           }
+
+          renderCacheRef.current[pageNum] = offscreenCanvas;
+
           setIsRendering(false);
           renderTaskRef.current = null;
+
+          preloadAdjacentPages(pageNum, numPages, finalScale);
         }
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
@@ -370,7 +464,7 @@ export default function LoanneHelloPage() {
     return () => {
       active = false;
     };
-  }, [pdfDoc, pageNum, zoom, windowSize]);
+  }, [pdfDoc, pageNum, zoom, windowSize, numPages]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
