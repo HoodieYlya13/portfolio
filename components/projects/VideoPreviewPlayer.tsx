@@ -13,25 +13,47 @@ export default function VideoPreviewPlayer({
   title,
 }: VideoPreviewPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true);
   const [showControls, setShowControls] = useState(false);
+  const [isManuallyPaused, setIsManuallyPaused] = useState(false);
   const controlsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    const playPromise = video.play();
-    if (playPromise !== undefined)
-      playPromise.catch((error) => {
-        console.log(
-          "Autoplay block detected, waiting for user interaction:",
-          error,
-        );
-        setIsPlaying(false);
-      });
-  }, [src]);
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          if (!isManuallyPaused)
+            video
+              .play()
+              .then(() => setIsPlaying(true))
+              .catch((error) => {
+                console.log(
+                  "Autoplay block detected, waiting for interaction:",
+                  error,
+                );
+                setIsPlaying(false);
+              });
+        } else {
+          video.pause();
+          setIsPlaying(false);
+        }
+      },
+      {
+        threshold: 1.0,
+      },
+    );
+
+    observer.observe(video);
+
+    return () => {
+      observer.unobserve(video);
+      observer.disconnect();
+    };
+  }, [src, isManuallyPaused]);
 
   const togglePlay = () => {
     const video = videoRef.current;
@@ -40,9 +62,11 @@ export default function VideoPreviewPlayer({
     if (isPlaying) {
       video.pause();
       setIsPlaying(false);
+      setIsManuallyPaused(true);
     } else {
       video.play().catch(() => {});
       setIsPlaying(true);
+      setIsManuallyPaused(false);
     }
   };
 
