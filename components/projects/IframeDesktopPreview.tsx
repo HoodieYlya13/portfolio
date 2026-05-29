@@ -47,7 +47,7 @@ export default function IframeDesktopPreview({
     <div
       ref={containerRef}
       style={{ height: `${containerHeight}px` }}
-      className="w-full overflow-hidden relative bg-card transition-all duration-300"
+      className="w-full max-w-full overflow-hidden relative bg-card transition-all duration-300"
     >
       <iframe
         src={src}

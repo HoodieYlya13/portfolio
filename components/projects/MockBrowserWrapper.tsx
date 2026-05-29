@@ -18,7 +18,7 @@ export default function MockBrowserWrapper({
   };
 
   return (
-    <div className="mt-4 shadow-2xl rounded-2xl overflow-hidden border border-border/80 bg-card transition-all duration-300">
+    <div className="mt-4 w-full max-w-full shadow-2xl rounded-2xl overflow-hidden border border-border/80 bg-card transition-all duration-300">
       <div className="bg-muted px-4 py-3 flex items-center gap-3 border-b border-border/40 select-none">
         <div className="flex gap-1.5 group/controls">
           <button
@@ -56,7 +56,7 @@ export default function MockBrowserWrapper({
           target="_blank"
           rel="noopener noreferrer"
           title="Open in new tab"
-          className="flex-1 mx-4 block bg-card/60 dark:bg-card/25 hover:bg-card/90 dark:hover:bg-card/45 border border-foreground/15 dark:border-foreground/10 hover:border-foreground/25 dark:hover:border-foreground/20 transition-colors text-[11px] text-muted-foreground hover:text-foreground text-left py-1.5 px-3.5 rounded-lg font-mono truncate cursor-pointer"
+          className="flex-1 min-w-0 mx-4 block bg-card/60 dark:bg-card/25 hover:bg-card/90 dark:hover:bg-card/45 border border-foreground/15 dark:border-foreground/10 hover:border-foreground/25 dark:hover:border-foreground/20 transition-colors text-[11px] text-muted-foreground hover:text-foreground text-left py-1.5 px-3.5 rounded-lg font-mono truncate cursor-pointer"
         >
           {projectUrl}
         </a>

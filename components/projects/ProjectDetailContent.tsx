@@ -51,7 +51,7 @@ export function ProjectDetailContent({
   const portfolio = repo.portfolio;
 
   return (
-    <div className="space-y-12 text-foreground text-left max-w-6xl mx-auto">
+    <div className="w-full space-y-12 text-foreground text-left max-w-6xl mx-auto">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-border/60 relative z-10">
         <div className="space-y-1.5">
           <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-foreground">
