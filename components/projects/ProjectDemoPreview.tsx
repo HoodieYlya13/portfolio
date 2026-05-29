@@ -3,10 +3,30 @@ import IframeDesktopPreview from "@/components/projects/IframeDesktopPreview";
 import { ShopifyStaticStorePreview } from "@/components/projects/ShopifyStaticStorePreview";
 import { getShopifyStorefrontHost } from "@/lib/shopify-storefront-previews";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
+import VideoPreviewPlayer from "@/components/projects/VideoPreviewPlayer";
 
 interface ProjectDemoPreviewProps {
   src: string;
   title: string;
+}
+
+function getYouTubeEmbedUrl(url: string): string | null {
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  const match = url.match(regExp);
+
+  if (match && match[2].length === 11) {
+    const videoId = match[2];
+    // To autoplay & loop on modern browsers:
+    // - autoplay=1, mute=1 (browsers block autoplay with sound)
+    // - loop=1 AND playlist=VIDEO_ID (YouTube iframe api requirement for looping)
+    // - modestbranding=1, controls=0, rel=0 (premium, clean aesthetics)
+    return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&modestbranding=1&rel=0&iv_load_policy=3&playsinline=1&enablejsapi=1`;
+  }
+  return null;
+}
+
+function isVideoUrl(url: string): boolean {
+  return /\.(mp4|webm|mov|ogg)($|\?)/i.test(url) || url.includes("video");
 }
 
 export function ProjectDemoPreview({ src, title }: ProjectDemoPreviewProps) {
@@ -34,5 +54,27 @@ export function ProjectDemoPreview({ src, title }: ProjectDemoPreviewProps) {
       </Suspense>
     );
 
+  // Check if it's a direct video link
+  if (isVideoUrl(src)) {
+    return <VideoPreviewPlayer src={src} title={title} />;
+  }
+
+  // Check if it's a YouTube link
+  const ytEmbedUrl = getYouTubeEmbedUrl(src);
+  if (ytEmbedUrl) {
+    return (
+      <div className="w-full aspect-video bg-black overflow-hidden relative border border-border/40 rounded-2xl">
+        <iframe
+          src={ytEmbedUrl}
+          title={title}
+          className="w-full h-full border-none"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowFullScreen
+        />
+      </div>
+    );
+  }
+
   return <IframeDesktopPreview src={src} title={title} />;
 }
+
