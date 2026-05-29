@@ -8,26 +8,29 @@ interface VideoPreviewPlayerProps {
   title: string;
 }
 
-export default function VideoPreviewPlayer({ src, title }: VideoPreviewPlayerProps) {
+export default function VideoPreviewPlayer({
+  src,
+  title,
+}: VideoPreviewPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(true);
   const [showControls, setShowControls] = useState(false);
   const controlsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Force autoplay logic on render/src changes
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    // Direct browser attempt to play
     const playPromise = video.play();
-    if (playPromise !== undefined) {
+    if (playPromise !== undefined)
       playPromise.catch((error) => {
-        console.log("Autoplay block detected, waiting for user interaction:", error);
+        console.log(
+          "Autoplay block detected, waiting for user interaction:",
+          error,
+        );
         setIsPlaying(false);
       });
-    }
   }, [src]);
 
   const togglePlay = () => {
@@ -55,20 +58,23 @@ export default function VideoPreviewPlayer({ src, title }: VideoPreviewPlayerPro
     const video = videoRef.current;
     if (!video) return;
 
-    if (video.requestFullscreen) {
-      video.requestFullscreen();
-    } else if ((video as any).webkitRequestFullscreen) {
-      (video as any).webkitRequestFullscreen();
-    } else if ((video as any).msRequestFullscreen) {
-      (video as any).msRequestFullscreen();
+    if (video.requestFullscreen) video.requestFullscreen();
+    else {
+      type PrefixedVideoElement = HTMLVideoElement & {
+        webkitRequestFullscreen?: () => Promise<void>;
+        msRequestFullscreen?: () => Promise<void>;
+      };
+      const prefixedVideo = video as PrefixedVideoElement;
+      if (prefixedVideo.webkitRequestFullscreen)
+        prefixedVideo.webkitRequestFullscreen();
+      else if (prefixedVideo.msRequestFullscreen)
+        prefixedVideo.msRequestFullscreen();
     }
   };
 
   const handleMouseMove = () => {
     setShowControls(true);
-    if (controlsTimeoutRef.current) {
-      clearTimeout(controlsTimeoutRef.current);
-    }
+    if (controlsTimeoutRef.current) clearTimeout(controlsTimeoutRef.current);
     controlsTimeoutRef.current = setTimeout(() => {
       setShowControls(false);
     }, 2500);
@@ -76,9 +82,7 @@ export default function VideoPreviewPlayer({ src, title }: VideoPreviewPlayerPro
 
   useEffect(() => {
     return () => {
-      if (controlsTimeoutRef.current) {
-        clearTimeout(controlsTimeoutRef.current);
-      }
+      if (controlsTimeoutRef.current) clearTimeout(controlsTimeoutRef.current);
     };
   }, []);
 
@@ -100,9 +104,8 @@ export default function VideoPreviewPlayer({ src, title }: VideoPreviewPlayerPro
         autoPlay
       />
 
-      {/* Modern Glassmorphic Overlay Controls */}
       <div
-        className={`absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent flex flex-col justify-end p-4 transition-opacity duration-300 ${
+        className={`absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-transparent flex flex-col justify-end p-4 transition-opacity duration-300 ${
           showControls || !isPlaying ? "opacity-100" : "opacity-0"
         }`}
       >
@@ -116,7 +119,11 @@ export default function VideoPreviewPlayer({ src, title }: VideoPreviewPlayerPro
               className="p-1.5 rounded-lg hover:bg-foreground/10 text-foreground transition-colors cursor-pointer"
               aria-label={isPlaying ? "Pause" : "Play"}
             >
-              {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 fill-foreground" />}
+              {isPlaying ? (
+                <Pause className="w-4 h-4" />
+              ) : (
+                <Play className="w-4 h-4 fill-foreground" />
+              )}
             </button>
 
             <button
@@ -127,7 +134,11 @@ export default function VideoPreviewPlayer({ src, title }: VideoPreviewPlayerPro
               className="p-1.5 rounded-lg hover:bg-foreground/10 text-foreground transition-colors cursor-pointer"
               aria-label={isMuted ? "Unmute" : "Mute"}
             >
-              {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+              {isMuted ? (
+                <VolumeX className="w-4 h-4" />
+              ) : (
+                <Volume2 className="w-4 h-4" />
+              )}
             </button>
           </div>
 
