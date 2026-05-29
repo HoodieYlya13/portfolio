@@ -43,7 +43,7 @@ export default function VideoPreviewPlayer({
         }
       },
       {
-        threshold: 1.0,
+        threshold: 0.5,
       },
     );
 
@@ -82,18 +82,19 @@ export default function VideoPreviewPlayer({
     const video = videoRef.current;
     if (!video) return;
 
-    if (video.requestFullscreen) video.requestFullscreen();
-    else {
-      type PrefixedVideoElement = HTMLVideoElement & {
-        webkitRequestFullscreen?: () => Promise<void>;
-        msRequestFullscreen?: () => Promise<void>;
-      };
-      const prefixedVideo = video as PrefixedVideoElement;
-      if (prefixedVideo.webkitRequestFullscreen)
-        prefixedVideo.webkitRequestFullscreen();
-      else if (prefixedVideo.msRequestFullscreen)
-        prefixedVideo.msRequestFullscreen();
-    }
+    type SafariVideoElement = HTMLVideoElement & {
+      webkitEnterFullscreen?: () => void;
+      webkitRequestFullscreen?: () => Promise<void>;
+      msRequestFullscreen?: () => Promise<void>;
+    };
+
+    const v = video as SafariVideoElement;
+
+    if (v.requestFullscreen) v.requestFullscreen().catch(() => {});
+    else if (v.webkitEnterFullscreen) v.webkitEnterFullscreen();
+    else if (v.webkitRequestFullscreen)
+      v.webkitRequestFullscreen().catch(() => {});
+    else if (v.msRequestFullscreen) v.msRequestFullscreen().catch(() => {});
   };
 
   const handleMouseMove = () => {
