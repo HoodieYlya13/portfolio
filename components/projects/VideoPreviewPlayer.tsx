@@ -17,6 +17,7 @@ export default function VideoPreviewPlayer({
   const [isMuted, setIsMuted] = useState(true);
   const [showControls, setShowControls] = useState(false);
   const [isManuallyPaused, setIsManuallyPaused] = useState(false);
+  const [hasAudio, setHasAudio] = useState(false);
   const controlsTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -54,6 +55,43 @@ export default function VideoPreviewPlayer({
       observer.disconnect();
     };
   }, [src, isManuallyPaused]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const checkAudio = () => {
+      type AudioDetectVideoElement = HTMLVideoElement & {
+        audioTracks?: { length: number };
+        mozHasAudio?: boolean;
+        webkitAudioDecodedByteCount?: number;
+      };
+      const v = video as AudioDetectVideoElement;
+
+      const hasAudioTrack = v.audioTracks && v.audioTracks.length > 0;
+      const hasFirefoxAudio = v.mozHasAudio === true;
+      const hasDecodedAudio =
+        v.webkitAudioDecodedByteCount !== undefined &&
+        v.webkitAudioDecodedByteCount > 0;
+
+      if (hasAudioTrack || hasFirefoxAudio || hasDecodedAudio)
+        setHasAudio(true);
+    };
+
+    video.addEventListener("loadedmetadata", checkAudio);
+    video.addEventListener("play", checkAudio);
+    video.addEventListener("playing", checkAudio);
+
+    checkAudio();
+    const checkAudioTimeout = setTimeout(checkAudio, 1000);
+
+    return () => {
+      video.removeEventListener("loadedmetadata", checkAudio);
+      video.removeEventListener("play", checkAudio);
+      video.removeEventListener("playing", checkAudio);
+      clearTimeout(checkAudioTimeout);
+    };
+  }, [src]);
 
   const togglePlay = () => {
     const video = videoRef.current;
@@ -145,26 +183,28 @@ export default function VideoPreviewPlayer({
               aria-label={isPlaying ? "Pause" : "Play"}
             >
               {isPlaying ? (
-                <Pause className="w-4 h-4" />
+                <Pause className="size-4" />
               ) : (
-                <Play className="w-4 h-4 fill-foreground" />
+                <Play className="size-4 fill-foreground" />
               )}
             </button>
 
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                toggleMute();
-              }}
-              className="p-1.5 rounded-lg hover:bg-foreground/10 text-foreground transition-colors cursor-pointer"
-              aria-label={isMuted ? "Unmute" : "Mute"}
-            >
-              {isMuted ? (
-                <VolumeX className="w-4 h-4" />
-              ) : (
-                <Volume2 className="w-4 h-4" />
-              )}
-            </button>
+            {hasAudio && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleMute();
+                }}
+                className="p-1.5 rounded-lg hover:bg-foreground/10 text-foreground transition-colors cursor-pointer"
+                aria-label={isMuted ? "Unmute" : "Mute"}
+              >
+                {isMuted ? (
+                  <VolumeX className="size-4" />
+                ) : (
+                  <Volume2 className="size-4" />
+                )}
+              </button>
+            )}
           </div>
 
           <div className="flex items-center gap-3">
@@ -180,7 +220,7 @@ export default function VideoPreviewPlayer({
               className="p-1.5 rounded-lg hover:bg-foreground/10 text-foreground transition-colors cursor-pointer"
               aria-label="Fullscreen"
             >
-              <Maximize className="w-4 h-4" />
+              <Maximize className="size-4" />
             </button>
           </div>
         </div>

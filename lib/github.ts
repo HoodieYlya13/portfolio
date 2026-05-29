@@ -362,16 +362,22 @@ export const FALLBACK_REPOS: Repository[] = [
 
 const FALLBACK_PINNED_NAMES = ["teslimitless", "ylya-bot", "codemafia"];
 
-function sanitizeNewlines<T>(obj: T): T {
-  if (typeof obj === "string") return obj.replace(/\\n/g, "\n") as unknown as T;
+function sanitizeContent<T>(obj: T): T {
+  if (typeof obj === "string") {
+    let sanitized = obj.replace(/\\n/g, "\n");
+    const hy13Regex = /https?:\/\/(?:[a-zA-Z0-9-]+\.)*hy13dev\.com\/?/gi;
+    if (hy13Regex.test(sanitized))
+      sanitized = sanitized.replace(hy13Regex, () => "/").replace(/\/+/g, "/");
+    return sanitized as unknown as T;
+  }
   if (Array.isArray(obj))
-    return obj.map((item) => sanitizeNewlines(item)) as unknown as T;
+    return obj.map((item) => sanitizeContent(item)) as unknown as T;
   if (obj !== null && typeof obj === "object") {
     const result: Record<string, unknown> = {};
     const objAsRecord = obj as Record<string, unknown>;
     for (const key in objAsRecord)
       if (Object.prototype.hasOwnProperty.call(objAsRecord, key))
-        result[key] = sanitizeNewlines(objAsRecord[key]);
+        result[key] = sanitizeContent(objAsRecord[key]);
     return result as T;
   }
   return obj;
@@ -394,7 +400,7 @@ async function fetchPortfolio(
       if (res.ok) {
         const json = await res.json();
         if (json && json.routing && json.project_meta)
-          return sanitizeNewlines(json) as PortfolioProject;
+          return sanitizeContent(json) as PortfolioProject;
       }
     } catch {
       // Continue to next branch
@@ -415,7 +421,7 @@ async function fetchPortfolio(
     if (res.ok) {
       const json = await res.json();
       if (json && json.routing && json.project_meta)
-        return sanitizeNewlines(json) as PortfolioProject;
+        return sanitizeContent(json) as PortfolioProject;
     }
   } catch {
     // Ignore
@@ -545,7 +551,7 @@ export async function getGithubData() {
         !lowercaseHonorable.includes(repo.name.toLowerCase()),
     );
 
-    return {
+    return sanitizeContent({
       profile: {
         username: profileData.login,
         name: profileData.name || FALLBACK_PROFILE.name,
@@ -561,7 +567,7 @@ export async function getGithubData() {
       honorableRepositories,
       repositories: remainingRepositories,
       isLive: true,
-    };
+    });
   } catch (error) {
     console.error(
       "Failed fetching live GitHub data, falling back to static:",
@@ -590,13 +596,13 @@ export async function getGithubData() {
         !lowercaseHonorable.includes(repo.name.toLowerCase()),
     );
 
-    return {
+    return sanitizeContent({
       profile: FALLBACK_PROFILE,
       pinnedRepositories: fallbackPinned,
       honorableRepositories: fallbackHonorable,
       repositories: fallbackRemaining,
       isLive: false,
-    };
+    });
   }
 }
 
@@ -627,7 +633,7 @@ export async function getGithubRepo(name: string) {
 
     const repo = await repoRes.json();
 
-    return {
+    return sanitizeContent({
       repo: {
         name: repo.name,
         description: repo.description,
@@ -642,16 +648,16 @@ export async function getGithubRepo(name: string) {
         portfolio,
       } as Repository,
       isLive: true,
-    };
+    });
   } catch (error) {
     console.error(`Failed fetching live repo ${name}, using static:`, error);
     const fallback = FALLBACK_REPOS.find(
       (r) => r.name.toLowerCase() === name.toLowerCase(),
     );
-    return {
+    return sanitizeContent({
       repo: fallback || null,
       isLive: false,
-    };
+    });
   }
 }
 
@@ -741,7 +747,8 @@ export async function getFullProfile(): Promise<FullProfileData | null> {
     if (!res.ok)
       throw new Error(`GitHub raw responded with status: ${res.status}`);
 
-    return await res.json();
+    const data = await res.json();
+    return sanitizeContent(data);
   } catch (remoteError) {
     console.error(
       "Failed fetching profile from GitHub, trying local fallback:",
@@ -756,7 +763,8 @@ export async function getFullProfile(): Promise<FullProfileData | null> {
         "profile.json",
       );
       const fileContents = await fs.readFile(filePath, "utf8");
-      return JSON.parse(fileContents);
+      const data = JSON.parse(fileContents);
+      return sanitizeContent(data);
     } catch (localError) {
       console.error(
         "Critical: Local profile fallback also failed:",
