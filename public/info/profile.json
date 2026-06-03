@@ -86,6 +86,7 @@
     ],
     "backend_and_data": [
       "Spring Boot",
+      "Django",
       "Node.js",
       "PostgreSQL",
       "MySQL",
@@ -245,31 +246,31 @@
   "academic_history": [
     {
       "range": "2023 - 2026",
-      "degree": "Engineer in IARN (Informatics, Automatic, Robotics, Networks)",
+      "degree": "Engineer in IA2R (Computer Science, Automation, Robotics, and Networks)",
       "institution": "Polytech Nancy",
-      "location": "Vandœuvre-lès-Nancy",
-      "summary": "Specializing in computer science, automation, robotics, and networks. This advanced engineering degree focuses on integrating software with hardware systems.",
+      "location": "Vandœuvre-lès-Nancy, France",
+      "summary": "Specializing in computer science, automation, AI, robotics, and networks. This advanced engineering degree focuses on integrating software with hardware systems.",
       "main": true
     },
     {
       "range": "2022 - 2023",
       "degree": "Diploma of Higher Education in Engineering Science",
-      "institution": "F.R.U. Mathematics, computer science, mechanics",
-      "location": "Metz",
+      "institution": "Faculty of Science and Technology (UFR MIM)",
+      "location": "Metz, France",
       "summary": "Focused on foundational engineering principles including advanced mathematics, computer science fundamentals, and classical mechanics."
     },
     {
       "range": "2021 - 2022",
-      "degree": "BTEC Higher National Diploma in Physics Measures",
-      "institution": "U.I.T. Department of Measures",
-      "location": "Metz",
+      "degree": "DUT in Physics Measures",
+      "institution": "IUT de Metz – Physical Measurements Department",
+      "location": "Metz, France",
       "summary": "Studies in physical measurements, instrumentation, and applied physics. Developed strong practical skills in data acquisition and analysis."
     },
     {
       "range": "2019 - 2021",
       "degree": "PeiP (Polytech engineering schools course)",
       "institution": "Polytech Nancy",
-      "location": "Vandœuvre-lès-Nancy",
+      "location": "Vandœuvre-lès-Nancy, France",
       "summary": "Preparatory cycle for the Polytech network engineering schools, focusing on intensive mathematics, physics, and introductory engineering concepts."
     }
   ],
@@ -277,18 +278,18 @@
     "pinned_repositories": [
       "teslimitless",
       "ylya-bot",
+      "grid-sentinel",
       "codemafia",
       "poly-livre-infrastructure",
-      "vibe-heist",
-      "schumacher-knepper-theme-dev"
+      "vibe-heist"
     ],
     "honorable_mentions_repositories": [
-      "insta-v2",
+      "schumacher-knepper-theme-dev",
       "dockercraft",
+      "insta-v2",
       "eclokit",
       "honey-pot",
-      "passkey-auth-template",
-      "portfolio"
+      "passkey-auth-template"
     ]
   }
 }
