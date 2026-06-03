@@ -1,5 +1,6 @@
 import { promises as fs } from "fs";
 import path from "path";
+import { cacheLife } from "next/cache";
 
 export interface MediaAsset {
   url: string;
@@ -392,10 +393,7 @@ async function fetchPortfolio(
   for (const branch of branches) {
     try {
       const res = await fetch(
-        `https://raw.githubusercontent.com/${username}/${repoName}/${branch}/portfolio.json`,
-        {
-          next: { revalidate: 3600 },
-        },
+        `https://raw.githubusercontent.com/${username}/${repoName}/${branch}/portfolio.json`
       );
       if (res.ok) {
         const json = await res.json();
@@ -415,8 +413,7 @@ async function fetchPortfolio(
           ...headers,
           Accept: "application/vnd.github.v3.raw",
         },
-        next: { revalidate: 3600 },
-      },
+      }
     );
     if (res.ok) {
       const json = await res.json();
@@ -431,6 +428,9 @@ async function fetchPortfolio(
 }
 
 export async function getGithubData() {
+  "use cache";
+  cacheLife("hours");
+
   const username = "HoodieYlya13";
   const headers: Record<string, string> = {
     "User-Agent": "portfolio-app-nextjs",
@@ -471,13 +471,11 @@ export async function getGithubData() {
     const [profileRes, reposRes] = await Promise.all([
       fetch(`https://api.github.com/users/${username}`, {
         headers,
-        next: { revalidate: 3600 },
       }),
       fetch(
         `https://api.github.com/users/${username}/repos?per_page=100&sort=updated`,
         {
           headers,
-          next: { revalidate: 3600 },
         },
       ),
     ]);
@@ -607,6 +605,9 @@ export async function getGithubData() {
 }
 
 export async function getGithubRepo(name: string) {
+  "use cache";
+  cacheLife("hours");
+
   const username = "HoodieYlya13";
   const headers: Record<string, string> = {
     "User-Agent": "portfolio-app-nextjs",
@@ -621,7 +622,6 @@ export async function getGithubRepo(name: string) {
     const [repoRes, portfolio] = await Promise.all([
       fetch(`https://api.github.com/repos/${username}/${name}`, {
         headers,
-        next: { revalidate: 3600 },
       }),
       fetchPortfolio(username, name, headers),
     ]);
@@ -736,13 +736,14 @@ export interface FullProfileData {
 }
 
 export async function getFullProfile(): Promise<FullProfileData | null> {
+  "use cache";
+  cacheLife("hours");
+
   const remoteUrl =
     "https://raw.githubusercontent.com/HoodieYlya13/HoodieYlya13/main/profile.json";
 
   try {
-    const res = await fetch(remoteUrl, {
-      next: { revalidate: 3600 },
-    });
+    const res = await fetch(remoteUrl);
 
     if (!res.ok)
       throw new Error(`GitHub raw responded with status: ${res.status}`);

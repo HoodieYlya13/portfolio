@@ -1,11 +1,21 @@
-import { Suspense } from "react";
+import { Suspense, use } from "react";
 import { getGithubData } from "@/lib/github";
 import { ProjectCard } from "@/components/projects/ProjectCard";
 import { FolderGit2, Award } from "lucide-react";
 import { GithubIcon } from "@/components/icons/Brands";
 
-async function ProjectsContent() {
-  const { profile, pinnedRepositories, honorableRepositories, repositories, isLive } = await getGithubData();
+function ProjectsContent({
+  dataPromise,
+}: {
+  dataPromise: ReturnType<typeof getGithubData>;
+}) {
+  const {
+    profile,
+    pinnedRepositories,
+    honorableRepositories,
+    repositories,
+    isLive,
+  } = use(dataPromise);
 
   return (
     <div className="space-y-16">
@@ -144,10 +154,12 @@ function ProjectsLoadingFallback() {
 }
 
 export default function ProjectsPage() {
+  const dataPromise = getGithubData();
+
   return (
     <section className="flex-1 flex flex-col w-full px-6 py-12 md:py-20 max-w-6xl mx-auto padding-footer">
       <Suspense fallback={<ProjectsLoadingFallback />}>
-        <ProjectsContent />
+        <ProjectsContent dataPromise={dataPromise} />
       </Suspense>
     </section>
   );

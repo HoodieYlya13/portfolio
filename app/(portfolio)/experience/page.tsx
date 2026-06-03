@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+import { Suspense, use } from "react";
 import TimelineContainer from "@/components/timeline/TimelineContainer";
 import TimelineCard from "@/components/timeline/TimelineCard";
 import ExperienceTimelineManager from "@/components/experience/ExperienceTimelineManager";
@@ -11,8 +11,12 @@ import { getFullProfile } from "@/lib/github";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 
 
-async function EngineeringTimeline() {
-  const profileData = await getFullProfile();
+function EngineeringTimeline({
+  promise,
+}: {
+  promise: ReturnType<typeof getFullProfile>;
+}) {
+  const profileData = use(promise);
   const engineeringData = profileData?.timeline_engineering || [];
 
   if (engineeringData.length === 0)
@@ -41,8 +45,12 @@ async function EngineeringTimeline() {
   );
 }
 
-async function FoundationalTimeline() {
-  const profileData = await getFullProfile();
+function FoundationalTimeline({
+  promise,
+}: {
+  promise: ReturnType<typeof getFullProfile>;
+}) {
+  const profileData = use(promise);
   const foundationalData = profileData?.timeline_foundational || [];
 
   if (foundationalData.length === 0)
@@ -70,17 +78,22 @@ async function FoundationalTimeline() {
   );
 }
 
-async function ExperienceContent() {
+function ExperienceContent({
+  promise,
+}: {
+  promise: ReturnType<typeof getFullProfile>;
+}) {
   return (
     <ExperienceTimelineManager
-      engineeringTimeline={<EngineeringTimeline />}
-      foundationalTimeline={<FoundationalTimeline />}
+      engineeringTimeline={<EngineeringTimeline promise={promise} />}
+      foundationalTimeline={<FoundationalTimeline promise={promise} />}
     />
   );
 }
 
 export default async function ExperiencePage() {
-  const profileData = await getFullProfile();
+  const profilePromise = getFullProfile();
+  const profileData = await profilePromise;
 
   const skills = profileData?.skills_matrix || {
     primary_web_stack: [],
@@ -113,9 +126,8 @@ export default async function ExperiencePage() {
 
       <div className="relative">
         <Suspense fallback={<LoadingSpinner />}>
-          <ExperienceContent />
+          <ExperienceContent promise={profilePromise} />
         </Suspense>
-
       </div>
 
       <div className="relative">

@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+import { Suspense, use } from "react";
 import TimelineContainer from "@/components/timeline/TimelineContainer";
 import TimelineCard from "@/components/timeline/TimelineCard";
 import LanguagesSection from "@/components/education/LanguagesSection";
@@ -10,8 +10,12 @@ import { getFullProfile } from "@/lib/github";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 
 
-async function EducationContent() {
-  const profileData = await getFullProfile();
+function EducationContent({
+  promise,
+}: {
+  promise: ReturnType<typeof getFullProfile>;
+}) {
+  const profileData = use(promise);
   const educationData = profileData?.academic_history || [];
   const languages = profileData?.communication?.languages || [];
   const codingSince = profileData?.identity?.coding_experience_since || 2019;
@@ -47,6 +51,8 @@ async function EducationContent() {
 }
 
 export default function EducationPage() {
+  const profilePromise = getFullProfile();
+
   return (
     <div className="flex-1 py-20 padding-footer relative overflow-hidden flex flex-col gap-8 sm:gap-16">
       <DotField />
@@ -61,7 +67,7 @@ export default function EducationPage() {
       </div>
 
       <Suspense fallback={<LoadingSpinner />}>
-        <EducationContent />
+        <EducationContent promise={profilePromise} />
       </Suspense>
     </div>
   );
