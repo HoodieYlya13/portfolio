@@ -1,6 +1,5 @@
-import { promises as fs } from "fs";
-import path from "path";
 import { cacheLife } from "next/cache";
+import localProfile from "../public/info/profile.json";
 
 export interface MediaAsset {
   url: string;
@@ -393,7 +392,7 @@ async function fetchPortfolio(
   for (const branch of branches) {
     try {
       const res = await fetch(
-        `https://raw.githubusercontent.com/${username}/${repoName}/${branch}/portfolio.json`
+        `https://raw.githubusercontent.com/${username}/${repoName}/${branch}/portfolio.json`,
       );
       if (res.ok) {
         const json = await res.json();
@@ -413,7 +412,7 @@ async function fetchPortfolio(
           ...headers,
           Accept: "application/vnd.github.v3.raw",
         },
-      }
+      },
     );
     if (res.ok) {
       const json = await res.json();
@@ -757,15 +756,7 @@ export async function getFullProfile(): Promise<FullProfileData | null> {
     );
 
     try {
-      const filePath = path.join(
-        process.cwd(),
-        "public",
-        "info",
-        "profile.json",
-      );
-      const fileContents = await fs.readFile(filePath, "utf8");
-      const data = JSON.parse(fileContents);
-      return sanitizeContent(data);
+      return sanitizeContent(localProfile);
     } catch (localError) {
       console.error(
         "Critical: Local profile fallback also failed:",
