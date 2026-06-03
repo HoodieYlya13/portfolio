@@ -734,34 +734,74 @@ export interface FullProfileData {
   };
 }
 
+let cachedProfile: FullProfileData | null = null;
+let lastFetched = 0;
+const CACHE_TTL = 1000 * 60 * 60;
+
 export async function getFullProfile(): Promise<FullProfileData | null> {
-  "use cache";
-  cacheLife("hours");
+  if (process.env.NEXT_PHASE === "phase-production-build") {
+    try {
+      return sanitizeContent(localProfile);
+    } catch {
+      return null;
+    }
+  }
+
+  const now = Date.now();
+
+  if (cachedProfile && now - lastFetched < CACHE_TTL) return cachedProfile;
 
   const remoteUrl =
     "https://raw.githubusercontent.com/HoodieYlya13/HoodieYlya13/main/profile.json";
 
+  if (cachedProfile) {
+    fetch(remoteUrl)
+      .then((res) => {
+        if (!res.ok) throw new Error(`Status ${res.status}`);
+        return res.json();
+      })
+      .then((data) => {
+        cachedProfile = sanitizeContent(data);
+        lastFetched = Date.now();
+        console.log(
+          "⚡ [getFullProfile] Memory cache refreshed in background.",
+        );
+      })
+      .catch((err) => {
+        console.warn(
+          "⚠️ [getFullProfile] Background cache refresh failed, using stale data:",
+          err.message,
+        );
+      });
+    return cachedProfile;
+  }
+
+  console.log(
+    "⚡ [getFullProfile] Cache empty. Fetching fresh profile from GitHub raw...",
+  );
   try {
-    const res = await fetch(remoteUrl);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 3000);
 
-    if (!res.ok)
-      throw new Error(`GitHub raw responded with status: ${res.status}`);
+    const res = await fetch(remoteUrl, { signal: controller.signal });
+    clearTimeout(timeoutId);
 
+    if (!res.ok) throw new Error(`Status ${res.status}`);
     const data = await res.json();
-    return sanitizeContent(data);
-  } catch (remoteError) {
-    console.error(
-      "Failed fetching profile from GitHub, trying local fallback:",
-      remoteError,
+    cachedProfile = sanitizeContent(data);
+    lastFetched = Date.now();
+    console.log(
+      "✅ [getFullProfile] Fresh profile retrieved and cached on cold start.",
     );
-
+    return cachedProfile;
+  } catch (error) {
+    console.warn(
+      "⚠️ [getFullProfile] Cold start fetch failed, falling back to local file:",
+      error instanceof Error ? error.message : String(error),
+    );
     try {
       return sanitizeContent(localProfile);
-    } catch (localError) {
-      console.error(
-        "Critical: Local profile fallback also failed:",
-        localError,
-      );
+    } catch {
       return null;
     }
   }

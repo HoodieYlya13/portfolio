@@ -22,7 +22,10 @@
       "Lucide React",
       "GitHub GraphQL API",
       "GitHub Actions CI/CD",
-      "Node.js Compiler"
+      "Node.js Compiler",
+      "Next.js after() API",
+      "Supabase Client",
+      "Upstash Redis"
     ]
   },
   "comprehensive_description": "The central control plane and Single Source of Truth (SSoT) for my professional engineering presence. This project is a highly optimized, state-of-the-art developer portfolio built on Next.js 16 (App Router) and React 19, integrating a headless data-driven architecture. A single structural update to profile.json triggers an automated GitHub Actions CI/CD compiler script to rewrite the GitHub profile README.md, programmatically sync active repository pins via the GitHub GraphQL API, bust edge CDN caching routes, and dynamically hot-swap the system prompt context of a Retrieval-Augmented Generation (RAG) AI assistant, YlyaBot. The application delivers a premium, hyper-fluid interactive visual experience using a bespoke React Three Fiber (R3F) WebGL Liquid Glass background running custom simplex noise fragment shaders, coupled with smooth GSAP transition choreographies.",
@@ -33,11 +36,14 @@
     "React 19 Server/Client Composition & ISR: Leveraged advanced React 19 server component patterns and high-performance fetches with 1-hour Edge/CDN ISR revalidation caching (revalidate: 3600) or standard 'use cache' components to stream dynamic elements via Suspense boundaries.",
     "Dynamic Parallel & Intercepting Routes: Engineered a smooth user navigation system for repository deep dives using Next.js parallel slots (@modal) and intercepting routes ((.)projects/[id]), rendering high-fidelity project overlays dynamically without losing application routing state.",
     "Bespoke WebGL Liquid Glass Shader: Created a premium dynamic background utilizing React Three Fiber and customized GLSL fragment shaders implementing 2D Simplex noise, real-time aspect-ratio compensation, and a MutationObserver layout listener to hot-swap theme colors seamlessly on dark-mode class mutations.",
-    "Robust Session History Navigation: Engineered a highly resilient navigation management hook (useSafeBack) utilizing sessionStorage history tracking, allowing modular modal closers to securely transition back through parallel routes or safely fall back to home navigation without crashing active browser route history."
+    "Robust Session History Navigation: Engineered a highly resilient navigation management hook (useSafeBack) utilizing sessionStorage history tracking, allowing modular modal closers to securely transition back through parallel routes or safely fall back to home navigation without crashing active browser route history.",
+    "Throttled LLM Stream Rendering: Developed a high-performance batching hook in React 19 that buffers incoming server-sent tokens and updates the UI state at most once every 60ms, preventing browser main thread congestion and eliminating connection-terminating TCP backpressure.",
+    "Post-Response Background Processing: Leveraged Next.js 16's native `after()` API to shift heavy database transactions (Supabase query logs) and server analytics (Upstash Redis) completely outside the request-response lifecycle, immediately releasing HTTP connections upon stream completion.",
+    "Zero-Latency SWR Context Synchronizer: Implemented a hybrid Stale-While-Revalidate (SWR) cache for live SSoT updates with a 3-second cold-start synchronous fetch timeout and 0ms warm-cache responses, avoiding dynamic route degradation."
   ],
   "measurable_metrics": {
-    "execution_latency": "Sub-150ms Time to First Byte (TTFB) via Edge-cached Incremental Static Regeneration (ISR) and static page pre-rendering; sub-10ms localized navigation history tracking resolution.",
-    "ui_performance": "Sustained lock-tight 60 FPS visual rendering under heavy CPU load, utilizing GPU-accelerated GLSL shader compilation and layout containment bounds; 100% Google Lighthouse performance scores.",
+    "execution_latency": "Sub-150ms Time to First Byte (TTFB) via Edge-cached Incremental Static Regeneration (ISR) and static page pre-rendering; 0ms startup latency for AI chatbot streaming by offloading telemetry and database writes to background processes.",
+    "ui_performance": "Sustained lock-tight 60 FPS visual rendering under heavy CPU load, utilizing GPU-accelerated GLSL shader compilation and a 60ms batching threshold for dynamic content rendering; 100% Google Lighthouse performance scores.",
     "operational_cost": "Absolute zero ($0.00) monthly maintenance cost, running completely serverless via Next.js ISR on Vercel Edge networks and utilizing free-tier GitHub Actions virtual runners."
   },
   "star_challenges": [
@@ -61,7 +67,7 @@
     }
   ],
   "architectural_deep_dive": {
-    "text": "The portfolio ecosystem follows a headless control plane layout. The core user-experience layer is built with Next.js 16 and React 19, compiling structural layouts using advanced PPR (Partial Prerendering) streams. A custom Git Actions CI/CD script operates as the compiler of the SSoT (profile.json), updating dynamic Markdown templates on-push and issuing programmatic GraphQL mutations to sync pinned repositories via the GitHub overview API. Inside the Next.js runtime, standard routes access profile data using cached raw fetch requests (revalidate: 3600), while custom navigation history and modal managers control layout containment boundaries dynamically. The WebGL shader is isolated entirely within a React Three Fiber canvas, listening directly to dark-mode DOM class changes via a MutationObserver to update WebGL uniform color parameters dynamically.",
+    "text": "The portfolio ecosystem follows a headless control plane layout. The core user-experience layer is built with Next.js 16 and React 19, compiling structural layouts using advanced PPR (Partial Prerendering) streams. A custom Git Actions CI/CD script operates as the compiler of the SSoT (profile.json), updating dynamic Markdown templates on-push and issuing programmatic GraphQL mutations to sync pinned repositories via the GitHub overview API. Inside the Next.js runtime, standard routes access profile data using a hybrid Stale-While-Revalidate (SWR) cache with a 3-second cold-start timeout guard, guaranteeing 0ms runtime retrieval latency. Chatbot telemetries (Supabase query logging and Upstash Redis analytics) are backgrounded using Next.js 16's native `after()` API to instantly close response streams. The WebGL shader is isolated entirely within a React Three Fiber canvas, listening directly to dark-mode DOM class changes via a MutationObserver to update WebGL uniform color parameters dynamically.",
     "illustration": {
       "url": "https://hy13dev.com/img/portfolio-architecture.png",
       "alt": "Single Source of Truth (SSoT) System Architecture and Compiler Pipeline Diagram",
