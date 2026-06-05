@@ -315,13 +315,13 @@ export default function DotField({
     };
   }, []);
 
-  // useEffect(() => {
-  //   const canvas = canvasRef.current;
-  //   if (!canvas) return;
-  //   canvas.style.display = "none";
-  //   void canvas.offsetHeight;
-  //   canvas.style.display = "";
-  // }, [theme]);
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    canvas.style.display = "none";
+    void canvas.offsetHeight;
+    canvas.style.display = "";
+  }, [theme]);
 
   const getMaskStyle = () => {
     if (!fadeTop && !fadeBottom) return {};
