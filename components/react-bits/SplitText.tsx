@@ -10,7 +10,7 @@ gsap.registerPlugin(ScrollTrigger, GSAPSplitText, useGSAP);
 
 type SplitTextTag = "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p";
 
-export interface SplitTextProps {
+interface SplitTextProps {
   text: string;
   className?: string;
   delay?: number;

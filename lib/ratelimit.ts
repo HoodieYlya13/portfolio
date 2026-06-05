@@ -46,7 +46,7 @@ function getLimiter(identifier: string, redis: Redis) {
   }
 }
 
-export async function getUserIp() {
+async function getUserIp() {
   const cookieStore = await cookies();
   return cookieStore.get("user_ip")?.value || "unknown";
 }

@@ -11,7 +11,7 @@ import {
 import { gsap } from "gsap";
 import "./TextType.css";
 
-export interface TextTypeProps {
+interface TextTypeProps {
   text: string | string[];
   as?: ElementType;
   typingSpeed?: number;

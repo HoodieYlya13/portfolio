@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useId, useState } from "react";
+import { useEffect, useRef, useId } from "react";
+import { useThemeObserver } from "@/lib/hooks/useThemeObserver";
 import "./DotField.css";
 
 const TWO_PI = Math.PI * 2;
@@ -69,26 +70,7 @@ export default function DotField({
   const sizeRef = useRef({ w: 0, h: 0, offsetX: 0, offsetY: 0 });
   const glowOpacity = useRef(0);
   const engagement = useRef(0);
-  const [theme, setTheme] = useState<"light" | "dark">("dark");
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const isDark = document.documentElement.classList.contains("dark");
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setTheme(isDark ? "dark" : "light");
-
-    const observer = new MutationObserver(() => {
-      const isDarkNow = document.documentElement.classList.contains("dark");
-      setTheme(isDarkNow ? "dark" : "light");
-    });
-
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class"],
-    });
-
-    return () => observer.disconnect();
-  }, []);
+  const theme = useThemeObserver();
 
   const propsRef = useRef({
     dotRadius,
@@ -333,6 +315,14 @@ export default function DotField({
     };
   }, []);
 
+  // useEffect(() => {
+  //   const canvas = canvasRef.current;
+  //   if (!canvas) return;
+  //   canvas.style.display = "none";
+  //   void canvas.offsetHeight;
+  //   canvas.style.display = "";
+  // }, [theme]);
+
   const getMaskStyle = () => {
     if (!fadeTop && !fadeBottom) return {};
 
@@ -354,7 +344,6 @@ export default function DotField({
 
   return (
     <div
-      key={theme}
       className={`dot-field-container ${className}`}
       style={{
         position: asBackground ? "absolute" : "relative",

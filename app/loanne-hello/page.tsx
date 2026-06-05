@@ -15,6 +15,41 @@ import {
   BookOpen,
 } from "lucide-react";
 
+interface PDFViewport {
+  width: number;
+  height: number;
+}
+
+interface PDFPage {
+  getViewport(options: { scale: number }): PDFViewport;
+  render(options: {
+    canvasContext: CanvasRenderingContext2D;
+    viewport: PDFViewport;
+  }): PDFRenderTask;
+}
+
+interface PDFRenderTask {
+  promise: Promise<void>;
+  cancel(): void;
+}
+
+interface PDFDocument {
+  numPages: number;
+  getPage(pageNum: number): Promise<PDFPage>;
+}
+
+interface PDFJS {
+  GlobalWorkerOptions: {
+    workerSrc: string;
+    workerPort: unknown;
+  };
+  getDocument(url: string): {
+    onProgress?: (progressData: { loaded: number; total: number }) => void;
+    promise: Promise<PDFDocument>;
+    destroy(): void;
+  };
+}
+
 const PORTFOLIOS = [
   {
     id: "creatif",
@@ -35,13 +70,11 @@ const PORTFOLIOS = [
 export default function LoanneHelloPage() {
   const [mounted, setMounted] = useState(false);
   const [currentPortfolio, setCurrentPortfolio] = useState(PORTFOLIOS[0]);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [pdfjs, setPdfjs] = useState<any>(null);
+  const [pdfjs, setPdfjs] = useState<PDFJS | null>(null);
   const [loadingLibrary, setLoadingLibrary] = useState(true);
   const [loadingPdf, setLoadingPdf] = useState(true);
   const [loadingProgress, setLoadingProgress] = useState(0);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [pdfDoc, setPdfDoc] = useState<any>(null);
+  const [pdfDoc, setPdfDoc] = useState<PDFDocument | null>(null);
   const [pageNum, setPageNum] = useState(1);
   const [numPages, setNumPages] = useState(0);
   const [zoom, setZoom] = useState(1.0);
@@ -52,13 +85,11 @@ export default function LoanneHelloPage() {
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const viewerRef = useRef<HTMLDivElement>(null);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const renderTaskRef = useRef<any>(null);
+  const renderTaskRef = useRef<PDFRenderTask | null>(null);
   const renderCacheRef = useRef<Record<number, HTMLCanvasElement>>({});
   const lastZoomRef = useRef(1.0);
   const lastWindowSizeRef = useRef({ width: 0, height: 0 });
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const lastDocRef = useRef<any>(null);
+  const lastDocRef = useRef<PDFDocument | null>(null);
 
   const touchStartX = useRef<number>(0);
   const touchEndX = useRef<number>(0);
@@ -184,10 +215,9 @@ export default function LoanneHelloPage() {
 
     const loadLibrary = async () => {
       try {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        if ((window as any).pdfjsLib) {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const lib = (window as any).pdfjsLib;
+        const globalPdfjsLib = (window as unknown as { pdfjsLib?: PDFJS }).pdfjsLib;
+        if (globalPdfjsLib) {
+          const lib = globalPdfjsLib;
           lib.GlobalWorkerOptions.workerSrc =
             "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
           lib.GlobalWorkerOptions.workerPort = null; // Clear stale worker ports from back-button navigations
@@ -202,8 +232,7 @@ export default function LoanneHelloPage() {
         script.async = true;
 
         script.onload = () => {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const lib = (window as any).pdfjsLib;
+          const lib = (window as unknown as { pdfjsLib?: PDFJS }).pdfjsLib;
           if (lib) {
             lib.GlobalWorkerOptions.workerSrc =
               "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
@@ -255,16 +284,14 @@ export default function LoanneHelloPage() {
     };
 
     loadingTask.promise.then(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (doc: any) => {
+      (doc: PDFDocument) => {
         if (active) {
           setPdfDoc(doc);
           setNumPages(doc.numPages);
           setLoadingPdf(false);
         }
       },
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      (err: any) => {
+      (err: unknown) => {
         console.error("Error loading PDF: ", err);
         if (active) {
           setError(
@@ -369,17 +396,7 @@ export default function LoanneHelloPage() {
           renderTaskRef.current = null;
           
           const page = await pdfDoc.getPage(pageNum);
-          const unscaledViewport = page.getViewport({ scale: 1.0 });
-          const container = viewerRef.current;
-          const containerWidth = container ? container.clientWidth : 800;
-          const containerHeight = container ? container.clientHeight : 600;
-          const padX = containerWidth < 768 ? 16 : 48;
-          const padY = containerWidth < 768 ? 16 : 48;
-          const targetW = Math.max(containerWidth - padX, 200);
-          const targetH = Math.max(containerHeight - padY, 200);
-          const scaleX = targetW / unscaledViewport.width;
-          const scaleY = targetH / unscaledViewport.height;
-          const fitScale = Math.min(scaleX, scaleY);
+          const fitScale = getFitScale(page, viewerRef.current);
           const finalScale = fitScale * zoom;
 
           preloadAdjacentPages(pageNum, numPages, finalScale);
@@ -392,21 +409,7 @@ export default function LoanneHelloPage() {
         const page = await pdfDoc.getPage(pageNum);
         if (!active || !canvasRef.current) return;
 
-        const unscaledViewport = page.getViewport({ scale: 1.0 });
-
-        const container = viewerRef.current;
-        const containerWidth = container ? container.clientWidth : 800;
-        const containerHeight = container ? container.clientHeight : 600;
-
-        const padX = containerWidth < 768 ? 16 : 48;
-        const padY = containerWidth < 768 ? 16 : 48;
-        const targetW = Math.max(containerWidth - padX, 200);
-        const targetH = Math.max(containerHeight - padY, 200);
-
-        const scaleX = targetW / unscaledViewport.width;
-        const scaleY = targetH / unscaledViewport.height;
-
-        const fitScale = Math.min(scaleX, scaleY);
+        const fitScale = getFitScale(page, viewerRef.current);
         const finalScale = fitScale * zoom;
         const viewport = page.getViewport({ scale: finalScale });
 
@@ -446,11 +449,11 @@ export default function LoanneHelloPage() {
 
           preloadAdjacentPages(pageNum, numPages, finalScale);
         }
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (err: any) {
+      } catch (err) {
+        const errorVal = err as { name?: string; message?: string };
         if (
-          err.name === "RenderingCancelledException" ||
-          err.message?.includes("cancelled")
+          errorVal.name === "RenderingCancelledException" ||
+          errorVal.message?.includes("cancelled")
         )
           return;
 
@@ -466,20 +469,24 @@ export default function LoanneHelloPage() {
     };
   }, [pdfDoc, pageNum, zoom, windowSize, numPages]);
 
+  const handlersRef = useRef({ nextPage, prevPage, zoomIn, zoomOut, resetZoom, toggleFullscreen });
+  useEffect(() => {
+    handlersRef.current = { nextPage, prevPage, zoomIn, zoomOut, resetZoom, toggleFullscreen };
+  });
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "ArrowRight" || e.key === "Right") nextPage();
-      else if (e.key === "ArrowLeft" || e.key === "Left") prevPage();
-      else if (e.key === "=" || e.key === "+") zoomIn();
-      else if (e.key === "-") zoomOut();
-      else if (e.key === "0") resetZoom();
-      else if (e.key === "f" || e.key === "F") toggleFullscreen();
+      if (e.key === "ArrowRight" || e.key === "Right") handlersRef.current.nextPage();
+      else if (e.key === "ArrowLeft" || e.key === "Left") handlersRef.current.prevPage();
+      else if (e.key === "=" || e.key === "+") handlersRef.current.zoomIn();
+      else if (e.key === "-") handlersRef.current.zoomOut();
+      else if (e.key === "0") handlersRef.current.resetZoom();
+      else if (e.key === "f" || e.key === "F") handlersRef.current.toggleFullscreen();
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pdfDoc, pageNum, numPages]);
+  }, []);
 
   if (!mounted)
     return (
@@ -727,4 +734,17 @@ export default function LoanneHelloPage() {
       )}
     </div>
   );
+}
+
+function getFitScale(page: PDFPage, container: HTMLDivElement | null) {
+  const unscaledViewport = page.getViewport({ scale: 1.0 });
+  const containerWidth = container ? container.clientWidth : 800;
+  const containerHeight = container ? container.clientHeight : 600;
+  const padX = containerWidth < 768 ? 16 : 48;
+  const padY = containerWidth < 768 ? 16 : 48;
+  const targetW = Math.max(containerWidth - padX, 200);
+  const targetH = Math.max(containerHeight - padY, 200);
+  const scaleX = targetW / unscaledViewport.width;
+  const scaleY = targetH / unscaledViewport.height;
+  return Math.min(scaleX, scaleY);
 }

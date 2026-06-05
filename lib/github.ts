@@ -63,7 +63,7 @@ export interface Repository {
   portfolio: PortfolioProject;
 }
 
-export interface GithubProfile {
+interface GithubProfile {
   username: string;
   name: string;
   headline: string;
@@ -75,7 +75,7 @@ export interface GithubProfile {
   public_repos: number;
 }
 
-export const FALLBACK_PROFILE: GithubProfile = {
+const FALLBACK_PROFILE: GithubProfile = {
   username: "HoodieYlya13",
   name: "Ylya Martchenko",
   headline: "Software Engineer / Next.js Expert / Full Stack Developer",
@@ -87,7 +87,7 @@ export const FALLBACK_PROFILE: GithubProfile = {
   public_repos: 20,
 };
 
-export const FALLBACK_REPOS: Repository[] = [
+const FALLBACK_REPOS: Repository[] = [
   {
     name: "teslimitless",
     description:
@@ -426,6 +426,44 @@ async function fetchPortfolio(
   return null;
 }
 
+interface GithubRepositoryResponse {
+  name: string;
+  description: string | null;
+  html_url: string;
+  language: string | null;
+  stargazers_count: number;
+  forks_count: number;
+  fork: boolean;
+  updated_at: string;
+  homepage?: string | null;
+}
+
+function mapGithubRepoToRepository(repo: GithubRepositoryResponse, portfolio: PortfolioProject): Repository {
+  return {
+    name: repo.name,
+    description: repo.description,
+    html_url: repo.html_url,
+    language: portfolio.project_meta.languages[0] || repo.language,
+    languages: portfolio.project_meta.languages,
+    stargazers_count: repo.stargazers_count,
+    forks_count: repo.forks_count,
+    fork: repo.fork,
+    updated_at: repo.updated_at,
+    homepage: repo.homepage || null,
+    portfolio,
+  };
+}
+
+function filterAndSortRepos(repos: Repository[], lowercaseNames: string[]): Repository[] {
+  return repos
+    .filter((repo) => lowercaseNames.includes(repo.name.toLowerCase()))
+    .sort(
+      (a, b) =>
+        lowercaseNames.indexOf(a.name.toLowerCase()) -
+        lowercaseNames.indexOf(b.name.toLowerCase()),
+    );
+}
+
 export async function getGithubData() {
   "use cache";
   cacheLife("hours");
@@ -502,19 +540,7 @@ export async function getGithubData() {
         const portfolio = await fetchPortfolio(username, repo.name, headers);
         if (!portfolio) return null;
 
-        return {
-          name: repo.name,
-          description: repo.description,
-          html_url: repo.html_url,
-          language: portfolio.project_meta.languages[0] || repo.language,
-          languages: portfolio.project_meta.languages,
-          stargazers_count: repo.stargazers_count,
-          forks_count: repo.forks_count,
-          fork: repo.fork,
-          updated_at: repo.updated_at,
-          homepage: repo.homepage || null,
-          portfolio,
-        } as Repository;
+        return mapGithubRepoToRepository(repo, portfolio);
       } catch (error) {
         console.warn(`Failed parsing portfolio.json for ${repo.name}:`, error);
         return null;
@@ -526,21 +552,8 @@ export async function getGithubData() {
       (r): r is Repository => r !== null,
     );
 
-    const pinnedRepositories = allMappedRepos
-      .filter((repo) => lowercasePins.includes(repo.name.toLowerCase()))
-      .sort(
-        (a, b) =>
-          lowercasePins.indexOf(a.name.toLowerCase()) -
-          lowercasePins.indexOf(b.name.toLowerCase()),
-      );
-
-    const honorableRepositories = allMappedRepos
-      .filter((repo) => lowercaseHonorable.includes(repo.name.toLowerCase()))
-      .sort(
-        (a, b) =>
-          lowercaseHonorable.indexOf(a.name.toLowerCase()) -
-          lowercaseHonorable.indexOf(b.name.toLowerCase()),
-      );
+    const pinnedRepositories = filterAndSortRepos(allMappedRepos, lowercasePins);
+    const honorableRepositories = filterAndSortRepos(allMappedRepos, lowercaseHonorable);
 
     const remainingRepositories = allMappedRepos.filter(
       (repo) =>
@@ -571,21 +584,8 @@ export async function getGithubData() {
       error,
     );
 
-    const fallbackPinned = FALLBACK_REPOS.filter((repo) =>
-      lowercasePins.includes(repo.name.toLowerCase()),
-    ).sort(
-      (a, b) =>
-        lowercasePins.indexOf(a.name.toLowerCase()) -
-        lowercasePins.indexOf(b.name.toLowerCase()),
-    );
-
-    const fallbackHonorable = FALLBACK_REPOS.filter((repo) =>
-      lowercaseHonorable.includes(repo.name.toLowerCase()),
-    ).sort(
-      (a, b) =>
-        lowercaseHonorable.indexOf(a.name.toLowerCase()) -
-        lowercaseHonorable.indexOf(b.name.toLowerCase()),
-    );
+    const fallbackPinned = filterAndSortRepos(FALLBACK_REPOS, lowercasePins);
+    const fallbackHonorable = filterAndSortRepos(FALLBACK_REPOS, lowercaseHonorable);
 
     const fallbackRemaining = FALLBACK_REPOS.filter(
       (repo) =>
@@ -633,19 +633,7 @@ export async function getGithubRepo(name: string) {
     const repo = await repoRes.json();
 
     return sanitizeContent({
-      repo: {
-        name: repo.name,
-        description: repo.description,
-        html_url: repo.html_url,
-        language: portfolio.project_meta.languages[0] || repo.language,
-        languages: portfolio.project_meta.languages,
-        stargazers_count: repo.stargazers_count,
-        forks_count: repo.forks_count,
-        fork: repo.fork,
-        updated_at: repo.updated_at,
-        homepage: repo.homepage || null,
-        portfolio,
-      } as Repository,
+      repo: mapGithubRepoToRepository(repo, portfolio),
       isLive: true,
     });
   } catch (error) {
@@ -734,11 +722,10 @@ export interface FullProfileData {
   };
 }
 
-let cachedProfile: FullProfileData | null = null;
-let lastFetched = 0;
-const CACHE_TTL = 1000 * 60 * 60;
-
 export async function getFullProfile(): Promise<FullProfileData | null> {
+  "use cache";
+  cacheLife("hours");
+
   if (process.env.NEXT_PHASE === "phase-production-build") {
     try {
       return sanitizeContent(localProfile);
@@ -747,38 +734,9 @@ export async function getFullProfile(): Promise<FullProfileData | null> {
     }
   }
 
-  const now = Date.now();
-
-  if (cachedProfile && now - lastFetched < CACHE_TTL) return cachedProfile;
-
   const remoteUrl =
     "https://raw.githubusercontent.com/HoodieYlya13/HoodieYlya13/main/profile.json";
 
-  if (cachedProfile) {
-    fetch(remoteUrl)
-      .then((res) => {
-        if (!res.ok) throw new Error(`Status ${res.status}`);
-        return res.json();
-      })
-      .then((data) => {
-        cachedProfile = sanitizeContent(data);
-        lastFetched = Date.now();
-        console.log(
-          "⚡ [getFullProfile] Memory cache refreshed in background.",
-        );
-      })
-      .catch((err) => {
-        console.warn(
-          "⚠️ [getFullProfile] Background cache refresh failed, using stale data:",
-          err.message,
-        );
-      });
-    return cachedProfile;
-  }
-
-  console.log(
-    "⚡ [getFullProfile] Cache empty. Fetching fresh profile from GitHub raw...",
-  );
   try {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 3000);
@@ -788,15 +746,10 @@ export async function getFullProfile(): Promise<FullProfileData | null> {
 
     if (!res.ok) throw new Error(`Status ${res.status}`);
     const data = await res.json();
-    cachedProfile = sanitizeContent(data);
-    lastFetched = Date.now();
-    console.log(
-      "✅ [getFullProfile] Fresh profile retrieved and cached on cold start.",
-    );
-    return cachedProfile;
+    return sanitizeContent(data);
   } catch (error) {
     console.warn(
-      "⚠️ [getFullProfile] Cold start fetch failed, falling back to local file:",
+      "⚠️ [getFullProfile] Fetch failed, falling back to local file:",
       error instanceof Error ? error.message : String(error),
     );
     try {

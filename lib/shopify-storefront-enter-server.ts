@@ -1,15 +1,9 @@
-import { SHOPIFY_STOREFRONT_PREVIEWS, type ShopifyStorefrontHost } from "./shopify-storefront-previews";
+import { type ShopifyStorefrontHost } from "./shopify-storefront-previews";
 
 const STOREFRONT_PASSWORDS: Record<ShopifyStorefrontHost, string> = {
   "schumacher-knepper-v2.myshopify.com":
     process.env.SHOPIFY_SCHUMACHER_KNEPPER_PASSWORD ?? "123",
 };
-
-export function isAllowedShopifyStorefrontHost(
-  store: string,
-): store is ShopifyStorefrontHost {
-  return store in SHOPIFY_STOREFRONT_PREVIEWS;
-}
 
 export function getShopifyStorefrontPassword(host: ShopifyStorefrontHost): string {
   return STOREFRONT_PASSWORDS[host];

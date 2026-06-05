@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
+import { useIntersectionObserver } from '@/lib/hooks/useIntersectionObserver';
 
 interface TimelineContainerProps {
   children: React.ReactNode;
@@ -41,24 +42,7 @@ export default function TimelineContainer({
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.setAttribute('data-state', 'visible');
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.1, rootMargin: '0px 0px -100px 0px' }
-    );
-
-    const elements = containerRef.current?.querySelectorAll('.reveal-on-scroll');
-    elements?.forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect();
-  }, []);
+  useIntersectionObserver(containerRef, ".reveal-on-scroll");
 
   return (
     <div ref={containerRef} className="relative max-w-5xl mx-auto sm:pt-8 px-4">
