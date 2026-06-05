@@ -274,6 +274,15 @@ export default function LiquidGlassBackground({
   }, [animateIn, meshKey, restartKey, invertFade]);
 
   useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const originalDisplay = el.style.display;
+    el.style.display = "none";
+    void el.offsetHeight;
+    el.style.display = originalDisplay;
+  }, [theme]);
+
+  useEffect(() => {
     if (typeof window === "undefined") return;
 
     const currentRef = ref.current;

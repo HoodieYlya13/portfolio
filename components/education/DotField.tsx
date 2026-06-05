@@ -55,6 +55,7 @@ export default function DotField({
   className = "",
   ...rest
 }: DotFieldProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
   const glowRef = useRef<SVGCircleElement>(null);
@@ -316,11 +317,12 @@ export default function DotField({
   }, []);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    canvas.style.display = "none";
-    void canvas.offsetHeight;
-    canvas.style.display = "";
+    const container = containerRef.current;
+    if (!container) return;
+    const originalDisplay = container.style.display;
+    container.style.display = "none";
+    void container.offsetHeight;
+    container.style.display = originalDisplay;
   }, [theme]);
 
   const getMaskStyle = () => {
@@ -344,6 +346,7 @@ export default function DotField({
 
   return (
     <div
+      ref={containerRef}
       className={`dot-field-container ${className}`}
       style={{
         position: asBackground ? "absolute" : "relative",
