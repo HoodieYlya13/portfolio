@@ -63,6 +63,8 @@ export default function DotField({
   const mouseRef = useRef({
     x: -9999,
     y: -9999,
+    pageX: -9999,
+    pageY: -9999,
     prevX: -9999,
     prevY: -9999,
     speed: 0,
@@ -125,7 +127,22 @@ export default function DotField({
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     let resizeTimer: NodeJS.Timeout;
 
+    function updateOffsets() {
+      if (!canvas || !canvas.parentElement) return;
+      const rect = canvas.parentElement.getBoundingClientRect();
+      const s = sizeRef.current;
+      s.offsetX = rect.left + window.scrollX;
+      s.offsetY = rect.top + window.scrollY;
+
+      const m = mouseRef.current;
+      if (m.pageX !== -9999) {
+        m.x = m.pageX - s.offsetX;
+        m.y = m.pageY - s.offsetY;
+      }
+    }
+
     function resize() {
+      updateOffsets();
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(doResize, 100);
     }
@@ -142,12 +159,9 @@ export default function DotField({
       canvas.style.height = `${h}px`;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      sizeRef.current = {
-        w,
-        h,
-        offsetX: rect.left + window.scrollX,
-        offsetY: rect.top + window.scrollY,
-      };
+      sizeRef.current.w = w;
+      sizeRef.current.h = h;
+      updateOffsets();
 
       buildDots(w, h);
     }
@@ -174,8 +188,11 @@ export default function DotField({
 
     function onMouseMove(e: MouseEvent) {
       const s = sizeRef.current;
-      mouseRef.current.x = e.pageX - s.offsetX;
-      mouseRef.current.y = e.pageY - s.offsetY;
+      const m = mouseRef.current;
+      m.pageX = e.pageX;
+      m.pageY = e.pageY;
+      m.x = e.pageX - s.offsetX;
+      m.y = e.pageY - s.offsetY;
     }
 
     function updateMouseSpeed() {
@@ -303,6 +320,8 @@ export default function DotField({
       resizeObserver.observe(parent);
     } else window.addEventListener("resize", resize);
 
+    window.addEventListener("scroll", updateOffsets, { passive: true });
+    window.addEventListener("resize", updateOffsets, { passive: true });
     window.addEventListener("mousemove", onMouseMove, { passive: true });
     rafRef.current = requestAnimationFrame(tick);
 
@@ -312,6 +331,8 @@ export default function DotField({
       clearTimeout(resizeTimer);
       if (resizeObserver) resizeObserver.disconnect();
       else window.removeEventListener("resize", resize);
+      window.removeEventListener("scroll", updateOffsets);
+      window.removeEventListener("resize", updateOffsets);
       window.removeEventListener("mousemove", onMouseMove);
     };
   }, []);
