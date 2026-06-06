@@ -188,7 +188,7 @@ const FALLBACK_REPOS: Repository[] = [
       "An event-driven, decoupled Retrieval-Augmented Generation (RAG) agent and chat interface that acts as an interactive professional clone of Ylya Martchenko.",
     html_url: "https://github.com/HoodieYlya13/ylya-bot",
     language: "TypeScript",
-    languages: ["TypeScript", "SQL"],
+    languages: ["TypeScript", "JavaScript", "SQL"],
     stargazers_count: 0,
     forks_count: 0,
     fork: false,
@@ -203,16 +203,22 @@ const FALLBACK_REPOS: Repository[] = [
       project_meta: {
         role: "Lead Systems Architect & AI Engineer",
         development_phase: "Production-Ready Recruiter Agent & RAG Portal",
-        languages: ["TypeScript", "SQL"],
+        languages: ["TypeScript", "JavaScript", "SQL"],
         frameworks_and_tools: [
-          "Next.js 16.2.6",
+          "Next.js 16 (App Router)",
           "React 19",
           "Supabase",
           "pgvector",
-          "OpenAI API",
+          "Google GenAI SDK",
+          "Gemini API",
           "Vercel AI SDK",
+          "Upstash Redis Rate Limiting",
+          "Upstash Redis (Atomic Telemetry & Global Counters)",
+          "Supabase Database (Detailed Interaction Telemetry)",
+          "Stateless JWT (HMAC-SHA256 Sessions)",
+          "HTTP Cookies (Pacific Midnight Expiry)",
+          "Next.js after() API",
           "Git Submodules",
-          "Reciprocal Rank Fusion (RRF)",
         ],
       },
       comprehensive_description:
@@ -438,7 +444,10 @@ interface GithubRepositoryResponse {
   homepage?: string | null;
 }
 
-function mapGithubRepoToRepository(repo: GithubRepositoryResponse, portfolio: PortfolioProject): Repository {
+function mapGithubRepoToRepository(
+  repo: GithubRepositoryResponse,
+  portfolio: PortfolioProject,
+): Repository {
   return {
     name: repo.name,
     description: repo.description,
@@ -454,7 +463,10 @@ function mapGithubRepoToRepository(repo: GithubRepositoryResponse, portfolio: Po
   };
 }
 
-function filterAndSortRepos(repos: Repository[], lowercaseNames: string[]): Repository[] {
+function filterAndSortRepos(
+  repos: Repository[],
+  lowercaseNames: string[],
+): Repository[] {
   return repos
     .filter((repo) => lowercaseNames.includes(repo.name.toLowerCase()))
     .sort(
@@ -552,8 +564,14 @@ export async function getGithubData() {
       (r): r is Repository => r !== null,
     );
 
-    const pinnedRepositories = filterAndSortRepos(allMappedRepos, lowercasePins);
-    const honorableRepositories = filterAndSortRepos(allMappedRepos, lowercaseHonorable);
+    const pinnedRepositories = filterAndSortRepos(
+      allMappedRepos,
+      lowercasePins,
+    );
+    const honorableRepositories = filterAndSortRepos(
+      allMappedRepos,
+      lowercaseHonorable,
+    );
 
     const remainingRepositories = allMappedRepos.filter(
       (repo) =>
@@ -585,7 +603,10 @@ export async function getGithubData() {
     );
 
     const fallbackPinned = filterAndSortRepos(FALLBACK_REPOS, lowercasePins);
-    const fallbackHonorable = filterAndSortRepos(FALLBACK_REPOS, lowercaseHonorable);
+    const fallbackHonorable = filterAndSortRepos(
+      FALLBACK_REPOS,
+      lowercaseHonorable,
+    );
 
     const fallbackRemaining = FALLBACK_REPOS.filter(
       (repo) =>
