@@ -371,9 +371,9 @@ const FALLBACK_PINNED_NAMES = ["teslimitless", "ylya-bot", "codemafia"];
 function sanitizeContent<T>(obj: T): T {
   if (typeof obj === "string") {
     let sanitized = obj.replace(/\\n/g, "\n");
-    const hy13Regex = /https?:\/\/(?:[a-zA-Z0-9-]+\.)*hy13dev\.com\/?/gi;
+    const hy13Regex = /https?:\/\/(?:www\.)?hy13dev\.com\/?/gi;
     if (hy13Regex.test(sanitized))
-      sanitized = sanitized.replace(hy13Regex, () => "/").replace(/\/+/g, "/");
+      sanitized = sanitized.replace(hy13Regex, () => "/");
     return sanitized as unknown as T;
   }
   if (Array.isArray(obj))
