@@ -1,5 +1,6 @@
 import { cacheLife } from "next/cache";
 import localProfile from "../public/info/profile.json";
+import { tryCatch, tryCatchSync } from "@/lib/utils";
 
 export interface MediaAsset {
   url: string;
@@ -389,6 +390,15 @@ function sanitizeContent<T>(obj: T): T {
   return obj;
 }
 
+async function extractPortfolio(
+  res: Response,
+): Promise<PortfolioProject | null> {
+  const [jsonErr, json] = await tryCatch(res.json());
+  if (!jsonErr && json && json.routing && json.project_meta)
+    return sanitizeContent(json) as PortfolioProject;
+  return null;
+}
+
 async function fetchPortfolio(
   username: string,
   repoName: string,
@@ -396,22 +406,19 @@ async function fetchPortfolio(
 ): Promise<PortfolioProject | null> {
   const branches = ["main", "master"];
   for (const branch of branches) {
-    try {
-      const res = await fetch(
+    const [err, res] = await tryCatch(
+      fetch(
         `https://raw.githubusercontent.com/${username}/${repoName}/${branch}/portfolio.json`,
-      );
-      if (res.ok) {
-        const json = await res.json();
-        if (json && json.routing && json.project_meta)
-          return sanitizeContent(json) as PortfolioProject;
-      }
-    } catch {
-      // Continue to next branch
+      ),
+    );
+    if (!err && res.ok) {
+      const portfolio = await extractPortfolio(res);
+      if (portfolio) return portfolio;
     }
   }
 
-  try {
-    const res = await fetch(
+  const [err, res] = await tryCatch(
+    fetch(
       `https://api.github.com/repos/${username}/${repoName}/contents/portfolio.json`,
       {
         headers: {
@@ -419,14 +426,12 @@ async function fetchPortfolio(
           Accept: "application/vnd.github.v3.raw",
         },
       },
-    );
-    if (res.ok) {
-      const json = await res.json();
-      if (json && json.routing && json.project_meta)
-        return sanitizeContent(json) as PortfolioProject;
-    }
-  } catch {
-    // Ignore
+    ),
+  );
+
+  if (!err && res.ok) {
+    const portfolio = await extractPortfolio(res);
+    if (portfolio) return portfolio;
   }
 
   return null;
@@ -492,31 +497,28 @@ export async function getGithubData() {
 
   let targetPinnedNames = FALLBACK_PINNED_NAMES;
   let targetHonorableNames: string[] = [];
-  try {
-    const profileJson = await getFullProfile();
-    if (profileJson) {
-      if (profileJson.repositories) {
-        if (profileJson.repositories.pinned_repositories)
-          targetPinnedNames = profileJson.repositories.pinned_repositories;
-        if (profileJson.repositories.honorable_mentions_repositories)
-          targetHonorableNames =
-            profileJson.repositories.honorable_mentions_repositories;
-      } else if (profileJson.pinned_repositories)
-        targetPinnedNames = profileJson.pinned_repositories;
-    }
-  } catch (e) {
+  const [profileErr, profileJson] = await tryCatch(getFullProfile());
+  if (!profileErr && profileJson) {
+    if (profileJson.repositories) {
+      if (profileJson.repositories.pinned_repositories)
+        targetPinnedNames = profileJson.repositories.pinned_repositories;
+      if (profileJson.repositories.honorable_mentions_repositories)
+        targetHonorableNames =
+          profileJson.repositories.honorable_mentions_repositories;
+    } else if (profileJson.pinned_repositories)
+      targetPinnedNames = profileJson.pinned_repositories;
+  } else
     console.warn(
       "Failed retrieving dynamic repositories lists from profile.json, applying default keys fallback.",
-      e,
+      profileErr,
     );
-  }
 
   const lowercasePins = targetPinnedNames.map((name) => name.toLowerCase());
   const lowercaseHonorable = targetHonorableNames.map((name) =>
     name.toLowerCase(),
   );
 
-  try {
+  const [error, liveData] = await tryCatch(async () => {
     const [profileRes, reposRes] = await Promise.all([
       fetch(`https://api.github.com/users/${username}`, {
         headers,
@@ -548,15 +550,12 @@ export async function getGithubData() {
     }>;
 
     const repoPromises = reposData.map(async (repo) => {
-      try {
-        const portfolio = await fetchPortfolio(username, repo.name, headers);
-        if (!portfolio) return null;
+      const [portfolioErr, portfolio] = await tryCatch(
+        fetchPortfolio(username, repo.name, headers),
+      );
+      if (portfolioErr || !portfolio) return null;
 
-        return mapGithubRepoToRepository(repo, portfolio);
-      } catch (error) {
-        console.warn(`Failed parsing portfolio.json for ${repo.name}:`, error);
-        return null;
-      }
+      return mapGithubRepoToRepository(repo, portfolio);
     });
 
     const resolvedRepos = await Promise.all(repoPromises);
@@ -579,7 +578,7 @@ export async function getGithubData() {
         !lowercaseHonorable.includes(repo.name.toLowerCase()),
     );
 
-    return sanitizeContent({
+    return {
       profile: {
         username: profileData.login,
         name: profileData.name || FALLBACK_PROFILE.name,
@@ -595,33 +594,35 @@ export async function getGithubData() {
       honorableRepositories,
       repositories: remainingRepositories,
       isLive: true,
-    });
-  } catch (error) {
-    console.error(
-      "Failed fetching live GitHub data, falling back to static:",
-      error,
-    );
+    };
+  });
 
-    const fallbackPinned = filterAndSortRepos(FALLBACK_REPOS, lowercasePins);
-    const fallbackHonorable = filterAndSortRepos(
-      FALLBACK_REPOS,
-      lowercaseHonorable,
-    );
+  if (!error && liveData) return sanitizeContent(liveData);
 
-    const fallbackRemaining = FALLBACK_REPOS.filter(
-      (repo) =>
-        !lowercasePins.includes(repo.name.toLowerCase()) &&
-        !lowercaseHonorable.includes(repo.name.toLowerCase()),
-    );
+  console.error(
+    "Failed fetching live GitHub data, falling back to static:",
+    error,
+  );
 
-    return sanitizeContent({
-      profile: FALLBACK_PROFILE,
-      pinnedRepositories: fallbackPinned,
-      honorableRepositories: fallbackHonorable,
-      repositories: fallbackRemaining,
-      isLive: false,
-    });
-  }
+  const fallbackPinned = filterAndSortRepos(FALLBACK_REPOS, lowercasePins);
+  const fallbackHonorable = filterAndSortRepos(
+    FALLBACK_REPOS,
+    lowercaseHonorable,
+  );
+
+  const fallbackRemaining = FALLBACK_REPOS.filter(
+    (repo) =>
+      !lowercasePins.includes(repo.name.toLowerCase()) &&
+      !lowercaseHonorable.includes(repo.name.toLowerCase()),
+  );
+
+  return sanitizeContent({
+    profile: FALLBACK_PROFILE,
+    pinnedRepositories: fallbackPinned,
+    honorableRepositories: fallbackHonorable,
+    repositories: fallbackRemaining,
+    isLive: false,
+  });
 }
 
 export async function getGithubRepo(name: string) {
@@ -638,7 +639,7 @@ export async function getGithubRepo(name: string) {
   if (process.env.GITHUB_TOKEN)
     headers["Authorization"] = `token ${process.env.GITHUB_TOKEN}`;
 
-  try {
+  const [error, liveData] = await tryCatch(async () => {
     const [repoRes, portfolio] = await Promise.all([
       fetch(`https://api.github.com/repos/${username}/${name}`, {
         headers,
@@ -652,21 +653,22 @@ export async function getGithubRepo(name: string) {
       );
 
     const repo = await repoRes.json();
-
-    return sanitizeContent({
+    return {
       repo: mapGithubRepoToRepository(repo, portfolio),
       isLive: true,
-    });
-  } catch (error) {
-    console.error(`Failed fetching live repo ${name}, using static:`, error);
-    const fallback = FALLBACK_REPOS.find(
-      (r) => r.name.toLowerCase() === name.toLowerCase(),
-    );
-    return sanitizeContent({
-      repo: fallback || null,
-      isLive: false,
-    });
-  }
+    };
+  });
+
+  if (!error && liveData) return sanitizeContent(liveData);
+
+  console.error(`Failed fetching live repo ${name}, using static:`, error);
+  const fallback = FALLBACK_REPOS.find(
+    (r) => r.name.toLowerCase() === name.toLowerCase(),
+  );
+  return sanitizeContent({
+    repo: fallback || null,
+    isLive: false,
+  });
 }
 
 export interface FullProfileData {
@@ -748,17 +750,14 @@ export async function getFullProfile(): Promise<FullProfileData | null> {
   cacheLife("hours");
 
   if (process.env.NEXT_PHASE === "phase-production-build") {
-    try {
-      return sanitizeContent(localProfile);
-    } catch {
-      return null;
-    }
+    const [err, content] = tryCatchSync(() => sanitizeContent(localProfile));
+    return err ? null : content;
   }
 
   const remoteUrl =
     "https://raw.githubusercontent.com/HoodieYlya13/HoodieYlya13/main/profile.json";
 
-  try {
+  const [error, data] = await tryCatch(async () => {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), 3000);
 
@@ -766,17 +765,19 @@ export async function getFullProfile(): Promise<FullProfileData | null> {
     clearTimeout(timeoutId);
 
     if (!res.ok) throw new Error(`Status ${res.status}`);
-    const data = await res.json();
-    return sanitizeContent(data);
-  } catch (error) {
-    console.warn(
-      "⚠️ [getFullProfile] Fetch failed, falling back to local file:",
-      error instanceof Error ? error.message : String(error),
-    );
-    try {
-      return sanitizeContent(localProfile);
-    } catch {
-      return null;
-    }
-  }
+    const json = await res.json();
+    return sanitizeContent(json);
+  });
+
+  if (!error) return data;
+
+  console.warn(
+    "⚠️ [getFullProfile] Fetch failed, falling back to local file:",
+    error instanceof Error ? error.message : String(error),
+  );
+
+  const [fallbackErr, content] = tryCatchSync(() =>
+    sanitizeContent(localProfile),
+  );
+  return fallbackErr ? null : content;
 }

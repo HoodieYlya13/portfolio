@@ -5,6 +5,7 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText as GSAPSplitText } from "gsap/SplitText";
 import { useGSAP } from "@gsap/react";
+import { tryCatchSync } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger, GSAPSplitText, useGSAP);
 
@@ -70,11 +71,7 @@ const SplitText = ({
 
       const existingInstance = splitInstanceMap.get(el);
       if (existingInstance) {
-        try {
-          existingInstance.revert();
-        } catch {
-          /* noop */
-        }
+        tryCatchSync(() => existingInstance.revert());
         splitInstanceMap.delete(el);
       }
 
@@ -155,11 +152,7 @@ const SplitText = ({
         ScrollTrigger.getAll().forEach((st) => {
           if (st.trigger === el) st.kill();
         });
-        try {
-          splitInstance.revert();
-        } catch {
-          /* noop */
-        }
+        tryCatchSync(() => splitInstance.revert());
         splitInstanceMap.delete(el);
         animationCompletedRef.current = false;
       };

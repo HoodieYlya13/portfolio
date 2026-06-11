@@ -3,26 +3,26 @@
 import React, { useEffect, Suspense } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
+import { tryCatchSync } from "@/lib/utils";
+
 let inMemoryHistory: string[] = [];
 
 function getHistory(): string[] {
   if (typeof window === "undefined") return [];
-  try {
+  const [error, history] = tryCatchSync(() => {
     const stored = sessionStorage.getItem("nav_history");
-    return stored ? JSON.parse(stored) : inMemoryHistory;
-  } catch {
-    return inMemoryHistory;
-  }
+    return stored ? (JSON.parse(stored) as string[]) : inMemoryHistory;
+  });
+  return error ? inMemoryHistory : history;
 }
 
 function setHistory(history: string[]) {
   inMemoryHistory = history;
   if (typeof window === "undefined") return;
-  try {
+  const [error] = tryCatchSync(() => {
     sessionStorage.setItem("nav_history", JSON.stringify(history));
-  } catch (e) {
-    console.error("Failed to write nav_history:", e);
-  }
+  });
+  if (error) console.error("Failed to write nav_history:", error);
 }
 
 function NavigationTracker() {

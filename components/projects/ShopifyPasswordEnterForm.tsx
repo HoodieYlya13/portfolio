@@ -4,6 +4,7 @@ import {
   getShopifyStorefrontOrigin,
   getShopifyStorefrontPassword,
 } from "@/lib/shopify-storefront-enter-server";
+import { tryCatch } from "@/lib/utils";
 import type { ShopifyStorefrontHost } from "@/lib/shopify-storefront-previews";
 
 interface ShopifyPasswordEnterFormProps {
@@ -14,11 +15,8 @@ interface ShopifyPasswordEnterFormProps {
 }
 
 async function loadAuthenticityToken(origin: string): Promise<string | null> {
-  try {
-    return await fetchShopifyPasswordAuthenticityToken(origin);
-  } catch {
-    return null;
-  }
+  const [error, token] = await tryCatch(fetchShopifyPasswordAuthenticityToken(origin));
+  return error ? null : token;
 }
 
 export async function ShopifyPasswordEnterForm({

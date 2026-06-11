@@ -1,5 +1,7 @@
 import "server-only";
 
+import { tryCatch } from "@/lib/utils";
+
 const JWT_SECRET =
   process.env.JWT_SECRET ||
   process.env.ANALYTICS_PASSWORD ||
@@ -63,7 +65,7 @@ export async function signJWT(
 export async function verifyJWT(
   token: string,
 ): Promise<Record<string, unknown> | null> {
-  try {
+  const [error, payload] = await tryCatch(async () => {
     const parts = token.split(".");
     if (parts.length !== 3) return null;
 
@@ -85,13 +87,21 @@ export async function verifyJWT(
     const decodedPayloadStr = new TextDecoder().decode(
       base64UrlToBuffer(payloadStr),
     );
-    const payload = JSON.parse(decodedPayloadStr) as Record<string, unknown>;
+    const decoded = JSON.parse(decodedPayloadStr) as Record<string, unknown>;
 
-    if (payload.exp && typeof payload.exp === "number" && Date.now() / 1000 > payload.exp) return null;
+    if (
+      decoded.exp &&
+      typeof decoded.exp === "number" &&
+      Date.now() / 1000 > decoded.exp
+    )
+      return null;
 
-    return payload;
-  } catch (err) {
-    console.error("JWT Verification failed:", err);
+    return decoded;
+  });
+
+  if (error) {
+    console.error("JWT Verification failed:", error);
     return null;
   }
+  return payload;
 }

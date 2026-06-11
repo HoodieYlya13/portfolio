@@ -9,6 +9,7 @@ import { gsap } from "gsap";
 import { sendContactEmail } from "@/app/actions/contact";
 import { contactSchema, type ContactFormData } from "@/app/actions/schemas";
 import SplitText from "@/components/react-bits/SplitText";
+import { tryCatch } from "@/lib/utils";
 
 export function ContactForm() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -34,9 +35,13 @@ export function ContactForm() {
   const onSubmit = async (data: ContactFormData) => {
     const toastId = toast.loading("Transmitting message payload...");
 
-    try {
-      const result = await sendContactEmail(data);
+    const [error, result] = await tryCatch(sendContactEmail(data));
 
+    if (error)
+      toast.error("Internal server error. Please try again later.", {
+        id: toastId,
+      });
+    else if (result) {
       if (result.success) {
         toast.success("Message sent successfully! I'll get back to you soon.", {
           id: toastId,
@@ -46,10 +51,6 @@ export function ContactForm() {
         toast.error(result.error || "Something went wrong. Please try again.", {
           id: toastId,
         });
-    } catch {
-      toast.error("Internal server error. Please try again later.", {
-        id: toastId,
-      });
     }
   };
 
