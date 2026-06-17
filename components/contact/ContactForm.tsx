@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2, Send } from "lucide-react";
@@ -9,10 +9,18 @@ import { gsap } from "gsap";
 import { sendContactEmail } from "@/app/actions/contact";
 import { contactSchema, type ContactFormData } from "@/app/actions/schemas";
 import SplitText from "@/components/react-bits/SplitText";
+import { Turnstile } from "@/components/contact/Turnstile";
 import { tryCatch } from "@/lib/utils";
+
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
 export function ContactForm() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const honeypotRef = useRef<HTMLInputElement>(null);
+  const renderedAtRef = useRef<number>(0);
+
+  const [showCaptcha, setShowCaptcha] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
   const {
     register,
@@ -24,6 +32,8 @@ export function ContactForm() {
   });
 
   useEffect(() => {
+    renderedAtRef.current = Date.now();
+
     if (containerRef.current)
       gsap.fromTo(
         containerRef.current,
@@ -32,27 +42,56 @@ export function ContactForm() {
       );
   }, []);
 
-  const onSubmit = async (data: ContactFormData) => {
-    const toastId = toast.loading("Transmitting message payload...");
+  const handleVerify = useCallback(
+    (token: string) => setCaptchaToken(token),
+    [],
+  );
+  const handleExpire = useCallback(() => setCaptchaToken(null), []);
 
-    const [error, result] = await tryCatch(sendContactEmail(data));
+  const onSubmit = useCallback(
+    async (data: ContactFormData, company: string, elapsedMs: number) => {
+      const toastId = toast.loading("Transmitting message payload...");
 
-    if (error)
-      toast.error("Internal server error. Please try again later.", {
-        id: toastId,
-      });
-    else if (result) {
-      if (result.success) {
-        toast.success("Message sent successfully! I'll get back to you soon.", {
+      const [error, result] = await tryCatch(
+        sendContactEmail({
+          ...data,
+          company,
+          elapsedMs,
+          captchaToken: captchaToken ?? undefined,
+        }),
+      );
+
+      if (error)
+        toast.error("Internal server error. Please try again later.", {
           id: toastId,
         });
-        reset();
-      } else
-        toast.error(result.error || "Something went wrong. Please try again.", {
-          id: toastId,
-        });
-    }
-  };
+      else if (result) {
+        if (result.success) {
+          toast.success(
+            "Message sent successfully! I'll get back to you soon.",
+            { id: toastId },
+          );
+          reset();
+          setShowCaptcha(false);
+          setCaptchaToken(null);
+        } else if (result.requiresCaptcha) {
+          setShowCaptcha(true);
+          setCaptchaToken(null);
+          toast.error(
+            result.error || "Please complete the verification below.",
+            { id: toastId },
+          );
+        } else
+          toast.error(
+            result.error || "Something went wrong. Please try again.",
+            { id: toastId },
+          );
+      }
+    },
+    [captchaToken, reset],
+  );
+
+  const awaitingCaptcha = showCaptcha && !captchaToken;
 
   return (
     <div
@@ -74,7 +113,39 @@ export function ContactForm() {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+      <form
+        onSubmit={(event) => {
+          const company = honeypotRef.current?.value ?? "";
+          const elapsedMs = Date.now() - renderedAtRef.current;
+          void handleSubmit((data) => onSubmit(data, company, elapsedMs))(
+            event,
+          );
+        }}
+        className="space-y-5"
+      >
+        <div
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            left: "-9999px",
+            top: 0,
+            width: 1,
+            height: 1,
+            overflow: "hidden",
+          }}
+        >
+          <label htmlFor="company">Company (leave this empty)</label>
+          <input
+            ref={honeypotRef}
+            id="company"
+            name="company"
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+            defaultValue=""
+          />
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-1.5">
             <label className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
@@ -149,9 +220,22 @@ export function ContactForm() {
           )}
         </div>
 
+        {showCaptcha && TURNSTILE_SITE_KEY && (
+          <div className="space-y-2 animate-fadeIn">
+            <p className="text-xs text-muted-foreground">
+              Quick check to confirm you&apos;re human, then hit send again.
+            </p>
+            <Turnstile
+              siteKey={TURNSTILE_SITE_KEY}
+              onVerify={handleVerify}
+              onExpire={handleExpire}
+            />
+          </div>
+        )}
+
         <button
           type="submit"
-          disabled={isSubmitting}
+          disabled={isSubmitting || awaitingCaptcha}
           className="w-full font-semibold text-sm bg-primary hover:bg-primary/95 text-primary-foreground h-12 rounded-xl flex items-center justify-center gap-2 hover:scale-[1.01] active:scale-[0.99] focus:outline-hidden focus:ring-2 focus:ring-primary/30 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
         >
           {isSubmitting ? (

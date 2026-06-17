@@ -14,3 +14,15 @@ export const contactSchema = z.object({
 });
 
 export type ContactFormData = z.infer<typeof contactSchema>;
+
+export const contactSubmissionSchema = contactSchema.extend({
+  company: z.string().optional().default(""),
+  elapsedMs: z.number().int().nonnegative().optional(),
+  captchaToken: z.string().optional(),
+});
+
+export type ContactSubmission = z.infer<typeof contactSubmissionSchema>;
+
+export type ContactActionResult =
+  | { success: true }
+  | { success: false; error: string; requiresCaptcha?: boolean };

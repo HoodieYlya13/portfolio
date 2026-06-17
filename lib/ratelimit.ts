@@ -1,7 +1,7 @@
 import "server-only";
 import { Ratelimit } from "@upstash/ratelimit";
 import { Redis } from "@upstash/redis";
-import { headers } from "next/headers";
+import { getClientIp } from "@/lib/ip";
 
 export class RateLimitError extends Error {
   constructor() {
@@ -37,6 +37,12 @@ function getLimiter(identifier: string, redis: Redis) {
         limiter: Ratelimit.slidingWindow(10, "1 m"),
         prefix: "rl:ip",
       });
+    case "contact":
+      return new Ratelimit({
+        redis,
+        limiter: Ratelimit.slidingWindow(2, "1 m"),
+        prefix: "rl:ip",
+      });
     default:
       return new Ratelimit({
         redis,
@@ -55,13 +61,21 @@ function getGlobalBudget(identifier: string, redis: Redis) {
   });
 }
 
-async function getClientIp(): Promise<string> {
-  const headerList = await headers();
-  return (
-    headerList.get("x-real-ip") ??
-    headerList.get("x-forwarded-for")?.split(",")[0]?.trim() ??
-    "unknown"
-  );
+
+
+export async function isRepeatSubmission(identifier: string): Promise<boolean> {
+  const redis = getRedisClient();
+  if (!redis) return false;
+
+  const ip = await getClientIp();
+  const softLimiter = new Ratelimit({
+    redis,
+    limiter: Ratelimit.slidingWindow(1, "1 m"),
+    prefix: "rl:soft",
+  });
+
+  const { success } = await softLimiter.limit(`${identifier}-${ip}`);
+  return !success;
 }
 
 export async function checkRateLimit(identifier: string): Promise<void> {

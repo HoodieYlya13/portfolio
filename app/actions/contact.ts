@@ -1,20 +1,45 @@
 "use server";
 
 import { Resend } from "resend";
-import { contactSchema, type ContactFormData } from "./schemas";
-import { checkRateLimit, RateLimitError } from "@/lib/ratelimit";
+import {
+  contactSubmissionSchema,
+  type ContactSubmission,
+  type ContactActionResult,
+} from "./schemas";
+import {
+  checkRateLimit,
+  isRepeatSubmission,
+  RateLimitError,
+} from "@/lib/ratelimit";
+import { isCaptchaEnabled, verifyTurnstileToken } from "@/lib/turnstile";
 import { tryCatch } from "@/lib/utils";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export async function sendContactEmail(data: ContactFormData) {
-  const validatedFields = contactSchema.safeParse(data);
+const MIN_HUMAN_FILL_MS = 3000;
+
+export async function sendContactEmail(
+  data: ContactSubmission,
+): Promise<ContactActionResult> {
+  const validatedFields = contactSubmissionSchema.safeParse(data);
 
   if (!validatedFields.success)
     return {
       success: false,
       error: "Invalid form submission data. Please check your inputs.",
     };
+
+  const {
+    firstName,
+    lastName,
+    email,
+    message,
+    company,
+    elapsedMs,
+    captchaToken,
+  } = validatedFields.data;
+
+  if (company.trim().length > 0) return { success: true };
 
   const [error] = await tryCatch(checkRateLimit("contact"));
   if (error) {
@@ -26,7 +51,31 @@ export async function sendContactEmail(data: ContactFormData) {
     throw error;
   }
 
-  const { firstName, lastName, email, message } = validatedFields.data;
+  if (isCaptchaEnabled()) {
+    const tooFast = elapsedMs === undefined || elapsedMs < MIN_HUMAN_FILL_MS;
+    const [, repeat] = await tryCatch(isRepeatSubmission("contact"));
+    const suspect = tooFast || repeat === true;
+
+    if (suspect) {
+      if (!captchaToken)
+        return {
+          success: false,
+          requiresCaptcha: true,
+          error: "Please complete the verification to continue.",
+        };
+
+      const [verifyError, valid] = await tryCatch(
+        verifyTurnstileToken(captchaToken),
+      );
+
+      if (verifyError || !valid)
+        return {
+          success: false,
+          requiresCaptcha: true,
+          error: "Verification failed. Please try again.",
+        };
+    }
+  }
 
   if (process.env.NODE_ENV !== "production") {
     console.log(
