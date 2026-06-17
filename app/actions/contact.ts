@@ -34,12 +34,12 @@ export async function sendContactEmail(
     lastName,
     email,
     message,
-    company,
+    website,
     elapsedMs,
     captchaToken,
   } = validatedFields.data;
 
-  if (company.trim().length > 0) return { success: true };
+  if (website.trim().length > 0) return { success: true };
 
   const [error] = await tryCatch(checkRateLimit("contact"));
   if (error) {

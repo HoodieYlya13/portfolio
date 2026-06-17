@@ -26,10 +26,28 @@ export function ContactForm() {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors, isSubmitting },
   } = useForm<ContactFormData>({
     resolver: zodResolver(contactSchema),
+    defaultValues: { firstName: "", lastName: "", email: "", message: "" },
   });
+
+  const syncDomValues = useCallback(
+    (form: HTMLFormElement) => {
+      (["firstName", "lastName", "email", "message"] as const).forEach(
+        (name) => {
+          const field = form.elements.namedItem(name);
+          if (
+            field instanceof HTMLInputElement ||
+            field instanceof HTMLTextAreaElement
+          )
+            setValue(name, field.value);
+        },
+      );
+    },
+    [setValue],
+  );
 
   useEffect(() => {
     renderedAtRef.current = Date.now();
@@ -49,13 +67,13 @@ export function ContactForm() {
   const handleExpire = useCallback(() => setCaptchaToken(null), []);
 
   const onSubmit = useCallback(
-    async (data: ContactFormData, company: string, elapsedMs: number) => {
+    async (data: ContactFormData, website: string, elapsedMs: number) => {
       const toastId = toast.loading("Transmitting message payload...");
 
       const [error, result] = await tryCatch(
         sendContactEmail({
           ...data,
-          company,
+          website,
           elapsedMs,
           captchaToken: captchaToken ?? undefined,
         }),
@@ -115,9 +133,10 @@ export function ContactForm() {
 
       <form
         onSubmit={(event) => {
-          const company = honeypotRef.current?.value ?? "";
+          syncDomValues(event.currentTarget);
+          const website = honeypotRef.current?.value ?? "";
           const elapsedMs = Date.now() - renderedAtRef.current;
-          void handleSubmit((data) => onSubmit(data, company, elapsedMs))(
+          void handleSubmit((data) => onSubmit(data, website, elapsedMs))(
             event,
           );
         }}
@@ -134,11 +153,11 @@ export function ContactForm() {
             overflow: "hidden",
           }}
         >
-          <label htmlFor="company">Company (leave this empty)</label>
+          <label htmlFor="website">Website (leave this empty)</label>
           <input
             ref={honeypotRef}
-            id="company"
-            name="company"
+            id="website"
+            name="website"
             type="text"
             tabIndex={-1}
             autoComplete="off"
@@ -154,6 +173,7 @@ export function ContactForm() {
             <input
               {...register("firstName")}
               type="text"
+              autoComplete="given-name"
               disabled={isSubmitting}
               className="w-full bg-background/70 dark:bg-black/40 border border-border/80 dark:border-border/45 rounded-xl px-4 py-3 text-[1rem] md:text-sm text-foreground placeholder-muted-foreground/60 focus:outline-hidden focus:border-primary/80 focus:ring-2 focus:ring-primary/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
               placeholder="John"
@@ -172,6 +192,7 @@ export function ContactForm() {
             <input
               {...register("lastName")}
               type="text"
+              autoComplete="family-name"
               disabled={isSubmitting}
               className="w-full bg-background/70 dark:bg-black/40 border border-border/80 dark:border-border/45 rounded-xl px-4 py-3 text-[1rem] md:text-sm text-foreground placeholder-muted-foreground/60 focus:outline-hidden focus:border-primary/80 focus:ring-2 focus:ring-primary/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
               placeholder="Doe"
@@ -191,6 +212,7 @@ export function ContactForm() {
           <input
             {...register("email")}
             type="email"
+            autoComplete="email"
             disabled={isSubmitting}
             className="w-full bg-background/70 dark:bg-black/40 border border-border/80 dark:border-border/45 rounded-xl px-4 py-3 text-[1rem] md:text-sm text-foreground placeholder-muted-foreground/60 focus:outline-hidden focus:border-primary/80 focus:ring-2 focus:ring-primary/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
             placeholder="johndoe@example.com"
@@ -209,6 +231,7 @@ export function ContactForm() {
           <textarea
             {...register("message")}
             rows={5}
+            autoComplete="off"
             disabled={isSubmitting}
             className="w-full bg-background/70 dark:bg-black/40 border border-border/80 dark:border-border/45 rounded-xl p-4 text-[1rem] md:text-sm text-foreground placeholder-muted-foreground/60 resize-none focus:outline-hidden focus:border-primary/80 focus:ring-2 focus:ring-primary/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
             placeholder="Tell me about your project stack requirements..."
