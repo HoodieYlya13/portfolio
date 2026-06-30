@@ -24,6 +24,8 @@ import MockBrowserWrapper from "@/components/projects/MockBrowserWrapper";
 import { ProjectDemoPreview } from "@/components/projects/ProjectDemoPreview";
 import { Repository } from "@/lib/github";
 import { Markdown } from "@/components/ui/Markdown";
+import { isVideoUrl } from "@/lib/utils";
+import VideoPreviewPlayer from "@/components/projects/VideoPreviewPlayer";
 
 interface ProjectDetailContentProps {
   repo: Repository;
@@ -98,15 +100,24 @@ export function ProjectDetailContent({
 
       {portfolio?.routing?.hero_image && (
         <div className="relative w-full z-10">
-          <Image
-            src={portfolio.routing.hero_image}
-            alt={portfolio.routing.project_name}
-            width={1200}
-            height={630}
-            priority
-            unoptimized
-            className="w-full h-auto object-contain"
-          />
+          {isVideoUrl(portfolio.routing.hero_image) ? (
+            <VideoPreviewPlayer
+              src={portfolio.routing.hero_image}
+              title={portfolio.routing.project_name}
+              className="w-full aspect-auto rounded-xl border-none cursor-default bg-transparent"
+              videoClassName="w-full h-auto object-cover"
+            />
+          ) : (
+            <Image
+              src={portfolio.routing.hero_image}
+              alt={portfolio.routing.project_name}
+              width={1200}
+              height={630}
+              priority
+              unoptimized
+              className="w-full h-auto object-contain rounded-3xl"
+            />
+          )}
         </div>
       )}
 

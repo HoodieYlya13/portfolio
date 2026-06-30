@@ -290,7 +290,7 @@
       "dockercraft",
       "insta-v2",
       "honey-pot",
-      "passkey-auth-template"
+      "auth"
     ]
   }
 }

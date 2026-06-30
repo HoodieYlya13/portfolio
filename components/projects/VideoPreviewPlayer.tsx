@@ -2,15 +2,20 @@
 
 import { useRef, useState, useEffect } from "react";
 import { Play, Pause, Volume2, VolumeX, Maximize } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface VideoPreviewPlayerProps {
   src: string;
   title: string;
+  className?: string;
+  videoClassName?: string;
 }
 
 export default function VideoPreviewPlayer({
   src,
   title,
+  className,
+  videoClassName,
 }: VideoPreviewPlayerProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -151,7 +156,10 @@ export default function VideoPreviewPlayer({
 
   return (
     <div
-      className="w-full relative aspect-video bg-black overflow-hidden group select-none cursor-pointer border border-border/40 rounded-2xl"
+      className={cn(
+        "w-full relative aspect-video bg-black overflow-hidden group select-none cursor-pointer border border-border/40 rounded-2xl",
+        className
+      )}
       onMouseMove={handleMouseMove}
       onMouseLeave={() => setShowControls(false)}
       onClick={togglePlay}
@@ -160,7 +168,7 @@ export default function VideoPreviewPlayer({
         ref={videoRef}
         src={src}
         title={title}
-        className="w-full h-full object-cover"
+        className={cn("w-full h-full object-cover", videoClassName)}
         loop
         muted
         playsInline

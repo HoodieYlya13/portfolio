@@ -5,6 +5,10 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export function isVideoUrl(url: string): boolean {
+  return /\.(mp4|webm|mov|ogg)($|\?)/i.test(url) || url.includes("video");
+}
+
 export async function tryCatch<T, E = Error>(
   promiseOrFn: Promise<T> | (() => Promise<T> | T),
 ): Promise<[E, null] | [null, T]> {

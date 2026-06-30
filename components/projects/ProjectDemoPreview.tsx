@@ -4,6 +4,7 @@ import { ShopifyStaticStorePreview } from "@/components/projects/ShopifyStaticSt
 import { getShopifyStorefrontHost } from "@/lib/shopify-storefront-previews";
 import { LoadingSpinner } from "@/components/ui/LoadingSpinner";
 import VideoPreviewPlayer from "@/components/projects/VideoPreviewPlayer";
+import { isVideoUrl } from "@/lib/utils";
 
 interface ProjectDemoPreviewProps {
   src: string;
@@ -20,10 +21,6 @@ function getYouTubeEmbedUrl(url: string): string | null {
     return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&modestbranding=1&rel=0&iv_load_policy=3&playsinline=1&enablejsapi=1`;
   }
   return null;
-}
-
-function isVideoUrl(url: string): boolean {
-  return /\.(mp4|webm|mov|ogg)($|\?)/i.test(url) || url.includes("video");
 }
 
 export function ProjectDemoPreview({ src, title }: ProjectDemoPreviewProps) {
