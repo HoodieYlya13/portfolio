@@ -1,0 +1,1518 @@
+{
+  "profile": {
+    "username": "HoodieYlya13",
+    "name": "Ylya",
+    "headline": "Software Engineer / Next.js Expert / Full Stack Developer",
+    "followers": 7,
+    "following": 6,
+    "website": "HY13dev.com",
+    "linkedIn": "https://www.linkedin.com/in/ylya-martchenko",
+    "githubUrl": "https://github.com/HoodieYlya13",
+    "public_repos": 31
+  },
+  "pinnedRepositories": [
+    {
+      "name": "teslimitless",
+      "description": "⚡ Restoring physical stalks to the Tesla Model 3 Highland and remapping capacitive steering wheel buttons using a FreeRTOS ESP32 LIN/CAN gateway & React Native HUD",
+      "html_url": "https://github.com/HoodieYlya13/teslimitless",
+      "language": "C++",
+      "languages": [
+        "C++",
+        "TypeScript",
+        "Python"
+      ],
+      "stargazers_count": 1,
+      "forks_count": 0,
+      "fork": false,
+      "updated_at": "2026-06-11T15:40:09Z",
+      "homepage": "https://www.hy13dev.com/teslimitless-video.mp4",
+      "portfolio": {
+        "routing": {
+          "repo_name": "teslimitless",
+          "project_name": "TesLimitless",
+          "hero_image": "https://hy13dev.com/img/teslimitless-app.png"
+        },
+        "project_meta": {
+          "role": "Lead Embedded & Mobile Systems Engineer",
+          "development_phase": "Functional Prototype (4th-Year Capstone)",
+          "languages": [
+            "C++",
+            "TypeScript",
+            "Python"
+          ],
+          "frameworks_and_tools": [
+            "ESP32",
+            "FreeRTOS",
+            "Arduino Core",
+            "React Native",
+            "LIN-bus (TJA1021)",
+            "CAN-bus (MCP2515)",
+            "react-native-ble-plx",
+            "SPI & UART Protocols",
+            "Resistor Ladder Network",
+            "CAD"
+          ]
+        },
+        "comprehensive_description": "A high-impact hardware-software retrofitting platform engineered to solve a major user experience pain point: the complete absence of physical control stalks on the Tesla Model 3 Highland. TesLimitless retrofits custom-engineered physical turn-signal and high-beam stalks back onto the steering column, and repurposes the now-redundant factory capacitive steering wheel buttons for customized macros. Running a custom asymmetric dual-core FreeRTOS C++ firmware stack on an ESP32, the system acts as a real-time LIN-bus Man-in-the-Middle (MITM) gateway between the car body controller and the steering wheel assembly. When a physical stalk is pressed or a steering button is touched, the ESP32 intercepts the frame, transmits a mock 'idle' payload to mask the default factory action, and injects custom CAN-bus commands safely via the diagnostic port. The landscape React Native companion app acts as both a premium cockpit HUD and a customization mapping controller. Users can dynamically remap steering wheel controls via the mobile UI—for example, binding the capacitive high-beam button to toggle Comfort/Sport acceleration—streaming configuration tables over BLE to the ESP32 for execution.",
+        "engineering_highlights": [
+          "Retrofitted custom-engineered physical turn-signal and high-beam stalks onto the Highland steering column, routing physical switches through an ESP32 while serving as a real-time LIN-bus MITM gateway (19200 baud) to override factory controls.",
+          "Developed a custom remapping system that intercepts steering wheel LIN-bus frames, dynamically injects spoofed 'idle' payloads to mask physical inputs from the vehicle body controller, and translates those inputs into custom CAN-bus macros.",
+          "Designed a non-invasive CAN integration connecting the ESP32 to the high-speed vehicle network strictly through the Tesla diagnostic port, reading live telemetry and injecting remapped command frames safely.",
+          "Leveraged high-priority FreeRTOS task pinning to bind safety-critical LIN-bus frame interception loops directly to Core 1, ensuring microsecond-accurate determinism with zero risk of processing starvation.",
+          "Engineered an analog resistor-ladder button network (SW1 to SW5) on ESP32 GPIO 34 as a secondary input simulator for bench-testing CAN-bus injection routines prior to physical LIN-bus integration.",
+          "Designed a custom, landscape-optimized React Native cockpit HUD using react-native-ble-plx that performs smooth state-interpolation of telemetry, rendering an interactive, color-coded battery status indicator and a dynamic SVG power/regen visualization arc."
+        ],
+        "measurable_metrics": {
+          "execution_latency": "Sub-1.5ms LIN-bus active MITM interception and forwarding latency; under 10ms CAN-bus sniffing and decoding cycle; sub-16ms update periods for BLE telemetry streaming.",
+          "ui_performance": "Hardware-accelerated rendering of the dynamic SVG power/regen visualization arc; telemetry state changes processed with sub-16ms UI updates matching the BLE streaming cycle.",
+          "operational_cost": "Zero server or external runtime expenses utilizing strictly direct on-device peripheral decoding and local P2P Bluetooth communication."
+        },
+        "star_challenges": [
+          {
+            "situation": "Real-time LIN-bus master-slave communication on the Tesla Model 3 Highland requires steering wheel responses to body controller poll queries to be processed and forwarded within a strict 1-2ms response window to prevent frame timeout errors. Executing slow BLE transport, analog polling, or high-throughput CAN sniffing on a single-thread loop caused execution delays, leading to LIN response timeouts, haptic system dropouts, and vehicle communication error codes.",
+            "action": "Leveraged an asymmetric dual-core FreeRTOS C++ firmware layout on the ESP32. Locked the safety-critical, time-sensitive LIN-bus MITM transceiver listener and injector tasks directly to Core 1 using high-priority FreeRTOS task pinning, while offloading high-throughput CAN packet sniffing, analog edge-trigger checks, and BLE client streaming to Core 2.",
+            "result": "Completely isolated the physical LIN-bus MITM intercept loop from networking and display overhead, guaranteeing deterministic sub-1.5ms response forwarding with zero LIN-bus timeout errors or haptic system dropouts.",
+            "inline_image": ""
+          },
+          {
+            "situation": "Initial attempts to hijack capacitive turn signals and column commands directly on the high-speed chassis CAN-bus suffered from severe bus noise, packet collisions, and could not easily bypass or prevent the car's default factory responses to physical stalk presses.",
+            "action": "Shifted the engineering strategy to place the ESP32 directly as a physical MITM gateway on the steering wheel LIN-bus. Reverse-engineered the capacitive button touch profiles and programmed the ESP32 to selectively overwrite these packets, returning a spoofed 'idle' state to the car's body controller over LIN-bus while generating and transmitting customized commands over the high-speed CAN-bus instead.",
+            "result": "Enabled absolute control over Highland capacitive inputs—effectively remapping turn signals, wipers, and media scrolls to custom macros without triggering default factory actions or dashboard error alerts.",
+            "inline_image": ""
+          },
+          {
+            "situation": "Streaming large JSON telemetry payloads or raw packets directly via Bluetooth Low Energy saturated the characteristic bandwidth, causing packet buffering, lagging speedometers, and jerky HUD UI updates in the React Native companion app.",
+            "action": "Implemented an efficient, compacted telemetry data structure mapping compressed values directly to the BLE GATT server notification loop, coupled with a customized requestAnimationFrame-based timing interpolator in the React Native state manager.",
+            "result": "Bypassed mobile OS Bluetooth transmission buffers, delivering fluid, jitter-free dashboard telemetry updates and achieving a response lag below 16ms for real-time turn signal and power animations.",
+            "inline_image": ""
+          }
+        ],
+        "architectural_deep_dive": {
+          "text": "The platform connects a dual-core ESP32 processor to an MCP2515 CAN controller via high-speed SPI (GPIO 5 as CS) and a dual TJA1021 LIN-bus transceiver array. The LIN interface acts as a physical MITM gateway (pins 16/17 for body controller, pins 32/33 for capacitive steering assembly) to capture turn signal and stalk inputs. By returning mock idle payloads over LIN, the ESP32 overrides standard vehicle controls. For CAN integration, the controller interfaces directly with the vehicle's diagnostic port, reading high-speed telemetry frames and injecting remapped actions safely. These low-level processing domains are isolated on-chip using FreeRTOS core-affinity mapping, broadcasting dynamic state changes up to the landscape React Native cockpit HUD app over a custom BLE GATT notification service (12345678-1234-5678-1234-56789abcdef0), which concurrently transmits user customization mappings back to the transceiver controller.",
+          "illustration": {
+            "url": "https://hy13dev.com/img/teslimitless-schema.png",
+            "alt": "TesLimitless Asymmetric Dual-Core System Architecture Schema",
+            "caption": "Hardware and software layer separation routing Core 1 and Core 2 tasks through physical transceivers."
+          }
+        },
+        "lessons_learned": "When dealing with real-time vehicle electronics integration, safety-critical bus loops must enforce strict hardware-level isolation boundaries and deterministic watchdog safety circuits using multi-core OS features like FreeRTOS before introducing high-level networking features."
+      }
+    },
+    {
+      "name": "confluence-bot",
+      "description": "RBAC-enforced MCP documentation RAG, end to end: Python MCP server with 4-layer security over live Confluence + Next.js console to experience it in the browser. Live demo, $0/month.",
+      "html_url": "https://github.com/HoodieYlya13/confluence-bot",
+      "language": "Python",
+      "languages": [
+        "Python",
+        "TypeScript",
+        "Rust",
+        "HTML",
+        "Shell"
+      ],
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "fork": false,
+      "updated_at": "2026-06-30T10:27:58Z",
+      "homepage": "https://confluence-bot.hy13dev.com",
+      "portfolio": {
+        "routing": {
+          "repo_name": "confluence-bot",
+          "project_name": "ConfluenceBot",
+          "hero_image": "https://hy13dev.com/confluence-bot-spotlight.mp4"
+        },
+        "project_meta": {
+          "role": "Applied AI & Full-Stack Systems Engineer",
+          "development_phase": "Production-Deployed: Python MCP Server + Next.js Live Console + Cross-Platform Tauri Desktop Spotlight (macOS / Windows / Linux)",
+          "languages": [
+            "Python",
+            "TypeScript",
+            "Rust",
+            "HTML",
+            "Shell"
+          ],
+          "frameworks_and_tools": [
+            "FastMCP (Model Context Protocol)",
+            "MCP TypeScript SDK (Streamable HTTP Client)",
+            "Tauri 2 (Rust Desktop, Global Shortcut)",
+            "rmcp (Rust MCP SDK, Streamable HTTP Client)",
+            "OpenID Connect / OAuth 2.0 Authorization Code + PKCE (self-hosted IdP, desktop deep-link sign-in, JWKS access-token verification)",
+            "tauri-action (Cross-Platform Release Matrix: macOS / Windows / Linux)",
+            "tauri-plugin-updater (Signed In-App Self-Update via GitHub Releases)",
+            "LangGraph (StateGraph)",
+            "LlamaIndex",
+            "ChromaDB (Embedded)",
+            "Sentence-Transformers (all-MiniLM-L6-v2)",
+            "Google GenAI / Gemini API",
+            "Ollama",
+            "Next.js 16 (Cache Components / PPR, React Compiler, Server Actions)",
+            "Tailwind CSS 4",
+            "Upstash Redis (Rate Limiting)",
+            "Starlette / ASGI",
+            "Prometheus (Custom Exposition + TypeScript Parser)",
+            "pytest & unittest",
+            "Docker (Multi-Stage, Rootless)",
+            "GitHub Actions (Two-Speed CI/CD)",
+            "Hugging Face Spaces",
+            "Vercel",
+            "Atlassian Confluence Cloud REST API"
+          ]
+        },
+        "comprehensive_description": "A complete, production-deployed Model Context Protocol system built around one idea: the same question must yield different answers depending on who is asking — and nothing else must ever leak. The umbrella repo combines two submodules. The first is a Python MCP server exposing a retrieval-augmented knowledge base built from a live Atlassian Confluence instance, implementing a zero-trust four-layer security model: bearer-token authentication, ACL filters pushed inside the ChromaDB vector query, a LangGraph context-verification node, and a post-generation leak scanner — all gated by an automated 8-scenario evaluation suite targeting 0.00% leakage. The bearer presented to the server can be either a pre-shared role token (for anonymous demos) or an OpenID Connect access token from a self-hosted identity provider, verified by the server against the provider's JWKS and mapped to a role by its claims — so the same RBAC model is driven by static demo credentials and by real federated identity interchangeably. The second is a server-first Next.js 16 console that makes the access-control story tangible in a browser: a live health and Prometheus metrics dashboard, and an RBAC playground that runs one question through two genuine MCP sessions holding different bearer tokens, in two modes: a retrieval mode that shows side by side which document chunks each authorization level may retrieve, and an answer mode that runs the server-side LangGraph agent and contrasts the grounded answer each role receives. A third submodule is a Tauri desktop spotlight written in Rust: a global hotkey summons a frameless command bar that calls the server's agent through the official Rust MCP SDK and returns a grounded answer with links straight to the source Confluence pages, with the bearer token held in the trusted Rust process and never exposed to the webview; a released build signs in directly against the self-hosted OIDC identity provider over an Authorization-Code + PKCE deep-link round trip (receiving access and refresh tokens whose role is fixed by the user's account, with no role picker), while a development build falls back to the console's hardcoded-persona demo sign-in — and the distributed binary holds no secret either way. The desktop app is downloadable for macOS, Windows, and Linux and keeps itself up to date through a signed in-app updater that pulls new releases from GitHub and verifies their signatures before installing. The whole system runs 24/7 on Hugging Face Spaces and Vercel at $0/month infrastructure cost.",
+        "engineering_highlights": [
+          "Designed a secure Four-Layer Enforcement Security Model (bearer token validation -> ACL query filter pushdown -> LangGraph context verifier node -> post-generation register leak scanner) ensuring complete authorization separation where a compromised retriever or a prompt injection embedded in the corpus cannot leak unauthorized content.",
+          "Implemented ACL Pushdown in ChromaDB using metadata filters evaluated natively inside the vector query, preventing unauthorized document chunks from ever entering the retrieval candidate set regardless of calling-code behavior.",
+          "Architected a Structure-Preserving Layout Chunker that parses Confluence XHTML into clean Markdown while keeping scientific tables atomic and carrying active heading context down through all generated sub-chunks.",
+          "Developed a Three-Phase LangGraph State Graph (router -> retrieve -> integrate -> verify -> generate/refuse), decoupling context verification from generation and rendering the safety pipeline as an inspectable execution graph.",
+          "Exposed two MCP deployment patterns from one server under identical RBAC: capable clients (Claude Desktop, Claude Code) call the raw retrieval tools and reason for themselves, while thin or untrusted clients call a single ask tool that runs the full LangGraph agent server-side — so the context-verifier node and post-generation leak scanner (layers 3-4) are enforced regardless of how much the caller can be trusted.",
+          "Built a dual-role RBAC playground as a server-first Next.js 16 app: one query fans out to two real MCP sessions via the official TypeScript SDK over streamable HTTP, in two modes — a retrieval mode that highlights the chunks withheld from the lower-privileged role, and an answer mode that runs the server-side LangGraph agent and contrasts each role's grounded answer — and the entire flow is a GET form driven by URL search params that works with JavaScript disabled, the only client component being a pending-state submit button.",
+          "Eliminated the console's JSON API surface entirely: bearer tokens are server-only, the browser receives rendered HTML and RSC payloads, and the single path to the MCP server is a rate-limited server render (per-IP sliding window plus a global daily budget, fail-closed in production).",
+          "Federated the MCP server's bearer authentication to a self-hosted OpenID Connect identity provider without losing the demo path: the ASGI middleware first checks a pre-shared token registry (anonymous demos), then verifies the bearer as an OIDC access token against the provider's JWKS (issuer, audience and RS256 signature) and maps its roles claim onto the same role context — failing closed when no recognized role is present — so static demo credentials and real federated identity drive one RBAC model interchangeably and the feature is dark unless an issuer and audience are configured.",
+          "Built a Tauri desktop spotlight in Rust that drives the same RBAC-governed server from a third language: a global-hotkey, frameless, always-on-top command bar calls the agent through the official rmcp SDK over streamable HTTP and renders the grounded answer with links to the source Confluence pages, while the bearer token stays inside the Rust process and the webview only ever receives rendered text — the desktop analog of the console's server-only tokens and the server's own STDIO_ROLE model, where the client never sends its own role; a released build signs in directly against the OIDC provider over an Authorization-Code + PKCE deep-link round trip (redeemed by the Rust process, never the webview) and renews its access token in place via the refresh token, while a development build uses the console's hardcoded-persona demo sign-in, so the shipped binary holds no secret either way; the app is distributed as unsigned macOS, Windows, and Linux installers built by a GitHub Actions tauri-action matrix, with the macOS-only NSPanel overlay cfg-gated behind a portable always-on-top-window fallback so one codebase builds on all three OSes; and installed copies keep themselves current with a Rust-driven self-updater (tauri-plugin-updater) that reads the GitHub releases feed and refuses to install any downloaded build whose signature does not verify against a public key baked into the app, with the private signing key held only in CI.",
+          "Created a zero-dependency Prometheus pipeline on both ends: a custom Python metrics exporter exposing tool-call rates, latency, sync state, and layer-specific RBAC denials, plus a dependency-free TypeScript exposition parser rendering them as semantic dashboard cards.",
+          "Engineered a Two-Speed CI/CD Pipeline in GitHub Actions running static analysis and offline evaluation gates in seconds per push, combined with nightly jobs executing full semantic evaluations, adversarial probe suites, Trivy scans, and self-healing sync against the deployed Space."
+        ],
+        "measurable_metrics": {
+          "execution_latency": "Sub-second retrieval with CPU-local all-MiniLM-L6-v2 embeddings and sub-10ms embedded ChromaDB queries; the console streams results over Partial Prerendering so the static shell paints instantly while both MCP role sessions resolve in parallel.",
+          "ui_performance": "Both console routes build as Partial Prerender (static HTML shell, server-streamed dynamic content) with the React Compiler owning all memoization; total client-side JavaScript beyond the framework is a single useFormStatus submit button, and the RBAC playground is fully functional with JavaScript disabled.",
+          "operational_cost": "$0/month for a 24/7 public system: Hugging Face Spaces (CPU Basic) for the MCP server, Vercel free tier for the console, local embedding computation, Gemini API free tier with tiered model fallback, and Upstash free tier for rate limiting."
+        },
+        "star_challenges": [
+          {
+            "situation": "Traditional RAG pipelines trust the vector database output, leaving them vulnerable to buggy retriever logic or prompt injections hidden inside the corpus (a permanent 'SYSTEM OVERRIDE: ignore all previous instructions...' fixture lives in the live Confluence space to prove the point).",
+            "action": "Implemented a strict four-layer security boundary: ACL filters pushed directly into the Chroma query, a dedicated LangGraph verify node auditing chunk-level permissions after retrieval, injection-hardened prompting, and a post-generation regex leak scanner checking register addresses in the LLM output against the authorized context.",
+            "result": "Achieved a 0.00% RBAC violation/leakage rate with zero adversarial probes leaked, verified continuously by the gated evaluation suite — the live LLM quotes the embedded injection as data and refuses to obey it.",
+            "inline_image": ""
+          },
+          {
+            "situation": "Exposing a public, anonymous web playground over the MCP server meant handing real bearer-token sessions to unknown visitors — risking token exposure, quota-draining abuse of the free-tier Space, and a needlessly large attack surface from conventional JSON API routes.",
+            "action": "Rebuilt the console server-first: tokens guarded by server-only imports, all three API routes deleted in favor of server actions and a next/form GET flow so the browser only ever receives rendered HTML, and Upstash rate limiting keyed on platform-set IP headers (unspoofable, unlike cookie-based identity) with a per-IP sliding window plus a global daily budget that fails closed in production.",
+            "result": "Anonymous visitors can run real dual-role MCP comparisons against the live index while tokens never reach the client, the only path to the upstream server is a rate-limited server render, and the playground degrades gracefully (including working with JavaScript disabled).",
+            "inline_image": ""
+          },
+          {
+            "situation": "The demo needed real federated sign-in for the desktop app — production users authenticating as themselves and receiving a role from their account — without breaking the anonymous, account-free demos the public playground and recruiters rely on.",
+            "action": "Stood up a self-hosted OpenID Connect provider and made the desktop app sign in directly against it over Authorization-Code + PKCE (public client, no secret in the binary), receiving access and refresh tokens; taught the MCP server to accept either a pre-shared demo token or an OIDC access token, verifying the latter against the provider's JWKS and mapping its roles claim onto the existing role context, failing closed and staying dark unless an issuer and audience are configured.",
+            "result": "One RBAC model is now driven interchangeably by static demo credentials and by real federated identity; production Spotlight users get a role fixed by their account with no role picker and silent token refresh, while anonymous demos keep working unchanged.",
+            "inline_image": ""
+          },
+          {
+            "situation": "Standard HTML-to-Markdown libraries split or corrupt complex data tables, destroying the semantic meaning of diagnostic register parameters when chunked across sliding windows.",
+            "action": "Built a custom ConfluenceSanitizationEngine that extracts XHTML tables, collapses inner newlines, normalizes row-column counts, and pre-renders Markdown tables wrapped in blank-line boundaries so the chunker treats them atomically.",
+            "result": "Passed 100% of table-parsing integrity checks in the evaluation suite, preserving structure and data accuracy across all document pages.",
+            "inline_image": ""
+          },
+          {
+            "situation": "Free-tier Gemini endpoints frequently rate-limit or exhaust quota under heavy evaluation runs, causing generation to drop and CI to fail; the free-tier Space additionally sleeps when idle, so a visitor's first request often hits a cold upstream.",
+            "action": "Engineered a tiered LLM fallback hierarchy (prioritized Gemini models, Ollama for offline execution, a deterministic stub for CI gating) and made the console treat the sleeping Space as an explicit 'waking up' state with independent per-role failure handling rather than an error page.",
+            "result": "Maintained uninterrupted RAG generation across CI and production under rate-limit constraints, and the first click after a quiet week shows a friendly wake-up state instead of a failure.",
+            "inline_image": ""
+          }
+        ],
+        "architectural_deep_dive": {
+          "text": "The Python server syncs Atlassian Confluence page version histories, parses XHTML into clean Markdown, and indexes chunks into ChromaDB with role-permission metadata. Any MCP client — Claude Desktop, Claude Code, the Next.js console, or the Rust desktop spotlight — connects over streamable HTTP with a bearer token that ASGI middleware maps to a role context; that bearer is either a pre-shared role token or an OpenID Connect access token verified against the identity provider's JWKS and mapped by its roles claim, after which role filters are pushed inside the vector query, a LangGraph verify node audits the retrieved context, an injection-hardened prompt drives the tiered Gemini fallback group, and a leak scanner checks the final output, with every decision recorded in Prometheus metrics. The console is the system's public window: server components fetch /health and parse the Prometheus exposition into semantic cards, while the RBAC playground — a GET form whose URL is the state — fans one query out to both role sessions in parallel through the official MCP TypeScript SDK — comparing either the raw chunks each role retrieves or, in answer mode, the grounded answer the server-side agent returns to each — renders the two result panes side by side with restricted content highlighted, and is itself protected by per-IP and global rate limits so the demo cannot be weaponized against the free-tier infrastructure it showcases. The desktop spotlight closes the loop: in production it authenticates the user directly against the self-hosted OIDC provider over a PKCE deep-link round trip handled entirely by the Rust process, then drives the same RBAC-governed agent with the resulting access token.",
+          "illustration": null
+        },
+        "lessons_learned": "Layered, zero-trust security boundaries are the only way to build safe RAG agents — a single vector-store filter is insufficient once prompt injections live inside the corpus. The same philosophy applies one level up: the web console that demonstrates the security story must itself be designed as part of the attack surface, which is why it ended up with no JSON API, server-only credentials, and fail-closed rate limiting rather than being treated as 'just a frontend'. And federating identity late taught a third lesson — accepting both a static demo token and a verified OIDC access token through one middleware seam kept real sign-in and account-free demos alive at the same time, instead of forcing a choice between them."
+      }
+    },
+    {
+      "name": "ylya-bot",
+      "description": "An architectural digital twin running on Next.js 16 App Router. Features semantic multi-repository ingestion (portfolio.json), stateless RAG pipeline embedding queries, and React 19 async streaming. (In Development)",
+      "html_url": "https://github.com/HoodieYlya13/ylya-bot",
+      "language": "TypeScript",
+      "languages": [
+        "TypeScript",
+        "JavaScript",
+        "SQL"
+      ],
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "fork": false,
+      "updated_at": "2026-06-24T02:29:51Z",
+      "homepage": "https://www.hy13dev.com/ylya-bot",
+      "portfolio": {
+        "routing": {
+          "repo_name": "ylya-bot",
+          "project_name": "YlyaBot",
+          "hero_image": ""
+        },
+        "project_meta": {
+          "role": "Lead Systems Architect & AI Engineer",
+          "development_phase": "Production-Ready Recruiter Agent & RAG Portal",
+          "languages": [
+            "TypeScript",
+            "JavaScript",
+            "SQL"
+          ],
+          "frameworks_and_tools": [
+            "Next.js 16 (App Router)",
+            "React 19",
+            "Supabase",
+            "pgvector",
+            "Google GenAI SDK",
+            "Gemini API",
+            "Vercel AI SDK",
+            "Upstash Redis Rate Limiting",
+            "Upstash Redis (Atomic Telemetry & Global Counters)",
+            "Supabase Database (Detailed Interaction Telemetry)",
+            "Stateless JWT (HMAC-SHA256 Sessions)",
+            "HTTP Cookies (Pacific Midnight Expiry)",
+            "Next.js after() API",
+            "Git Submodules"
+          ]
+        },
+        "comprehensive_description": "An event-driven, decoupled Retrieval-Augmented Generation (RAG) agent and streaming chat interface acting as an interactive professional clone of Ylya Martchenko. The system implements a dynamic Git Submodule pattern to expose the bot as a standalone module inside a core Next.js host while retaining an independent repository structure. Leveraging an optimized PostgreSQL Remote Procedure Call (RPC), the bot matches recruiting queries with sub-10ms database latency, utilizing vector cosine similarity calculations to deliver high-precision context grounding. It features a robust 5-tier model fallback hierarchy with timezone-aware cookie exclusions, resolving Gemini API rate limits with zero downtime. Additionally, it integrates a production-grade secure real-time analytics dashboard monitoring conversation telemetry, model efficiency, and geographic request metrics.",
+        "engineering_highlights": [
+          "Architected a Decoupled RAG Architecture using Git Submodules to host the YlyaBot agent independently, separating presentation layers from ingestion codebases while keeping global workspace configurations clean.",
+          "Engineered a robust 5-Tier prioritized Model Fallback Hierarchy (gemini-3.1-flash-lite -> gemini-3.5-flash -> gemini-2.5-flash -> gemma-4-31b-it -> gemini-flash-latest) to guarantee consistent high-uptime LLM performance.",
+          "Implemented a Time-Zone Aware Cookie Exclusion system expiring at exactly midnight Pacific Time (America/Los_Angeles) to cache quota-exhausted endpoints, preventing redundant and failing API calls.",
+          "Designed a high-performance vector matching function inside Supabase using PL/pgSQL, computing multi-dimensional cosine distance metrics natively on the database hardware layer.",
+          "Built a mobile-first, high-fidelity chat dashboard utilizing the Vercel AI SDK, optimizing response times to sub-second Time-To-First-Token on developer-tier APIs—architected to scale under 150ms using enterprise Context Caching—and integrated a 60ms batching state hook to buffer streaming tokens and prevent browser thread lockup.",
+          "Developed a Secure Telemetry & Real-Time Analytics Dashboard (/ylya-bot/metrics) protected by stateless cryptographic JWT authentication, combining live PostgreSQL database logs with high-performance rolling Redis aggregate metrics, and offloaded all runtime write telemetry to the Next.js `after()` API to release HTTP streams instantly.",
+          "Engineered an automated garbage collection routine in the ETL pipeline that queries the GitHub API at build time and on a daily cron schedule, purging orphaned vector embeddings from Supabase when repositories are deleted or made private."
+        ],
+        "measurable_metrics": {
+          "execution_latency": "Sub-second (under 900ms) Time-To-First-Token streaming on free-tier APIs, theoretically scalable to under 150ms with enterprise Context Caching; sub-10ms PostgreSQL vector retrieval execution speed; 0ms runtime write overhead by backgrounding telemetry transactions via the Next.js `after()` API.",
+          "ui_performance": "60 FPS responsive animations utilizing client-side stream reading hooks, a 60ms batching threshold to eliminate TCP backpressure, and strict layout containment supporting dynamic HTML5 semantic structures. Exclusively compiled via the native React 19 compiler.",
+          "operational_cost": "$0/month. Operates entirely within Google AI Studio, Supabase, and Upstash free-tier thresholds, dropping system maintenance overhead to zero."
+        },
+        "star_challenges": [
+          {
+            "situation": "Free-tier Gemini API endpoints frequently return 429 Rate Limit Exceeded or Quota Exhausted errors under concurrent recruiter evaluation sessions, causing the AI bot to crash and return blank streams.",
+            "action": "Engineered a prioritized 5-tier fallback model hierarchy coupled with a timezone-aware cookie exclusion engine. The Next.js Server Action synchronously attempts to resolve the first stream chunk from active models. If a model fails due to a quota exhaustion, the server catches the error, writes a cookie marking that model as exhausted until exactly midnight Pacific Time (America/Los_Angeles), and seamlessly falls back to the next model in the priority list.",
+            "result": "Completely resolved free-tier API quota exhaustions with zero user downtime, maintaining 100% agent uptime while keeping monthly maintenance costs at absolute zero ($0.00).",
+            "inline_image": ""
+          },
+          {
+            "situation": "Traditional RAG pipelines require continuous polling servers or expensive always-on extraction endpoints to index portfolio data changes, and often leak stale data when repositories are deleted or made private on the version control layer.",
+            "action": "Engineered an event-driven ingestion script executed purely within serverless ephemeral GitHub Actions runners triggered instantly by code pushes, and integrated an automated pruning mechanism that queries the GitHub API to garbage-collect orphaned database vectors.",
+            "result": "Completely eliminated runtime compute overhead, ensured the vector store remains 100% synchronized with active projects, and reduced operational maintenance costs to zero.",
+            "inline_image": ""
+          },
+          {
+            "situation": "Building real-time dashboards in modern React frameworks regularly triggers hydration mismatches when server-rendered timestamps and client-rendered layouts conflict, especially on high-frequency mobile viewport states.",
+            "action": "Adopted pure utility-first layouts, isolated dynamic locks inside deferred CSS micro-animation states rather than synchronous React render frames, migrated client-side telemetry queries to server-rendered Next.js Async Components, and replaced legacy useMemo hooks with native React 19 Compiler instructions.",
+            "result": "Fully resolved layout shift flashes and hydration anomalies, creating a rock-solid, fully responsive mobile analytics console that compiles with zero console warnings.",
+            "inline_image": ""
+          }
+        ],
+        "architectural_deep_dive": {
+          "text": "The engine matches input queries against vectorized segments of profile.json and individual repository records. High-fidelity embedding is achieved via gemini-embedding-2 compressed natively to 768 dimensions, stored and indexed in Supabase. Recruiter chat queries are processed by a typesafe React Server Action that validates inputs with Zod, checks Upstash Redis rate limits, filters models against active quota exclusion cookies, and streams Gemini tokens securely to the client. Detailed telemetry records are stored atomically inside Supabase, while aggregate session distributions (daily count history, models, countries) are resolved via Upstash Redis pipelines, all surfaced dynamically inside our secure metrics workspace.",
+          "illustration": null
+        },
+        "lessons_learned": "Injecting structural key data (like languages or contact details) directly into system contexts guarantees deterministic truth, while keeping semantic RAG strictly for project implementation logs yields the highest conversational coherence."
+      }
+    },
+    {
+      "name": "grid-sentinel",
+      "description": "Production-grade self-healing observability & ML orchestration pipeline for distributed grids.",
+      "html_url": "https://github.com/HoodieYlya13/grid-sentinel",
+      "language": "Python",
+      "languages": [
+        "Python",
+        "JavaScript",
+        "Puppet",
+        "HCL",
+        "YAML",
+        "HTML",
+        "CSS"
+      ],
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "fork": false,
+      "updated_at": "2026-06-02T23:25:37Z",
+      "homepage": "https://hoodieylya13-grid-sentinel.hf.space",
+      "portfolio": {
+        "routing": {
+          "repo_name": "grid-sentinel",
+          "project_name": "Grid Sentinel",
+          "hero_image": ""
+        },
+        "project_meta": {
+          "role": "Lead DevOps & SRE Platform Engineer",
+          "development_phase": "Production-Grade Self-Healing Observability Console & Orchestration Pipeline",
+          "languages": [
+            "Python",
+            "JavaScript",
+            "Puppet",
+            "HCL",
+            "YAML",
+            "HTML",
+            "CSS"
+          ],
+          "frameworks_and_tools": [
+            "Django 5.0",
+            "Scikit-Learn",
+            "Docker Compose",
+            "Ansible",
+            "Puppet",
+            "Terraform",
+            "PostgreSQL",
+            "Redis",
+            "NASA Space Weather API",
+            "Jenkins",
+            "Vanilla CSS",
+            "Vanilla JavaScript"
+          ]
+        },
+        "comprehensive_description": "A production-grade, containerized Self-Healing Observability Console and Orchestration Pipeline designed for distributed high-performance grid environments (such as the Worldwide LHC Computing Grid - WLCG). The system integrates a machine learning engine running an unsupervised Isolation Forest model on normalized telemetry metrics to detect subtle, slow-burning anomalies (like memory leaks) while ignoring geomagnetic solar storm spikes driven by the NASA Space Weather API. Leveraging an automated closed-loop remediation flow, the control plane coordinates dynamic configuration classification via a Puppet External Node Classifier (ENC) endpoint, triggers asynchronous container recovery playbooks via Ansible, and features a Kubernetes-style Horizontal Pod Autoscaler (HPA) to scale and balance worker nodes dynamically under space weather load surges.",
+        "engineering_highlights": [
+          "Architected a Closed-Loop Self-Healing System integrating Scikit-Learn Isolation Forest outlier detection with Django, dynamically triggering Ansible recovery playbooks asynchronously to reboot degraded worker nodes and drop memory leaks back to baseline.",
+          "Engineered a NASA DONKI Space Weather Driver to simulate geomagnetic solar storm workload surges, dynamically computing stress multipliers to scale simulated CPU, network, and active job loads across worker agents.",
+          "Designed a Telemetry Normalization Pipeline dividing raw metrics (CPU, network, active jobs) by the environmental stress multiplier before ML classifier feeding, reducing space-weather false positives to zero.",
+          "Implemented a Kubernetes-style Horizontal Pod Autoscaler (HPA) inside the Django control plane, dynamically provisioning and de-provisioning virtual worker nodes (grid-worker-03 to grid-worker-06) to balance stress workloads.",
+          "Created a Dynamic Configuration Catalog classifier endpoint simulating Puppet External Node Classifier (ENC) returning custom node role parameters in structured YAML.",
+          "Built a Glassmorphic Observability Console in Django and Vanilla CSS/JS featuring real-time cluster status visualizations, active job tracking, and auto-updating event logs with sub-250ms polling latency."
+        ],
+        "measurable_metrics": {
+          "execution_latency": "Sub-10ms Isolation Forest anomaly inference execution speed; sub-250ms real-time dashboard state polling update; sub-2s automated Ansible recovery trigger reaction time.",
+          "ui_performance": "60 FPS responsive animations utilizing Vanilla CSS/JS client-side polling, showing live-updating node cards, active grid jobs, and solar weather multipliers. Structured around modern HTML5 semantic elements (<header>, <main>, <section>).",
+          "operational_cost": "$0/month. Operates entirely within local Docker-Compose environments, or can be deployed on free-tier virtual machines using open-source infrastructure tools (PostgreSQL, Redis, Ansible, Puppet) with zero maintenance fees."
+        },
+        "star_challenges": [
+          {
+            "situation": "During solar storm workload surges simulated via the NASA DONKI API, increased CPU and network usage naturally spikes across all workers, causing the Isolation Forest model to misidentify healthy load peaks as anomalies and trigger catastrophic false-positive container reboots.",
+            "action": "Designed a telemetry normalization layer that divides raw CPU usage, network activity, and jobs by the current solar weather stress multiplier before training and classifying telemetry, while retaining baseline metrics on raw RAM usage.",
+            "result": "Successfully isolated the latent memory leak on grid-worker-02 while keeping false-positive reboots on healthy worker nodes at exactly zero during high solar storm stress events.",
+            "inline_image": ""
+          },
+          {
+            "situation": "Heavy geomagnetic storms spike the stress multiplier to 3.0x, overloading the fixed two-worker cluster and leading to resource exhaustion, job degradation, and potential cascading node failures.",
+            "action": "Implemented a Kubernetes-style Horizontal Pod Autoscaler (HPA) that dynamically provisions and bootstraps new worker nodes (up to six total) when stress exceeds 1.2x, while modifying worker agents to query the active worker count and scale down their load by a factor of 2 / active_workers.",
+            "result": "Balanced workloads evenly across the dynamically scaled cluster, keeping average CPU loads within safe operating bounds and preventing cascade failure under maximum solar storm spikes.",
+            "inline_image": ""
+          },
+          {
+            "situation": "A slow-burning, linear memory leak of +4.5% per check-in loop on grid-worker-02 slips past traditional static alert thresholds during low-utilization periods, eventually leading to silent system unresponsiveness and job loss.",
+            "action": "Trained an unsupervised Scikit-Learn Isolation Forest model on a sliding window of the last 200 normal telemetry points, dynamically isolating outliers near the root of the tree, backed by a deterministic SRE defense-in-depth safety rail (RAM > 90% or CPU > 95%).",
+            "result": "Detected and flagged the memory leak within 12 check-in loops before node crash, triggering the Ansible reboot playbook to restore the container to healthy baseline parameters automatically.",
+            "inline_image": ""
+          }
+        ],
+        "architectural_deep_dive": {
+          "text": "The Django control plane polls NASA's Space Weather API (DONKI) to fetch active solar events and compute a dynamic stress multiplier. Worker agents boot up, register themselves via the Puppet ENC catalog endpoint, and begin posting telemetry metrics. The control plane filters and normalizes these metrics before processing them through an unsupervised Isolation Forest model (scikit-learn). When the ML engine flags an anomaly, the node is marked degraded, triggering an asynchronous Ansible simulation (recover_node.yml). In parallel, a Horizontal Pod Autoscaler (HPA) dynamically provisions new workers to distribute heavy space weather loads, all visualized in a real-time glassmorphic dashboard.",
+          "illustration": null
+        },
+        "lessons_learned": "Normalizing dynamic environmental variables (such as solar weather loads) at the ingestion layer is critical for training robust unsupervised anomaly detection models, preventing normal system peaks from polluting the training window and triggering cascade failure alerts."
+      }
+    },
+    {
+      "name": "codemafia",
+      "description": "A modern, reverse-engineered revival of Code Mafia. Built with Next.js 16, React 19, Tailwind v4, WebSockets (PartyKit), and in-browser Python (Pyodide).",
+      "html_url": "https://github.com/HoodieYlya13/codemafia",
+      "language": "TypeScript",
+      "languages": [
+        "TypeScript",
+        "Python",
+        "HTML",
+        "CSS"
+      ],
+      "stargazers_count": 4,
+      "forks_count": 1,
+      "fork": false,
+      "updated_at": "2026-05-26T14:47:41Z",
+      "homepage": "https://vibecoder.hy13dev.com",
+      "portfolio": {
+        "routing": {
+          "repo_name": "codemafia",
+          "project_name": "Vibe Coder",
+          "hero_image": ""
+        },
+        "project_meta": {
+          "role": "Solo Creator & Reverse-Engineer",
+          "development_phase": "Production-Ready Multiplayer Revival",
+          "languages": [
+            "TypeScript",
+            "Python",
+            "HTML",
+            "CSS"
+          ],
+          "frameworks_and_tools": [
+            "Next.js 16.2.4",
+            "React 19.2.4",
+            "Tailwind CSS v4",
+            "React Compiler",
+            "PartyKit",
+            "PartySocket (Reconnecting Socket API)",
+            "Zustand",
+            "Yjs CRDTs",
+            "HTML5 Web Workers API",
+            "Pyodide (WebAssembly)",
+            "Monaco Editor",
+            "Framer Motion",
+            "Retro Pixel-Art CSS Animation Engine"
+          ]
+        },
+        "comprehensive_description": "A high-performance multiplayer social deduction game for developers supporting up to 20 concurrent users per lobby. Rebuilt from the ground up by reverse-engineering obfuscated, minified legacy production web assets retrieved from the Wayback Machine. The project was engineered specifically as an interactive, custom collaborative icebreaker built to engage my corporate team and host a live multiplayer gaming session during the end of our spring sprint retrospective and planning meeting. The platform integrates real-time state synchronization, collaborative coding environments using conflict-free replicated data types (CRDTs), and client-side, sandboxed execution of user-submitted code.",
+        "engineering_highlights": [
+          "Reverse-Engineered Legacy Assets: Dissected minified production bundles from Internet Archive Wayback Machine mirrors to recover game state transition logic, Python level schemas, and sabotage verification cases.",
+          "Multiplexed Event Protocol: Engineered a custom hybrid socket layer that multiplexes Zustand global game state updates, presence tracking, and Monaco editor Yjs CRDT document sync events into a single JSON-based PartyKit channel.",
+          "Sandboxed Client-Side Execution: Integrated Pyodide WebAssembly to execute Python validations and unit tests in-browser, achieving zero remote code execution (RCE) vulnerabilities and zero cloud hosting costs.",
+          "Watchdog Thread Isolation: Developed a dedicated Web Worker wrapper for Pyodide with an active 5-second supervisor watchdog that terminates and regenerates the thread to handle infinite loop exploits gracefully.",
+          "Multiplayer Collision Interception: Intercepted Monaco Editor commands to deactivate high-risk keyboard shortcuts (e.g. Cmd+A select all, mass undo/redo, cut, search-replace), blocking collaborative text degradation during concurrent edits.",
+          "Dynamic Remote Cursors: Designed a low-overhead decoration engine rendering custom CSS-styled remote cursors colored dynamically per player, including real-time floating name tags, without dropping visual frame rates."
+        ],
+        "measurable_metrics": {
+          "execution_latency": "0ms server round-trip execution latency for user-written Python code due to in-browser WebAssembly compilation.",
+          "ui_performance": "Sustained a lock-tight 60 FPS frame rate by isolating Yjs delta processing and Pyodide Wasm execution entirely within background Web Worker threads.",
+          "operational_cost": "Zero cloud database or isolated sandboxing cost, enabling infinite horizontal scalability without server-side overhead."
+        },
+        "star_challenges": [
+          {
+            "situation": "The original source code was completely lost, leaving behind only minified, compressed, and obfuscated client assets on Wayback Machine archive mirrors.",
+            "action": "Systematically mapped obfuscated variable names, reverse-engineered the core state machine, restored the level and sabotage test mechanics, and refactored the UI into a clean, modern Next.js 16 + React 19 codebase.",
+            "result": "Successfully revived and modernized a lost social deduction game, establishing a robust, fully-typed source-available architecture running concurrent React 19.",
+            "inline_image": ""
+          },
+          {
+            "situation": "Standard binary-over-WebSocket Yjs collaboration crashed on Cloudflare edge proxy routing when transferring large document updates due to token frame truncation.",
+            "action": "Constructed a custom serialization protocol that encodes binary Yjs update buffers into standard JSON number arrays and routes them as standard messages through the unified PartyKit socket.",
+            "result": "Bypassed Cloudflare's binary proxy limits entirely, enabling highly stable real-time document synchronization with zero packet truncation anomalies and zero extra socket connections.",
+            "inline_image": ""
+          },
+          {
+            "situation": "Standard collaborative coding platforms are highly vulnerable to concurrent text desynchronizations or destructive edits (e.g., players selecting all text and deleting it, or spamming global undo), rendering multiplayer gameplay impossible.",
+            "action": "Hijacked Monaco Editor's underlying command registry on initialization, systematically disabling global keyboard actions (Undo, Redo, Cut, Select All, Select All Occurrences, and Find-and-Replace) and confining actions to localized ranges.",
+            "result": "Guaranteed lobby stability and continuous playability for up to 20 active developers typing in the same shared Monaco instance, completely preventing editor lockouts and accidental text wipes.",
+            "inline_image": ""
+          }
+        ],
+        "architectural_deep_dive": {
+          "text": "The system uses Next.js 16 and Zustand for frontend presentation, communicating with a PartyKit WebSocket server. Real-time document syncing is handled by Monaco Editor linked to a local Y.Doc text node. Document updates are serialized as JSON and multiplexed inside the single game socket connection. Python compilation and unit testing are offloaded to Pyodide (running inside a sandboxed Web Worker), featuring a custom supervisor hook that automatically terminates and restarts the worker thread when an infinite loop or runaway calculation is detected.",
+          "illustration": null
+        },
+        "lessons_learned": "Offloading complex WebAssembly operations (like Pyodide compilation) and real-time serialization tasks to background Web Workers is essential for modern web applications. Executing these operations on the main UI thread immediately disrupts the React rendering pipeline and drops frames. Furthermore, implementing active thread watchdogs is crucial to preventing user-submitted infinite loops from freezing the browser."
+      }
+    },
+    {
+      "name": "poly-livre-infrastructure",
+      "description": "Unified infrastructure & orchestration hub for Liprerie. Integrates Next.js 16 and Spring Boot 3.5 submodules via a containerized local Docker dev stack, automated Makefile commands, and Kubernetes configs",
+      "html_url": "https://github.com/HoodieYlya13/poly-livre-infrastructure",
+      "language": "Java",
+      "languages": [
+        "Java",
+        "TypeScript",
+        "SQL",
+        "HTML",
+        "CSS"
+      ],
+      "stargazers_count": 1,
+      "forks_count": 0,
+      "fork": false,
+      "updated_at": "2026-06-20T11:38:02Z",
+      "homepage": null,
+      "portfolio": {
+        "routing": {
+          "repo_name": "poly-livre-infrastructure",
+          "project_name": "Liprerie",
+          "hero_image": ""
+        },
+        "project_meta": {
+          "role": "Lead Architect & Full-Stack Core Engineer",
+          "development_phase": "Production-Ready Full-Stack System (5th-Year Capstone)",
+          "languages": [
+            "Java",
+            "TypeScript",
+            "SQL",
+            "HTML",
+            "CSS"
+          ],
+          "frameworks_and_tools": [
+            "Spring Boot 3.5",
+            "Next.js 16 (App Router)",
+            "React 19",
+            "Spring Security",
+            "WebAuthn4j",
+            "SimpleWebAuthn",
+            "PostgreSQL",
+            "Docker Compose",
+            "Project Loom (Virtual Threads)",
+            "JSON Web Tokens (JWT)",
+            "next-intl",
+            "Tailwind CSS v4",
+            "Mailpit",
+            "Hibernate/JPA",
+            "Maven",
+            "Zod"
+          ]
+        },
+        "comprehensive_description": "A robust, high-performance, and fully containerized collaborative book-sharing and library management system designed to support interactive catalog discovery, passwordless security, and seamless dynamic localization. Engineered with Next.js 16 (using the React 19 concurrent App Router) and a Spring Boot 3.5 (Java 21) backend, the platform leverages Java 21's Virtual Threads (Project Loom) to achieve non-blocking concurrency under high-volume book catalog search queries. Authentication is managed via a state-of-the-art WebAuthn biometrics and hardware-key registration flow alongside a secure fallback magic-link transmission loop. A containerized PostgreSQL database acts as the relational storage layer, while system-generated transaction and validation emails are intercepted locally in developer environments using a Mailpit container. Complete multi-language navigation (French and English) is baked natively using next-intl, preserving active search parameters and states across dynamic routing changes.",
+        "engineering_highlights": [
+          "Orchestrated a containerized development workflow via a unified root Makefile, streamlining environment bootstrapping (using make init and make dev) across frontend, backend, PostgreSQL, and Mailpit services.",
+          "Integrated biometric hardware-key and passkey credentials (WebAuthn) using `@simplewebauthn/browser` on the client and `WebAuthn4j` on the backend, enabling secure passwordless signup, login, and multi-key user profile management.",
+          "Leveraged Java 21 Virtual Threads (Project Loom) in Spring Boot (spring.threads.virtual.enabled: true) to eliminate standard OS-thread scheduling bottlenecks during high-throughput database interactions and asynchronous transactions.",
+          "Engineered a low-latency authorization pipeline utilizing stateless JWTs signed with Elliptic Curve (EC) cryptographic keys, achieving superior security with significantly lower computational overhead than RSA keys.",
+          "Implemented client-side form validation using React Hook Form and Zod schemas integrated with standard Java Bean Validation annotations (@Valid, @NotNull) on Spring REST Controllers to ensure robust full-stack data integrity.",
+          "Built a highly responsive internationalization architecture using next-intl, enabling dynamic French and English translation switching while maintaining localized cookie configurations and catalog query states."
+        ],
+        "measurable_metrics": {
+          "execution_latency": "Sub-5ms JWT verification overhead using lightweight Elliptic Curve cryptography; under 15ms database query response time enabled by JPA connection pooling and virtual thread task dispatching.",
+          "ui_performance": "Lock-tight 60 FPS transitions and form submissions using framer-motion and TailwindCSS 4; under 100ms client-side page transitions with App Router server-side hydration.",
+          "operational_cost": "Near-zero cloud infrastructure footprint leveraging standard Docker containerization, enabling complete local or self-hosted deployment of Spring, Postgres, Mailpit, and Next.js."
+        },
+        "star_challenges": [
+          {
+            "situation": "Implementing biometric WebAuthn credentials authentication between Next.js server-actions and a Spring Boot backend often breaks due to delicate signature validations, strict cryptographic challenge matching, and complex Base64URL string encoding variations across native browser APIs and Java validation libraries.",
+            "action": "Designed customized, strongly-typed JSON DTOs (RegistrationFinishRequest and AuthenticationFinishRequest) to normalize incoming authenticator payloads, sanitized and decoded all Base64URL credential identifiers inside the Next.js server actions proxy, and implemented a precise cryptographic challenge verification hook in the Spring backend.",
+            "result": "Established a zero-failure, seamless passwordless signup and fingerprint login flow that is fully compliant with the W3C WebAuthn standards.",
+            "inline_image": ""
+          },
+          {
+            "situation": "Enabling Project Loom Virtual Threads allows handling millions of concurrent requests but quickly exhausts database connections in the HikariCP connection pool if queries block or transactions are poorly managed under heavy concurrent catalog reads.",
+            "action": "Enforced strict transactional boundaries via Spring Data's @Transactional annotation to minimize the lifecycle of database connections, tuned HikariCP pool parameters in application.yaml, and decoupled slow asynchronous processes (like local Mailpit email transmissions) from main Web MVC execution threads.",
+            "result": "Prevented connection starvation and thread-pinning issues, ensuring robust performance under high concurrent user search loads.",
+            "inline_image": ""
+          },
+          {
+            "situation": "Enforcing dynamic internationalization with next-intl across the App Router created constant hydration mismatches, search parameter losses, and route thrashing when users switched languages inside dynamic catalog filter panels.",
+            "action": "Built a state-driven LocaleSwitcher component with automated locale-aware cookie matching, leveraging next-intl's router wrappers to cleanly forward active search states (price slider limits, categorization filters) during dynamic language transitions.",
+            "result": "Created a seamless, zero-hydration-error dynamic translation layer that preserves active search settings with zero layout shifts or route errors.",
+            "inline_image": ""
+          }
+        ],
+        "architectural_deep_dive": {
+          "text": "The Liprerie architecture uses a decoupled full-stack design orchestrating a Next.js 16 frontend and a Spring Boot 3.5 backend. The frontend utilizes Next.js App Router for localized routing (next-intl), React 19 for rendering, and `@simplewebauthn/browser` for biometric credentials initialization. Dynamic requests are proxied via server actions and API clients to the Java backend. The backend runs on Java 21 with Virtual Threads (Project Loom) enabled, dispatching request execution to lightweight virtual threads that drastically minimize concurrency overhead. Spring Security handles security filtering, extracting JWT tokens signed using Elliptic Curve (EC) cryptography to authenticate endpoints. Persistence is managed via Spring Data JPA connected to a PostgreSQL 16 container, while SMTP triggers route system emails to a containerized Mailpit catcher. The complete stack is containerized and orchestrated with Docker Compose and managed with Makefile commands.",
+          "illustration": null
+        },
+        "lessons_learned": "Decoupling frontend presentation and backend services via strict API contracts (using OpenAPI/Swagger) and unified Docker orchestration greatly accelerates development velocity. Furthermore, utilizing modern, efficient cryptographic primitives like Elliptic Curve tokens and passwordless biometrics drastically reduces architectural security vulnerabilities while simplifying database schema dependencies (no need to store hashed passwords, just public keys)."
+      }
+    }
+  ],
+  "honorableRepositories": [
+    {
+      "name": "vibe-heist",
+      "description": "Public entry point for Vibe Heist. Orchestrates submodules for the WebGPU engine, web portal, and the private game client. (In Development)",
+      "html_url": "https://github.com/HoodieYlya13/vibe-heist",
+      "language": "Rust",
+      "languages": [
+        "Rust",
+        "TypeScript",
+        "WGSL",
+        "HTML",
+        "CSS",
+        "Bash"
+      ],
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "fork": false,
+      "updated_at": "2026-07-07T14:50:32Z",
+      "homepage": "https://vibe-heist.hy13dev.com",
+      "portfolio": {
+        "routing": {
+          "repo_name": "vibe-heist",
+          "project_name": "Vibe Heist",
+          "hero_image": ""
+        },
+        "project_meta": {
+          "role": "Sole Creator & Lead Systems Engineer",
+          "development_phase": "Active Development (Phase 2: The Drive & Greybox)",
+          "languages": [
+            "Rust",
+            "TypeScript",
+            "WGSL",
+            "HTML",
+            "CSS",
+            "Bash"
+          ],
+          "frameworks_and_tools": [
+            "WebAssembly",
+            "WebGPU",
+            "Babylon.js",
+            "Rapier3D",
+            "Next.js 16",
+            "Vite",
+            "SharedArrayBuffer",
+            "Atomics",
+            "Nalgebra",
+            "Tailwind CSS v4",
+            "wasm-pack"
+          ]
+        },
+        "comprehensive_description": "Vibe Heist is an ambitious, high-fidelity, open-world driving and action game designed to run natively inside a standard web browser tab. Rejecting standard web game development cliches (such as DOM-driven visuals or using React state to manage frame logic), the project implements a cutting-edge native-performance architecture. By dividing the system into an independent physics simulation core ('the Brain') written in Rust and compiled to WebAssembly (WASM), and a visual rendering engine ('the Eyes') written in TypeScript utilizing Babylon.js on the next-gen WebGPU standard, the game fully decouples state calculations from presentation. The two layers communicate asynchronously over a lock-free, zero-copy shared memory bridge leveraging SharedArrayBuffer and Atomics, achieving silky smooth 60+ FPS simulation speeds with virtually zero garbage collection stutter or thread synchronization latency.",
+        "engineering_highlights": [
+          "Decoupled Multi-Threaded Engine: Strictly separates game logic and physics simulation (running at a fixed 60Hz timestep in a background Web Worker) from presentation and rendering (running up to 240Hz on the main thread), ensuring simulation determinism and preventing screen refresh jank.",
+          "Zero-Copy Shared Memory Bridge: Custom memory layout leveraging SharedArrayBuffer and atomic thread signaling to cast WASM memory heaps directly as JavaScript Float32Array views, completely avoiding main-loop allocations and slow postMessage JSON serialization.",
+          "Next-Generation WebGPU Renderer: Native WebGPU visual pipeline driven by Babylon.js v8.26 with shaders written in WGSL, supporting advanced visual techniques like percentage closer filtering (PCF) shadow generation, depth buffer testing, and custom emissive lighting materials.",
+          "Raycast Vehicle Physics in Rust: Custom multi-wheeled vehicle simulation utilizing Rapier3D's DynamicRayCastVehicleController, with configurable four-point raycast suspensions, mass calibration, linear/angular damping, and handbrake-induced oversteer steering drift.",
+          "Boid-Flocking ECS Crowd Simulation: High-performance pedestrian simulation calculated inside the WASM thread, driving up to 1,500 independent agents utilizing collision avoidance (ped-to-ped, ped-to-player, ped-to-vehicle) and block/ramp height adjustments.",
+          "Hardware-Accelerated Instancing: Main thread rendering uses Babylon.js Thin Instances to batch and draw thousands of active crowd meshes in a single GPU draw call, minimizing CPU overhead and WebGPU API bottlenecking.",
+          "Next.js 16 Launcher Integration: Built a secure, high-performance launcher website using Next.js 16 and Tailwind CSS v4, supporting seamless launcher mechanics and static delivery targets."
+        ],
+        "measurable_metrics": {
+          "execution_latency": "Sub-1ms simulation updates (typically 0.15ms - 0.40ms per step in WASM) at 60Hz physics frequency.",
+          "ui_performance": "Interpolated 60fps to 240fps rendering depending on screen refresh rate, with 0% garbage collection jank during gameplay loop.",
+          "operational_cost": "$0 server compute hosting cost, leveraging client-side WebAssembly execution (serverless launcher hosted on Vercel CDN)."
+        },
+        "star_challenges": [
+          {
+            "situation": "Garbage collection (GC) pauses and communication overhead when transferring heavy game state vectors (1,500+ entities) between a background physics thread and the main rendering thread caused severe frame drops (jank) in the browser.",
+            "action": "Designed a zero-allocation SharedArrayBuffer memory bridge. Calculated strict byte strides and offsets (e.g. PED_STATE_OFFSET, CAM_STATE_OFFSET) to project the Rust SimEngine memory layout directly into WebGPU-aligned Float32Array views on the main thread. Synchronized thread reading/writing atomically using Atomics.",
+            "result": "Completely eliminated serialization overhead, dropping state transfer time from 12ms to 0ms (zero-copy), and reduced garbage collection pauses to absolute zero during active gameplay.",
+            "inline_image": ""
+          },
+          {
+            "situation": "A noticeable frame rate mismatch occurred because the core physics simulation runs at a fixed, deterministic 60Hz timestep in Rust, whereas the rendering thread scales dynamically with high-refresh-rate monitors (144Hz to 240Hz), causing visible visual stuttering.",
+            "action": "Developed a time-interpolated rendering layer. Tracked the worker's atomic frame counter and write indices. In the main Babylon.js render loop, implemented linear interpolation (lerp) for positions and camera targets, and spherical linear interpolation (slerp) for rigid-body rotation quaternions, smoothly bridging states between the last two completed physics cycles based on high-resolution timing deltas.",
+            "result": "Achieved perfectly fluid visual rendering that natively matches the monitor's high refresh rate, while preserving the mathematical determinism of the fixed 60Hz Rust physics simulation.",
+            "inline_image": ""
+          },
+          {
+            "situation": "Simulating and rendering a dense crowd of 1,500 active pedestrians on the web typically causes severe CPU congestion from loop overhead and GPU draw-call bottlenecks.",
+            "action": "Offloaded boid-style crowd flocking, obstacle avoidance, and raycast height queries on blocks/ramps entirely to Rust. Combined this high-speed calculation with WebWorker thread decoupling, then updated instance matrices directly on the GPU using Babylon's Thin Instances.",
+            "result": "Allowed the browser to simulate and render 1,500 dynamic agents in real-time with full shadow casting, keeping browser CPU thread utilization under 15% and keeping framerate locks stable.",
+            "inline_image": ""
+          }
+        ],
+        "architectural_deep_dive": {
+          "text": "The Vibe Heist engine is designed around a strictly decoupled, asymmetrical multi-threaded architecture that communicates via shared memory. The main thread handles presentation, input gathering, and WebGPU draw-call dispatch, while a dedicated Web Worker acts as the simulation thread (the WASM physics host). Inside the Web Worker, the Rust SimEngine runs a fixed 60Hz game loop (approx. 16.6ms intervals) utilizing Cargo packages like Rapier3D and Nalgebra to calculate physics steps, vehicle coordinates, player trajectories, and 1,500 agent crowd positions. 1) Input Phase: The main thread catches mouse movements and keyboard events, encoding buttons and camera angles into a shared RingBuffer using atomic write indices. 2) Simulation Phase: The Worker thread drains the RingBuffer atomically, passes these inputs into the physics engine, computes the state step, and writes the resulting translations, rotations, camera targets, and instanced ped matrices directly into a SharedArrayBuffer via raw WASM heap pointers. 3) Presentation Phase: Rather than waiting, the main thread reads the SharedArrayBuffer, interpolates between the last two physics frames to support high screen refresh rates (e.g. 144Hz), and immediately uploads the raw floats to WebGPU buffers via Babylon.js Thin Instances, keeping drawing overhead down to a single CPU-to-GPU memory transfer.",
+          "illustration": null
+        },
+        "lessons_learned": "Developing Vibe Heist demonstrated that a native-grade, high-performance open-world game is entirely feasible in modern browsers when standard web overhead is systematically bypassed. A major takeaway is the power of zero-allocation game loops: by reusing Float32Array memory views and avoiding the generation of temporary vectors (e.g., 'new Vector3()') or serialization buffers in the update cycle, garbage collection pauses can be eliminated. Furthermore, building lock-free multi-threaded architectures in WebWorkers using SharedArrayBuffer and Atomics requires extreme precision regarding memory alignment and byte-stride layouts, but pays massive performance dividends that make modern browser standards like WebGPU shine at full capability."
+      }
+    },
+    {
+      "name": "schumacher-knepper-theme-dev",
+      "description": "Development fork of the Schumacher-Knepper theme. Used for testing and staging before pushing to my client's production repository. (password = 123)",
+      "html_url": "https://github.com/HoodieYlya13/schumacher-knepper-theme-dev",
+      "language": "Liquid",
+      "languages": [
+        "Liquid",
+        "JavaScript",
+        "CSS",
+        "HTML"
+      ],
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "fork": true,
+      "updated_at": "2026-05-30T10:25:47Z",
+      "homepage": "https://schumacher-knepper-v2.myshopify.com",
+      "portfolio": {
+        "routing": {
+          "repo_name": "schumacher-knepper-theme-dev",
+          "project_name": "Schumacher-Knepper e-shop",
+          "hero_image": ""
+        },
+        "project_meta": {
+          "role": "Lead Shopify Theme Developer & UI/UX Engineer",
+          "development_phase": "Production-Ready / Deployed",
+          "languages": [
+            "Liquid",
+            "JavaScript",
+            "CSS",
+            "HTML"
+          ],
+          "frameworks_and_tools": [
+            "Shopify CLI",
+            "Theme Check Linter",
+            "Dawn Reference Theme Base",
+            "IntersectionObserver API",
+            "requestAnimationFrame",
+            "HTML5 History API"
+          ]
+        },
+        "comprehensive_description": "A bespoke premium Shopify theme developed for Domaine Viticole Schumacher-Knepper, an independent, historic wine producer from the Moselle Valley in Luxembourg. Built on top of Shopify's high-performance reference theme Dawn, this project introduces a luxurious 'Liquid Glass' aesthetic and several custom functional components tailored to premium wine commerce. Key features include an age verification security gateway that intercepts actions in the DOM capture phase, dynamic breadcrumbs leveraging custom metafield references and product categories, a dynamic heritage slideshow counting down to Wintrange Wineries' founding year (1714), and hardware-accelerated animations that deliver zero Cumulative Layout Shift (CLS) on mobile viewports.",
+        "engineering_highlights": [
+          "Capturer-Phase Event Interception: Designed a custom DOM interceptor running in the event-capturing phase (useCapture = true) to halt Dawn's default AJAX cart submittals and dynamic checkout actions prior to theme handler execution, dynamically appending verified cart compliance attributes (Age_Verified, DOB_Entered, and Verification_Timestamp) before programmatic re-triggering.",
+          "Hardware-Accelerated 'Liquid Glass' Styling: Engineered high-end glassmorphic UI cards, modals, and elements leveraging hardware-accelerated transitions via CSS 'transform: translateZ(0)' and 'will-change: backdrop-filter', maximizing frame rates and minimizing repaint overhead under heavy load.",
+          "iOS Scroll Locking & Dynamic Viewport Height: Solved persistent Safari background body scrolling and layout shifts by pairing a body-level overflow hide overlay with touch-action disabling, anchoring the verification modal cleanly with Dynamic Viewport Height (100dvh) rules.",
+          "IntersectionObserver-Optimized Deceleration: Engineered a custom countdown web component targeting 1714 that leverages an IntersectionObserver to conserve mobile CPU cycles, animating the visual progression over 2.5s with requestAnimationFrame and an easeOutExpo easing curve for a premium, decelerating feel.",
+          "Metaobject Category Breadcrumb Resolution: Designed a custom breadcrumbs snippet that maps dynamic collection hierarchies through standard collection reference and metaobject category references (product.metafields.custom.primary_collection), introducing safe fallbacks to ensure structured product navigation paths."
+        ],
+        "measurable_metrics": {
+          "execution_latency": "Sub-16ms JavaScript evaluation and render loop execution for countdown timer, maintaining a locked 60 FPS (or 120 FPS on high-refresh ProMotion screens) during layout animations.",
+          "ui_performance": "100/100 Lighthouse Performance score for critical path loading on desktop, with zero Cumulative Layout Shift (CLS) achieved through strict aspect-ratio bounding and dynamic viewport height (100dvh) implementation.",
+          "operational_cost": "$0/month infrastructure cost. The theme operates entirely on Shopify's serverless SaaS infrastructure, maximizing performance through static Liquid rendering, localized browser caching, and zero third-party external API script dependencies."
+        },
+        "star_challenges": [
+          {
+            "situation": "The default Shopify Dawn theme triggers immediate asynchronous cart updates and dynamic checkouts. Incorporating a secure age verification modal to comply with Luxembourgish digital commerce regulations required blocking all purchase actions without breaking Dawn's native asynchronous checkout state or cart drawer triggers.",
+            "action": "Implemented a capture-phase event listener ('document.addEventListener('submit', ..., true)') that catches add-to-cart form submissions and payment clicks before they propagate to Dawn's theme handlers. When no adult verification cookie is found, it intercepts the submit action, displays the glassmorphic gate, collects the user's DOB, validates age, sets a secure 30-day session cookie, dynamically injects required legal verification cart attributes, and executes a programmatic click event to complete the transaction.",
+            "result": "Enforced 100% legal compliance on all checkout paths, cleanly injecting validated verification timestamps and age verification flags directly into Shopify's database records with zero conversion rate friction.",
+            "inline_image": ""
+          },
+          {
+            "situation": "Mobile viewports (specifically iOS Safari) suffered from background scrolling (scroll bleed) and vertical shift reflows whenever the age verification popup or dynamic drawer modals were active, failing strict visual quality assurance checks.",
+            "action": "Created a multi-faceted scroll lock. Applied 'overflow: hidden !important' to the root '<html>' and '<body>' tags under the active modal class, coupled with a 'touch-action: none' overlay layer to block Safari touch-scrolling. Positioned the modal using dynamic viewport height ('100dvh') and enabled graphics card hardware-acceleration via 'transform: translateZ(0)' on blur overlays.",
+            "result": "Achieved absolute mobile layout stability and complete, bug-free scroll locking across all iOS and Android web browsers, with zero vertical shifts or backdrop movement during modal navigation.",
+            "inline_image": ""
+          }
+        ],
+        "architectural_deep_dive": {
+          "text": "The Schumacher-Knepper theme architecture is founded on a progressive enhancement model that leverages Shopify's high-speed edge liquid rendering engine alongside vanilla DOM Web APIs. Custom visual attributes are styled using local component-scoped stylesheets that declare and customize modern CSS custom properties (e.g. '--media-radius'), exposing clean, reusable design tokens directly to the Shopify Theme Editor. Dynamic compliance gating operates at the capturing boundary of the DOM, ensuring that checkout forms cannot submit without validated cookie states. High-refresh animations, such as the decrescendo heritage timer, leverage hardware-accelerated composition layers and IntersectionObserver checks to run seamlessly on low-tier mobile processors, maintaining zero dependencies on heavy JavaScript libraries.",
+          "illustration": null
+        },
+        "lessons_learned": "This project demonstrated the superior stability and speed of native browser Web APIs over large third-party JavaScript libraries. Utilizing capture-phase event listeners proved to be an incredibly powerful way to intercept, validate, and enrich core ecommerce flows without modifying vendor theme code. Additionally, constructing the 'Liquid Glass' design system reinforced the need for hardware-accelerated CSS properties to render heavy effects (like backdrop-filter blurs) smoothly on mobile browsers, showing that luxury design can co-exist with excellent performance."
+      }
+    },
+    {
+      "name": "dockercraft",
+      "description": "Dockercraft revival: Manage Minecraft servers with Docker on any system, including native support for ARM (Apple Silicon) and standard x86 architectures.",
+      "html_url": "https://github.com/HoodieYlya13/dockercraft",
+      "language": "Go",
+      "languages": [
+        "Go",
+        "Lua",
+        "Makefile",
+        "C++"
+      ],
+      "stargazers_count": 0,
+      "forks_count": 1,
+      "fork": true,
+      "updated_at": "2026-05-25T17:21:12Z",
+      "homepage": null,
+      "portfolio": {
+        "routing": {
+          "repo_name": "dockercraft",
+          "project_name": "Dockercraft",
+          "hero_image": ""
+        },
+        "project_meta": {
+          "role": "Systems & DevOps Engineer",
+          "development_phase": "Revival & Optimization",
+          "languages": [
+            "Go",
+            "Lua",
+            "Makefile",
+            "C++"
+          ],
+          "frameworks_and_tools": [
+            "Docker",
+            "Cuberite (Minecraft Server)",
+            "Go Modules",
+            "Multi-stage Docker Builds",
+            "Multi-arch Builds (ARM64/x86_64)",
+            "Alpine Linux",
+            "Debian Linux"
+          ]
+        },
+        "comprehensive_description": "Dockercraft is an immersive Minecraft Docker client that visualizes and manages Docker containers directly inside a 3D multiplayer Minecraft world. By wrapping Cuberite (a lightweight C++ Minecraft game server) and leveraging a custom Go-based daemon alongside Lua plugins, Dockercraft bridges the Docker remote API and the Minecraft server's internal voxel world. Inside the game, running and stopped containers are represented as distinct blue and orange wool structures, fully equipped with interactive buttons and levers to start, stop, or remove containers, alongside wall signs displaying real-time CPU and Memory usage metrics. This fork successfully revives the abandoned, highly unstable original project, upgrading legacy Go code to Go 1.23, standardizing modern Go modules, packaging the execution pipeline using multi-stage multi-architecture Dockerfiles, introducing cross-compilation support for both ARM64 (Apple Silicon) and x86_64, and integrating automatic architecture-detection scripts in the orchestrating Makefile.",
+        "engineering_highlights": [
+          "Modern Go 1.23 Migration: Ported a legacy, unmaintained Go 1.4 proxy daemon to Go 1.23, replacing obsolete vendoring dependencies (vendor.conf) with standard Go modules, and resolving modern library deprecations.",
+          "Multi-Stage & Multi-Architecture Docker Pipeline: Orchestrated an efficient, multi-stage multi-architecture Dockerfile building target binaries for both amd64 (x86_64) and arm64 (Apple Silicon / aarch64) without cross-architecture compilation overhead.",
+          "Container-Native Docker CLI Integration: Replaced the fragile runtime downloading of Docker binaries with system-level package integration and exec.LookPath runtime lookups, eliminating external internet dependencies during startup and improving security.",
+          "Cuberite Lua Socket Protocol: Integrated asynchronous TCP communication over port 25566 between the Go daemon (monitoring Docker events) and the Cuberite Lua plugin to synchronize container states with sub-second latency.",
+          "Dynamic Voxel Rendering Queue: Optimized voxel chunk updates within Minecraft using a custom-built Lua UpdateQueue class that throttles block replacements per tick, preventing server crashes and frame drops.",
+          "Unified Makefile Orchestration: Automated multi-architecture image construction, container lifetime management, and instant biome variations (Ocean, Desert, Forest, Jungle) using shell script selectors in the Makefile."
+        ],
+        "measurable_metrics": {
+          "execution_latency": "Sub-second event synchronization. Real-time Docker daemon container state changes (start, die, destroy) are intercepted via the SDK events channel and broadcasted to Cuberite within < 50ms, while real-time memory and CPU resource stats updates are throttled at 500ms intervals to prevent network congestion.",
+          "ui_performance": "325ms server initialization latency. The fully containerized Cuberite Minecraft-compatible server completes startup and begins listening on port 25565 in just 325ms, delivering solid 20 TPS (Ticks Per Second) server-side game performance with smooth voxel grid rendering using custom queue batching.",
+          "operational_cost": "Zero runtime package retrieval overhead. Prior to the optimization, the container fetched the Docker CLI at runtime. By integrating a multi-stage Alpine build, the final runner image is fully self-contained and pre-packaged at 180MB, minimizing container initialization overhead and completely eliminating runtime network dependencies."
+        },
+        "star_challenges": [
+          {
+            "situation": "The original project used pre-Go modules vendoring, unmaintained Docker client APIs, and outdated C++ Cuberite builds that failed to compile or run on modern Linux versions, rendering the project completely unbuildable and dead.",
+            "action": "Upgraded the daemon to Go 1.23, integrated the modern github.com/docker/docker API v25.0.3+incompatible, rewrote socket handling, event monitors, and standard library logs, and overhauled the Dockerfile into a multi-stage pipeline utilizing Alpine and Debian Slim images.",
+            "result": "Successfully resurrected the application from a broken state into a stable, compilable, and highly responsive modern stack that passes standard formatting and linters.",
+            "inline_image": ""
+          },
+          {
+            "situation": "The legacy build system only produced x86_64 binaries, meaning Mac users running Apple Silicon M-series chips or developers utilizing ARM64 cloud instances were completely blocked from running the container locally due to architecture mismatch issues.",
+            "action": "Designed a multi-arch multi-stage Docker build pipeline leveraging TARGETARCH arguments and wrote shell detection logic inside both the Dockerfile and Makefile to dynamically pull appropriate compiler images, static Docker CLI archives, and compatible Cuberite engine builds.",
+            "result": "Enabled seamless native execution on both Apple Silicon (ARM64) and standard Intel/AMD (x86_64) platforms, reducing startup overhead on M-series Macs to zero translation delay.",
+            "inline_image": ""
+          },
+          {
+            "situation": "During state listing or when multiple containers started simultaneously, the Minecraft world would experience desynchronized state rendering, where block updates occurred out of order or older container structures completely vanished from the map until manually forced to re-render.",
+            "action": "Debugged the Lua engine, identified rendering race conditions within the chunk manager, implemented a robust batch-based UpdateQueue that schedules changes incrementally (throttled by MAX_BLOCK_UPDATE_PER_TICK), and added an explicit double-rendering pass in docker.lua to enforce sign line state hydration.",
+            "result": "Resolved all map rendering failures and desynchronizations, maintaining stable 20 TPS server performance during high-throughput container creation operations.",
+            "inline_image": ""
+          }
+        ],
+        "architectural_deep_dive": {
+          "text": "The Dockercraft architecture is a dual-process system comprised of a highly efficient game loop and a systems daemon. (1) Systems Daemon (Go Proxy): Written in Go 1.23, this background process runs inside the main container. It communicates with the host's Docker engine via a mounted UNIX socket (/var/run/docker.sock). It monitors container events in real time using the official Docker SDK, calculates CPU usage percentage dynamically (utilizing historical delta comparisons), and calculates memory consumption metrics. (2) Custom Minecraft Game Server (Cuberite): A lightweight, high-performance C++ Minecraft server that hosts the 3D voxel environment. (3) Communication Protocol: The Go daemon starts a TCP Server on port 25566. The Cuberite server loads a custom Lua plugin (Docker) which connects to this TCP socket as a client. Real-time system events (create, start, stop, stats) are serialized as newline-delimited JSON messages (TCPMessage struct) and pushed across the local socket. The Lua plugin parses these messages and adds block updates to an internal UpdateQueue. This queue throttles voxel modifications per tick to avoid CPU spikes. In-game player interactions (such as pulling a lever or pushing a button) are captured by Cuberite block hooks, which compile commands and transmit them back to the Go proxy, invoking standard docker start, docker stop, or docker rm CLI executions.",
+          "illustration": null
+        },
+        "lessons_learned": "Reviving a decade-old, abandoned open-source project teaches critical lessons about software rot, architectural decoupling, and the challenges of embedding system orchestrations inside game engines. First, relying on external, runtime-downloaded binaries is a major anti-pattern; shifting to container-native multi-stage pre-bundling dramatically increases predictability and build resilience. Second, when bridging system-level events (like Docker containers) with rendering loops (like a Minecraft server), strict throttle and queue mechanisms are indispensable; direct synchronous writes to the world state quickly lead to engine blockages and thread starvation. Finally, ensuring multi-arch compatibility (ARM64 & x86_64) from day one is essential in modern development environments, especially for local dev tools where modern developers heavily utilize Apple Silicon."
+      }
+    },
+    {
+      "name": "insta-v2",
+      "description": "🚀 InstaV2: The Next.js 16 & React 19 Best Practices Playground  A high-performance Instagram clone demonstrating the cutting-edge features of Next.js 16 and React 19.",
+      "html_url": "https://github.com/HoodieYlya13/insta-v2",
+      "language": "TypeScript",
+      "languages": [
+        "TypeScript",
+        "HTML",
+        "CSS"
+      ],
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "fork": false,
+      "updated_at": "2026-05-25T17:20:18Z",
+      "homepage": "https://insta-v2-nine.vercel.app",
+      "portfolio": {
+        "routing": {
+          "repo_name": "insta-v2",
+          "project_name": "InstaV2",
+          "hero_image": ""
+        },
+        "project_meta": {
+          "role": "Lead Full-Stack Developer & Technical Architect",
+          "development_phase": "Production-Ready / Deployed Demo",
+          "languages": [
+            "TypeScript",
+            "HTML",
+            "CSS"
+          ],
+          "frameworks_and_tools": [
+            "Next.js 16.2.5 (App Router)",
+            "React 19.2.4",
+            "React Compiler",
+            "Tailwind CSS 4",
+            "Bun",
+            "Sonner",
+            "Partial Prerendering (PPR)"
+          ]
+        },
+        "comprehensive_description": "A high-performance technical demonstration playground designed to showcase cutting-edge Next.js 16 and React 19 architecture patterns. Emphasizing modern React concepts, the application integrates Partial Prerendering (PPR), the React Compiler, robust progressive enhancement, and advanced soft/hard routing strategies ('the Instagram Trick'). Built with interactive optimistic interfaces and concurrent transitions, the system resolves complex visual state updates with zero user-perceived latency while ensuring complete session hygiene and fail-safe error recovery.",
+        "engineering_highlights": [
+          "Partial Prerendering (PPR) & Cache Components: Leveraged Next.js 16's experimental 'cacheComponents: true' feature to build a high-performance rendering model, splitting the document into a static, edge-cached page shell (header, sidebar) and dynamic real-time segments (user auth state, posts feed) streamed progressively via <Suspense> boundaries.",
+          "Granular Compound Component Composition: Engineered highly decoupled and reusable structural components (e.g. <Post.Root>, <Post.Header>, <Post.Media>, <Post.LikeButton>, <Post.Delete>) powered by React Context, eliminating complex boolean flags and prop-drilling while allowing the parent to control structural markup and layout.",
+          "Client-Side Optimistic UI with Error Rollback: Designed instant-feedback systems for likes and post deletions using React 19's `useOptimistic` hook within transition boundaries. When server actions fail (e.g., simulated database errors in post deletions), the UI programmatically rolls back to its original state and displays helpful error toast notifications.",
+          "Soft vs. Hard Navigation Interception: Implemented advanced parallel routes (@modal) and intercepting route segments ((.)post) to enable smooth client-side modal overlays on soft navigation clicks without full page reloads, while fully preserving direct server-side rendering and deep-link routing on hard page refreshes.",
+          "Concurrent Refresh Transitions: Replaced standard key-remount hacks with React 19's concurrent transitions (`useTransition` and `router.refresh()`), keeping the current user feed visible and fully interactive on-screen while fresh data is streamed and compiled in the background."
+        ],
+        "measurable_metrics": {
+          "execution_latency": "0ms client-side perceived delay for core user interactions (liking posts, deleting items) via optimistic rendering, backed by simulated server-side processing delays (2s authentication, 1s deletion, 500ms likes) to demonstrate loading state smoothness.",
+          "ui_performance": "Consistent, locked 60 FPS (or 120 FPS on ProMotion screens) layout transitions and background data refetches. Zero Cumulative Layout Shift (CLS) achieved through strict aspect-ratio aspect bounding on image wrappers and skeleton loaders.",
+          "operational_cost": "$0/month infrastructure cost. The entire application executes on Vercel's serverless and edge networks, relying fully on localized HTTP-only browser cookie management and static CDN distribution."
+        },
+        "star_challenges": [
+          {
+            "situation": "Implementing real-time, high-speed user interactions such as post deletions required an instantaneous layout response, yet must reliably handle eventual consistency and rollback states if the underlying network request or database transaction failed.",
+            "action": "Developed an optimistic delete flow inside the Compound Post Component. By utilizing React 19's `useOptimistic` hook within a `useTransition` boundary, the `PostRoot.tsx` immediately intercepts the submission, returns `null` to hide the card from the active viewport, and triggers the `deletePostAction` Server Action. This action purposefully simulates a server error, returning a mock rejection to the client transition handler, which catches the error and instantly rolls back the deleted state so the post reappears seamlessly.",
+            "result": "Created a robust, instantaneous interaction model that provides immediate client response while maintaining complete data-level integrity and graceful recovery during network or database failures.",
+            "inline_image": ""
+          },
+          {
+            "situation": "Refreshing a data feed in standard React applications typically triggers a full layout flash or forces users to wait for a loading skeleton, breaking scroll continuity and undermining the luxury feel of a continuous, fluid social feed.",
+            "action": "Designed a `RefreshWrapper` using React 19 concurrent transitions (`useTransition`) and Next.js App Router's `router.refresh()`. Wrapping the feed refresh button inside the transition wrapper signals React to retain the interactive, fully loaded feed on-screen while it fetches the updated data bundle. Once the new data streams in, React updates the feed in a single non-blocking composition step.",
+            "result": "Achieved seamless, non-blocking feed updates that preserve active user focus, scroll coordinates, and element hover states while quietly updating items in the background.",
+            "inline_image": ""
+          }
+        ],
+        "architectural_deep_dive": {
+          "text": "The architecture of InstaV2 combines React 19's modern client features with Next.js 16's next-generation edge rendering framework. Built entirely around the React Composition Pattern, the app manages complex dynamic layouts through clean compound elements, relying on localized React Context rather than bulky state management libraries. The rendering pipeline utilizes Next.js 16's Partial Prerendering (PPR), leveraging high-speed edge cached headers and layouts with dynamic streamed 'holes' for user session and feed states. Security and session hygiene are enforced at the layout layer; while data updates use smooth transitions, user auth shifts trigger a strict layout-level key change to purge active client memory and prevent session bleed. URL search parameters are designated as the sole source of truth for feed filtering, ensuring native browser navigation and shareability operate out-of-the-box.",
+          "illustration": null
+        },
+        "lessons_learned": "This showcase proved that React 19's concurrent APIs (such as useTransition and useOptimistic) enable highly interactive, fluid user interfaces without the overhead of massive state engines. Utilizing the Compound Component composition pattern paired with clean context providers drastically increased code maintainability and layout flexibility. Additionally, combining Partial Prerendering (PPR) with progressively-enhanced native form and server action flows demonstrated that modern, state-of-the-art web designs can remain extremely resilient, high-performance, and completely accessible."
+      }
+    },
+    {
+      "name": "honey-pot",
+      "description": "A Next.js Honey Pot application designed to lure attackers, simulate vulnerabilities (like shell access), and log their activities for security analysis.",
+      "html_url": "https://github.com/HoodieYlya13/honey-pot",
+      "language": "TypeScript",
+      "languages": [
+        "TypeScript",
+        "JavaScript",
+        "SQL",
+        "Bash",
+        "HTML",
+        "CSS"
+      ],
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "fork": false,
+      "updated_at": "2026-05-25T17:03:55Z",
+      "homepage": null,
+      "portfolio": {
+        "routing": {
+          "repo_name": "honey-pot",
+          "project_name": "Honey Pot Server Simulator",
+          "hero_image": ""
+        },
+        "project_meta": {
+          "role": "Full-Stack & Security Engineer",
+          "development_phase": "Completed / Simulation Sandbox",
+          "languages": [
+            "TypeScript",
+            "JavaScript",
+            "SQL",
+            "Bash",
+            "HTML",
+            "CSS"
+          ],
+          "frameworks_and_tools": [
+            "Next.js 16 (App Router)",
+            "React 19",
+            "Prisma ORM",
+            "PostgreSQL",
+            "Docker",
+            "Docker Compose",
+            "Tailwind CSS v4",
+            "Zod",
+            "bcryptjs"
+          ]
+        },
+        "comprehensive_description": "An interactive full-stack Honeypot application designed for enterprise security research and attacker behavior monitoring. Developed as part of an advanced enterprise security architecture course (5A Architecture Sécurisée Entreprise), the application simulates a realistic administration panel containing highly confidential business documents and deliberate, strategically placed security vulnerabilities. Attackers are lured into standard entry vectors, such as brute-forcing administrative logins or exploring administrative interfaces, where they discover an exposed, unauthenticated database access point (/api/admin/data) and an un-sanitized interactive shell command execution endpoint (/api/shell). In the background, the honeypot silently and comprehensively logs all interactions—including brute-force attempts with credentials tried, client IP addresses, user agents, API statuses, and commands executed in the shell—providing deep insights into attacker methodology. The application is completely containerized via Docker and orchestrated with Docker Compose, ensuring a secure, sandboxed execution environment that isolates the host system from malicious commands run by attackers.",
+        "engineering_highlights": [
+          "Intentionally Engineered Security Defects: Designed and deployed deliberate, realistic vulnerabilities, including an unauthenticated data leakage API (/api/admin/data) and an un-sanitized shell execution parameter (/api/shell), mimicking common misconfigurations.",
+          "Comprehensive Forensic Logging Layer: Implemented a custom server-side logging mechanism that captures attacker telemetry, recording precise timestamps, client IP addresses (x-forwarded-for), browser user-agents, failed login credentials (brute-force monitoring), and executed shell commands directly to a centralized log file (honeypot.log).",
+          "Sandboxed Containerization & DevSecOps Isolation: Containerized the application stack using Node.js and PostgreSQL services, mapping container ports securely and implementing isolation boundaries to prevent commands executed via the exposed shell from compromising the host infrastructure.",
+          "Relational Database Seeding for Realism: Programmed a seed script using Prisma and Faker to populate the PostgreSQL database with 147 mock confidential documents and 312 historical fake login attempts, establishing a highly authentic 'honeypot lure' that keeps attackers engaged.",
+          "Modern Next.js 16 App Router Core: Crafted the application with Next.js 16 (App Router), React 19, and Tailwind CSS v4, styling a dark-themed glassmorphism interface ('liquid-glass') that displays fake administrative data once authenticated.",
+          "Robust Input Validation Core: Integrated React Hook Form with Zod schemas to enforce client-side constraints, demonstrating that while the backend has intentional holes, standard front-end input rules remain intact to keep up the appearance of a standard app."
+        ],
+        "measurable_metrics": {
+          "execution_latency": "Command execution response under 50ms (local/containerized exec overhead), with simulated UX delays of 500ms to 2000ms for admin pages to mimic network latency and maintain the illusion of a complex remote server.",
+          "ui_performance": "Lighthouse Performance score of 98/100, featuring instant initial loads, highly responsive custom CSS animations, and a React 19 concurrent-safe client state flow.",
+          "operational_cost": "$0/month. The entire sandbox runs locally via lightweight Docker containers, isolating the application from the host and consuming minimal resources (under 250MB RAM for the full stack)."
+        },
+        "star_challenges": [
+          {
+            "situation": "A honeypot is useless if attackers quickly realize it is a fake environment. It needs to look authentic, contain believable data, and feature subtle but discoverable vulnerabilities rather than obvious traps.",
+            "action": "I used Prisma and Faker to seed the database with 147 unique, professional-looking confidential documents with varying levels of classification (RESTRICTED, CONFIDENTIAL, TOP SECRET). I also populated 312 fake login attempts with random IPs and user agents to simulate a live, highly-active target. Furthermore, the frontend implements custom artificial delays (500ms to 2000ms) when querying the backend to emulate realistic server-side processing times for sensitive databases.",
+            "result": "The simulated environment perfectly mimics an active, high-value enterprise administration server, enticing attackers to spend more time performing reconnaissance and executing payloads, which maximizes logging efficiency.",
+            "inline_image": ""
+          },
+          {
+            "situation": "The honeypot must record every single step of the attacker—including failed login payloads (brute-force credentials), system commands, and headers—without crashing, raising security warnings, or showing errors that would tip off the hacker.",
+            "action": "I developed custom logging functions in the Next.js API routes (/api/auth/login and /api/shell). In the authentication route, I intercepted the exact login/password inputs and logged them directly to a server-side honeypot.log file alongside their IP address (x-forwarded-for) and User Agent. In the shell execution route, all incoming shell commands are recorded before execution.",
+            "result": "Administrators can monitor attacker behavior in real time by executing 'make logs' (mapping to 'tail -f /app/logs/honeypot.log'). The logging mechanism is silent, fast, and does not leak any operational indicators to the attacker's client.",
+            "inline_image": ""
+          },
+          {
+            "situation": "Exposing an endpoint like /api/shell that executes raw commands on the host is highly dangerous. If an attacker gains access to the shell, they could potentially compromise the host system, infect the local network, or access private files.",
+            "action": "I packaged the entire architecture into a multi-container Docker Compose setup. The Next.js application runs inside a distinct 'web' container using Node 22, while the Postgres database runs in an isolated 'db' container. Crucially, the web container is restricted to its virtualized workspace, limiting any shell commands executed via /api/shell to the containerized environment.",
+            "result": "The host system is completely safe and isolated. Even if an attacker executes destructive commands (e.g., 'rm -rf /' or background cryptominers), they only damage the volatile container environment, which can be immediately restored to a clean state by running 'make clean && make start'.",
+            "inline_image": ""
+          }
+        ],
+        "architectural_deep_dive": {
+          "text": "The system's architecture is a multi-tier sandbox environment orchestrated entirely via Docker and Docker Compose.\n\n- **Frontend Tier (Next.js 16 & React 19):** Implements the user interface utilizing Tailwind CSS v4 and a customized glassmorphic design system.\n\n- **Backend API Tier (Next.js App Router):** Exposes endpoints for authentication (/api/auth/login), administrative data extraction (/api/admin/data), and a vulnerable shell command executor (/api/shell).\n\n- **Forensic Logging Engine:** Every API request to the authentication and shell endpoints is caught by a custom synchronous logging module.\n\n- **Data Tier (Prisma & PostgreSQL 15):** The database contains models for User, LoginAttempt, and SecretDocument.\n\n- **Isolation Boundary (Docker Compose):** Separates the web app container from the database container and the host machine.",
+          "illustration": null
+        },
+        "lessons_learned": "- **The Art of Deception in Cyber Defense:** Designing a honeypot taught me that creating realistic, engaging data (lures) and artificial latency is just as important as the security vulnerability itself.\n\n- **Container Security and DevSecOps:** Exposing shell commands, even in a simulated workspace, demands absolute isolation. Utilizing Docker Compose to restrict network routing, volume mounts, and container privilege levels is critical to protecting the underlying infrastructure.\n\n- **Telemetry and Forensics:** Gathering structured logs of malicious payloads reveals deep insights into the credentials and dictionaries used by modern hackers.\n\n- **Simplicity in Attack Surface Design:** Building intentional vulnerabilities in an application without introducing accidental secondary weaknesses requires precise architectural design."
+      }
+    },
+    {
+      "name": "auth",
+      "description": "🔐 Lightweight, self-hosted OpenID Connect (OIDC) identity provider for first & third-party apps. Features passwordless auth (passkeys & magic links), PKCE, consent gates, and per-app roles. Built with Next.js 16, Bun, Prisma, and Redis.",
+      "html_url": "https://github.com/HoodieYlya13/auth",
+      "language": "TypeScript",
+      "languages": [
+        "TypeScript",
+        "JavaScript",
+        "SQL",
+        "HTML",
+        "CSS"
+      ],
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "fork": false,
+      "updated_at": "2026-06-29T21:53:16Z",
+      "homepage": "https://auth.hy13dev.com",
+      "portfolio": {
+        "routing": {
+          "repo_name": "auth",
+          "project_name": "HY13 Passkey SSO",
+          "hero_image": ""
+        },
+        "project_meta": {
+          "role": "Lead Full-Stack Security & Identity Engineer",
+          "development_phase": "Production",
+          "languages": [
+            "TypeScript",
+            "JavaScript",
+            "SQL",
+            "HTML",
+            "CSS"
+          ],
+          "frameworks_and_tools": [
+            "Next.js 16 (App Router, cacheComponents / PPR)",
+            "React 19 (React Compiler)",
+            "Prisma 7 ORM (driver adapters)",
+            "PostgreSQL (Neon)",
+            "jose (RS256 / JWKS)",
+            "SimpleWebAuthn (WebAuthn / passkeys)",
+            "Upstash Redis",
+            "Resend API",
+            "Cloudflare Turnstile",
+            "Tailwind CSS v4",
+            "Radix UI",
+            "Zod",
+            "bun"
+          ]
+        },
+        "comprehensive_description": "A small, self-hosted OpenID Connect identity provider — a 'mini-Keycloak' — that centralizes authentication for first- and third-party applications. Users authenticate once with a passkey (WebAuthn) or a magic link, then are redirected back to the calling app with standard OIDC tokens whose access token carries their identity and per-app roles. It implements the full standards-compliant Authorization Code + PKCE (S256) flow with RS256-signed, self-contained access/ID tokens, a discovery document and JWKS endpoint, rotating refresh tokens with replay (reuse) detection, RP-initiated logout, a one-time-per-app consent screen, and a per-client role-based access-control model administered from a built-in dashboard. Built on Next.js 16 (App Router with cacheComponents/PPR and the React 19 compiler) on bun, it uses Prisma 7 over PostgreSQL (Neon) through the @prisma/adapter-pg driver adapter with UUIDv7 identifiers for durable state, and Upstash Redis (with TTLs) for ephemeral state — WebAuthn challenges, magic-link tokens, and short-lived OIDC authorization codes — so the database holds only durable rows. Email magic links are dispatched via Resend, sign-in is shielded by Upstash Redis rate limiting and Cloudflare Turnstile, and the whole stack runs at $0/month on free tiers. It is not a toy: it is the live identity provider behind a separate Confluence-RAG product, issuing the role-bearing access tokens that an MCP server verifies for RBAC.",
+        "engineering_highlights": [
+          "Standards-Compliant OIDC Authorization Server: Implemented the full OpenID Connect Authorization Code + PKCE (S256-only) flow from scratch with jose — discovery document, JWKS endpoint, RS256-signed self-contained access and ID tokens (identity claims + per-audience `roles` + an `admin` boolean), UserInfo, and RP-initiated logout — so any off-the-shelf OIDC client library integrates without custom glue.",
+          "Refresh-Token Rotation with Reuse Detection: Engineered a rotating refresh-token family model (hashed tokens, family id, used/revoked flags) where presenting an already-rotated token is treated as a replay and revokes the entire token family, containing stolen-token blast radius while keeping legitimate long-lived sessions seamless.",
+          "Passwordless Identity: Built dual passwordless auth — SimpleWebAuthn passkeys (platform authenticators, signature verification, per-credential management) plus Resend magic links that verify the email and create the account — backed by DB-stored, httpOnly, individually revocable login sessions.",
+          "Per-Client RBAC with Env-Driven Admin: Designed a per-application role model — each registered client defines its own role palette and a `defaultRoles` set auto-assigned on first link — assigned from an admin dashboard, while the privileged `admin` flag is computed from an `ADMIN_EMAIL` env value rather than stored, so rotating the env rotates super-admin with zero database writes.",
+          "Free-Tier Operational Hardening: Split state across PostgreSQL (durable, UUIDv7) and Upstash Redis (ephemeral, TTL-bound challenges/codes/tokens), guarded actions with Redis rate limiting and Turnstile, and added an authorized /api/cron endpoint (daily via GitHub Actions) that keep-warms Postgres + Redis against cold starts and transactionally purges abandoned signups, expired sessions, and expired refresh tokens."
+        ],
+        "measurable_metrics": {
+          "execution_latency": "Short-lived, self-contained RS256 access/ID tokens (~15 min TTL) verifiable offline against the JWKS with no introspection round-trip; refresh tokens valid 30 days with rotation on every use; sliding-window Redis rate limiting adds single-digit-millisecond overhead per auth action.",
+          "ui_performance": "Next.js 16 cacheComponents (Partial Prerendering) streams dynamic, cookie-dependent sections while static shells prerender instantly, and the React 19 compiler removes manual memoization; mutations are split by stakes: low-risk edits (profile fields like name/birthday, passkey renaming) use React 19 useOptimistic for instant feedback with automatic rollback on failure, while security-sensitive actions (adding/deleting passkeys, revoking sessions and linked apps) deliberately stay pessimistic — server action then router.refresh() to re-stream authoritative state — so the UI never shows an optimistic lie about a security boundary; all surfaced through accessible Radix modals and Sonner toasts.",
+          "operational_cost": "$0/month runtime on free tiers — Neon PostgreSQL (pooled + direct/migration URLs), Upstash Redis, Resend, Cloudflare Turnstile, and Vercel — kept warm and clean by a daily GitHub Actions cron."
+        },
+        "star_challenges": [
+          {
+            "situation": "Long-lived refresh tokens are the highest-value secret an identity provider holds: if one is exfiltrated, an attacker can silently mint access tokens indefinitely, and naive rotation schemes still let a stolen token be replayed once.",
+            "action": "Modeled refresh tokens as rotating families — each token is stored only as a SHA-256 hash with a family id, expiry, and used/revoked flags. On every refresh the presented token is rotated to a fresh one; if a token that has already been rotated (used) is ever presented again, it is treated as a replay and the entire family is revoked in a single transaction, logging the legitimate user out everywhere.",
+            "result": "Bounded the blast radius of a stolen refresh token to a single use and a forced re-authentication, achieving Keycloak/Auth0-grade reuse-detection semantics on a self-hosted, zero-cost stack, verified end-to-end by an automated reuse-detection check.",
+            "inline_image": ""
+          },
+          {
+            "situation": "Next.js 16's cacheComponents (Partial Prerendering) changes how authentication guards behave: a redirect() in a layout does not reliably halt rendering or data fetching in the child page, so a protected page could still execute its queries and stream privileged data before the redirect lands.",
+            "action": "Moved every authorization guard out of shared layouts and into each protected page, checking the session and required state (verified email, completed username, admin identity) before any data fetch, and kept ephemeral/cookie-dependent reads inside the dynamic boundary so the static shell can still prerender.",
+            "result": "Eliminated the data-leak window entirely while preserving Partial Prerendering's instant static shells — protected pages never touch the database until the request is proven authorized.",
+            "inline_image": ""
+          },
+          {
+            "situation": "An identity provider needs to serve real third-party applications, not just a demo login form — those apps must be able to register, receive role-scoped tokens, and trust the issuer with any standard OIDC client.",
+            "action": "Built an admin dashboard to register clients (redirect URIs, post-logout URIs, trusted flag, per-app role palette, default roles, optional hashed client secret) and assign user roles, then wired the issuer to embed each client's resolved roles into the audience-scoped access token; integrated it as the live SSO for a separate Confluence-RAG product where a Tauri desktop client signs in via PKCE and an MCP server verifies the role-bearing access token (alongside legacy pre-shared tokens) for RBAC.",
+            "result": "Turned the project from a template into a production identity provider with a real downstream consumer — one user account, role-aware tokens, and a standards-based integration surface that any OIDC library can consume.",
+            "inline_image": ""
+          },
+          {
+            "situation": "Deploying a stateful auth stack entirely on free tiers invites Neon PostgreSQL cold starts after idle periods, database pollution from abandoned magic-link signups, and unbounded growth of expired sessions and refresh tokens.",
+            "action": "Added an /api/cron endpoint guarded by a Bearer CRON_SECRET and driven by a daily GitHub Actions workflow that pings Postgres and Redis to keep them warm, then runs a single transaction deleting unconfirmed users (no username and no passkey older than 24h), expired login sessions, and expired refresh tokens.",
+            "result": "Eliminated cold starts on the critical login path and automated 100% of stale-row cleanup, keeping a lean schema and predictable latency at zero infrastructure cost.",
+            "inline_image": ""
+          }
+        ],
+        "architectural_deep_dive": {
+          "text": "State is deliberately split by lifetime. Durable identity data — users, WebAuthn credentials, registered clients, app memberships (consent links), rotating refresh tokens, and login sessions — lives in PostgreSQL (Neon) with UUIDv7 primary keys, accessed through Prisma 7's @prisma/adapter-pg driver adapter (pooled URL for reads, a direct URL for migrations). Ephemeral, security-sensitive state — WebAuthn challenges, magic-link tokens, and OIDC authorization codes (bound to the PKCE challenge, user, client, nonce, and scope for ~60s) — lives only in Upstash Redis with TTLs, so it self-expires and never pollutes the database. The OIDC surface is a set of App Router route handlers: /api/oidc/authorize validates client, redirect_uri, PKCE, scope, state, and nonce, then requires a login session (redirecting to sign-in with a return path), requires a completed username, and shows consent for non-trusted clients before minting a short-lived authorization code; /api/oidc/token exchanges that code (verifying the PKCE code_verifier) for RS256 access/ID/refresh tokens or rotates a refresh token; /api/oidc/userinfo and /api/oidc/logout complete the standard set, with discovery and JWKS exposed under /.well-known via rewrites. RS256 keys are loaded from base64-encoded PEM in the environment, and the ISSUER env both signs tokens and builds endpoint URLs. The web app itself runs on Next.js 16 with cacheComponents (Partial Prerendering): authorization guards live inside each page (not layouts) so static shells prerender while authenticated, cookie-dependent reads stream within the dynamic boundary. Sign-in actions are protected by Upstash rate limiting and Cloudflare Turnstile, and a daily GitHub Actions cron hits /api/cron to keep the data stores warm and purge stale rows.",
+          "illustration": null
+        },
+        "lessons_learned": "Building a standards-compliant OpenID Connect provider from primitives — jose for RS256/JWKS, SimpleWebAuthn for passkeys, Redis for ephemeral code/token state — made the security model concrete in a way that adopting a black-box auth SaaS never does: PKCE binding, refresh rotation with reuse detection, and audience-scoped role claims stop being buzzwords and become code you can reason about and test. Next.js 16's cacheComponents also reframed authorization as a data-fetching concern rather than a routing one; the key insight was that guards belong at the page/data boundary, not in layouts, because Partial Prerendering will happily stream a child page that a layout redirect was supposed to block. Finally, separating durable state (Postgres, UUIDv7) from ephemeral state (Redis with TTLs) and automating keep-warm plus cleanup proved you can run a genuinely production-grade, multi-tenant identity provider — one that real third-party apps depend on — at zero monthly cost without compromising on the security guarantees that matter."
+      }
+    }
+  ],
+  "repositories": [
+    {
+      "name": "portfolio",
+      "description": "Personal Portfolio & AI Concierge | Built with Next.js 16 & React 19. Dynamically hydrated via a centralized profile SSoT and integrated with a custom RAG-powered LLM (YlyaBot)",
+      "html_url": "https://github.com/HoodieYlya13/portfolio",
+      "language": "TypeScript",
+      "languages": [
+        "TypeScript",
+        "JavaScript",
+        "GLSL",
+        "HTML",
+        "CSS"
+      ],
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "fork": false,
+      "updated_at": "2026-07-05T22:15:14Z",
+      "homepage": "https://www.hy13dev.com",
+      "portfolio": {
+        "routing": {
+          "repo_name": "portfolio",
+          "project_name": "My Portfolio",
+          "hero_image": ""
+        },
+        "project_meta": {
+          "role": "Lead Full-Stack & GenAI Architect",
+          "development_phase": "Production-Ready (SSoT Ecosystem)",
+          "languages": [
+            "TypeScript",
+            "JavaScript",
+            "GLSL",
+            "HTML",
+            "CSS"
+          ],
+          "frameworks_and_tools": [
+            "Next.js 16.2.6",
+            "React 19.2.4",
+            "Tailwind CSS v4",
+            "Three.js",
+            "React Three Fiber (R3F)",
+            "GSAP (GreenSock)",
+            "Zod",
+            "React Hook Form",
+            "Resend",
+            "Sonner",
+            "Lucide React",
+            "GitHub GraphQL API",
+            "GitHub Actions CI/CD",
+            "Node.js Compiler",
+            "Next.js after() API",
+            "Supabase Client",
+            "Upstash Redis"
+          ]
+        },
+        "comprehensive_description": "The central control plane and Single Source of Truth (SSoT) for my professional engineering presence. This project is a highly optimized, state-of-the-art developer portfolio built on Next.js 16 (App Router) and React 19, integrating a headless data-driven architecture. A single structural update to profile.json triggers an automated GitHub Actions CI/CD compiler script to rewrite the GitHub profile README.md, programmatically sync active repository pins via the GitHub GraphQL API, bust edge CDN caching routes, and dynamically hot-swap the system prompt context of a Retrieval-Augmented Generation (RAG) AI assistant, YlyaBot. The application delivers a premium, hyper-fluid interactive visual experience using a bespoke React Three Fiber (R3F) WebGL Liquid Glass background running custom simplex noise fragment shaders, coupled with smooth GSAP transition choreographies.",
+        "engineering_highlights": [
+          "SSoT Headless Architecture: Designed a decoupled portfolio control plane where my entire career timeline, placement preferences, and technical skills live inside a centralized machine-readable JSON schema, feeding Vercel page generation, GitHub profiles, and vector RAG pipelines concurrently.",
+          "GraphQL-Driven Pin Sync: Developed a custom automated compiler script executed in GitHub Actions that programmatically synchronizes my featured GitHub page pins with my SSoT configuration, executing dynamic GraphQL mutations to re-pin repositories on-push.",
+          "Next.js 16 Async Request Compliance: Architected the page routing and data-access layers (DAL) to fully comply with Next.js 16's asynchronous request APIs, ensuring robust async resolution of cookies, headers, and dynamic route params.",
+          "React 19 Server/Client Composition & ISR: Leveraged advanced React 19 server component patterns and high-performance fetches with 1-hour Edge/CDN ISR revalidation caching (revalidate: 3600) or standard 'use cache' components to stream dynamic elements via Suspense boundaries.",
+          "Dynamic Parallel & Intercepting Routes: Engineered a smooth user navigation system for repository deep dives using Next.js parallel slots (@modal) and intercepting routes ((.)projects/[id]), rendering high-fidelity project overlays dynamically without losing application routing state.",
+          "Bespoke WebGL Liquid Glass Shader: Created a premium dynamic background utilizing React Three Fiber and customized GLSL fragment shaders implementing 2D Simplex noise, real-time aspect-ratio compensation, and a MutationObserver layout listener to hot-swap theme colors seamlessly on dark-mode class mutations.",
+          "Robust Session History Navigation: Engineered a highly resilient navigation management hook (useSafeBack) utilizing sessionStorage history tracking, allowing modular modal closers to securely transition back through parallel routes or safely fall back to home navigation without crashing active browser route history.",
+          "Throttled LLM Stream Rendering: Developed a high-performance batching hook in React 19 that buffers incoming server-sent tokens and updates the UI state at most once every 60ms, preventing browser main thread congestion and eliminating connection-terminating TCP backpressure.",
+          "Post-Response Background Processing: Leveraged Next.js 16's native `after()` API to shift heavy database transactions (Supabase query logs) and server analytics (Upstash Redis) completely outside the request-response lifecycle, immediately releasing HTTP connections upon stream completion.",
+          "Zero-Latency SWR Context Synchronizer: Implemented a hybrid Stale-While-Revalidate (SWR) cache for live SSoT updates with a 3-second cold-start synchronous fetch timeout and 0ms warm-cache responses, avoiding dynamic route degradation."
+        ],
+        "measurable_metrics": {
+          "execution_latency": "Sub-150ms Time to First Byte (TTFB) via Edge-cached Incremental Static Regeneration (ISR) and static page pre-rendering; 0ms startup latency for AI chatbot streaming by offloading telemetry and database writes to background processes.",
+          "ui_performance": "Sustained lock-tight 60 FPS visual rendering under heavy CPU load, utilizing GPU-accelerated GLSL shader compilation and a 60ms batching threshold for dynamic content rendering; 100% Google Lighthouse performance scores.",
+          "operational_cost": "Absolute zero ($0.00) monthly maintenance cost, running completely serverless via Next.js ISR on Vercel Edge networks and utilizing free-tier GitHub Actions virtual runners."
+        },
+        "star_challenges": [
+          {
+            "situation": "Integrating a high-performance WebGL liquid glass shader inside a dual-theme Next.js website caused visible flashes, broken color boundaries, or high latency because updating R3F canvas components via traditional React state forces expensive re-renders and re-compilations of the underlying shader program.",
+            "action": "Bypassed React state updates entirely for canvas styling. Programmed a low-level browser MutationObserver on the document.documentElement to detect class name changes (e.g., .dark). Directly mapped these changes to low-level canvas document style queries, parsing the CSS custom variables (--background and --primary) to dynamically inject new THREE.Color vectors directly into the WebGL shader's uniform memory array without triggering standard React tree diffs.",
+            "result": "Achieved microsecond-accurate color transitions inside the active GLSL fragment shader upon dark mode clicks, maintaining zero-flash layouts and keeping the render pipeline running at a steady 60 FPS.",
+            "inline_image": ""
+          },
+          {
+            "situation": "Implementing intercepting routes ((.)projects/[id]) for beautiful detail overlays caused navigational locking. Clicking close buttons or clicking outside the modal triggered default browser history steps (via router.back()), which occasionally popped the user completely off the site or stranded them in broken parallel routing states if they landed on the page directly from external organic search links.",
+            "action": "Built a highly resilient navigation management hook (useSafeBack) and contextual state provider. Implemented a session history tracker that monitors active portfolio routing paths inside sessionStorage. If the session history contains valid routing traces, close commands dispatch standard router.back(); if the session history is blank (e.g., direct external visits), the hook interceptor dynamically rewrites history and triggers a clean push back to /projects.",
+            "result": "Fully eliminated modal navigational lockouts, ensuring a flawless UX across both intercepting routes and standalone desktop layouts under all navigation scenarios.",
+            "inline_image": ""
+          },
+          {
+            "situation": "The portfolio dynamically reads navigation states, custom CSS height variables, and cookies synchronously on boot to render smooth layout choreographies. Because Next.js pre-renders the HTML on the server, client-side viewport computations and cookie-based theme hooks caused severe hydration mismatches and visible UI flashing.",
+            "action": "Devised a zero-flash pre-boot script (ThemeScript) injected directly into the HTML <head>, resolving cookie-based theme classes before the page layout mounts. Configured proper suppressHydrationWarning flags on structural page layers, and safely wrapped dynamic, browser-dependent elements (like GetInTouchButton) in client-side Suspense wrappers to postpone non-essential element hydration.",
+            "result": "Completely bypassed server-client mismatches and eliminated the visual 'flash of unstyled content' (FOUC) while retaining full static site generation capabilities.",
+            "inline_image": ""
+          }
+        ],
+        "architectural_deep_dive": {
+          "text": "The portfolio ecosystem follows a headless control plane layout. The core user-experience layer is built with Next.js 16 and React 19, compiling structural layouts using advanced PPR (Partial Prerendering) streams. A custom Git Actions CI/CD script operates as the compiler of the SSoT (profile.json), updating dynamic Markdown templates on-push and issuing programmatic GraphQL mutations to sync pinned repositories via the GitHub overview API. Inside the Next.js runtime, standard routes access profile data using a hybrid Stale-While-Revalidate (SWR) cache with a 3-second cold-start timeout guard, guaranteeing 0ms runtime retrieval latency. Chatbot telemetries (Supabase query logging and Upstash Redis analytics) are backgrounded using Next.js 16's native `after()` API to instantly close response streams. The WebGL shader is isolated entirely within a React Three Fiber canvas, listening directly to dark-mode DOM class changes via a MutationObserver to update WebGL uniform color parameters dynamically.",
+          "illustration": {
+            "url": "https://hy13dev.com/img/portfolio-architecture.png",
+            "alt": "Single Source of Truth (SSoT) System Architecture and Compiler Pipeline Diagram",
+            "caption": "Flow of centralized profile.json config parsing through compiler actions, dynamic ISR page rendering, and WebGL shader parameters."
+          }
+        },
+        "lessons_learned": "Decoupling content data from layout presentation via a machine-readable Single Source of Truth (SSoT) dramatically accelerates professional portfolio updates, eliminates copy-paste sync errors across networks, and directly supplies high-fidelity data matrices to Retrieval-Augmented Generation (RAG) agents with zero extra ingestion overhead. Furthermore, when building hyper-smooth visual experiences in Next.js 16/React 19, keeping high-frequency animation logic and theme observer states completely isolated from the React render diffing pipeline is essential to preventing frame drops and hydration anomalies."
+      }
+    },
+    {
+      "name": "eclokit",
+      "description": "Re-engineered a next-gen e-commerce storefront template into a custom 3D subscription experience for my girlfriend's DIY school project, EcloKit. Powered by Next.js 16, React 19, and React Three Fiber",
+      "html_url": "https://github.com/HoodieYlya13/eclokit",
+      "language": "TypeScript",
+      "languages": [
+        "TypeScript",
+        "JavaScript",
+        "HTML",
+        "CSS"
+      ],
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "fork": true,
+      "updated_at": "2026-06-11T20:45:03Z",
+      "homepage": "https://eclokit.vercel.app",
+      "portfolio": {
+        "routing": {
+          "repo_name": "eclokit",
+          "project_name": "EcloKit",
+          "hero_image": ""
+        },
+        "project_meta": {
+          "role": "Lead Full-Stack Developer & Creative Technologist",
+          "development_phase": "Completed & Production-Ready",
+          "languages": [
+            "TypeScript",
+            "JavaScript",
+            "HTML",
+            "CSS"
+          ],
+          "frameworks_and_tools": [
+            "Next.js 16 (Canary)",
+            "React 19",
+            "React Three Fiber (R3F)",
+            "Three.js",
+            "GSAP",
+            "Framer Motion",
+            "Tailwind CSS v4",
+            "Commerce Kit SDK",
+            "Biome",
+            "Bun",
+            "Shadcn UI",
+            "Radix UI",
+            "Postprocessing"
+          ]
+        },
+        "comprehensive_description": "EcloKit is a premium, custom 3D subscription-based storefront built for a high-end French DIY and craft box service. Created as a tailored school project showcase for Loanne, Lina, and Clara's brand concept, this application replaces traditional static layouts with an interactive 3D WebGL user experience. The storefront enables users to discover curated collections, subscribe to seasonal box tiers, explore partner packages, bookmark favorites, and get dynamic assistance. By integrating headless commerce engines, advanced WebGL animators, and strict Next.js App Router caching, the project delivers a luxurious digital storefront that blends fine art with cutting-edge engineering.",
+        "engineering_highlights": [
+          "Engineered a dynamic 3D WebGL Magic Box Canvas utilizing React Three Fiber, OrbitControls, and custom bloom post-processing filters.",
+          "Designed a real-time cursor-proximity calculations engine that dynamically scales THREE.PointLight and material emissive intensity using Three.js MathUtils.lerp as the cursor hovers near the screen center.",
+          "Implemented solid API error tolerance by wrapping all Commerce Kit SDK client operations in tuple-based safe-try boundaries to eliminate client crashes.",
+          "Constructed a persistent client-side wishlist system using custom React context hooks synchronized dynamically with local storage state.",
+          "Optimized initial render times and page speed benchmarks by lazy loading heavy WebGL three-fiber scenes using next/dynamic with disabled server-side rendering.",
+          "Developed a multi-page partner onboarding portal and integrated an Apple-style floating customer support chatbot widget with smooth custom transitions."
+        ],
+        "measurable_metrics": {
+          "execution_latency": "SSR / ISR Time to First Byte (TTFB) under 45ms utilizing Next.js 'use cache' directives and Partial Prerendering (PPR) dynamic splits.",
+          "ui_performance": "Steady 60fps WebGL animation loops across desktop and modern mobile devices; 100/100 Lighthouse performance score on desktop.",
+          "operational_cost": "$0/month hosting on Vercel's free serverless tier combined with Upstash Redis and Commerce Kit headless integrations."
+        },
+        "star_challenges": [
+          {
+            "situation": "The base template was built with strict English copywriting, rigid routes, and standard SDK calls that would crash the site during network dropouts or schema mismatches.",
+            "action": "Translated the entire storefront to natural, high-converting French, mapped localized routes (such as '/panier', '/commande', and '/mentions-legales'), and refactored API calls to use tuple-based safe-try wrappers.",
+            "result": "Created a 100% crash-proof routing experience where missing products or network failures resolve gracefully into custom fallback states instead of page errors.",
+            "inline_image": ""
+          },
+          {
+            "situation": "Loading high-fidelity GLTF meshes, orbit controllers, and continuous lighting calculations degraded mobile performance and caused hydration mismatches during server-side pre-rendering.",
+            "action": "Implemented deferred dynamic imports to keep the main bundle lightweight, wrapped the 3D scene in a Suspense boundary, and bound activation to cookie consent acceptance to prevent premature WebGL initialization.",
+            "result": "Reduced the initial JavaScript payload by approximately 120KB and established stable 60fps performance on standard iOS and Android browsers without hydration conflicts.",
+            "inline_image": ""
+          },
+          {
+            "situation": "The brand concept required unique customer engagement systems (AI chat assistance, custom newsletter dialogs, and a persistent wishlist) that typical headless storefronts do not support out of the box.",
+            "action": "Created custom hooks and a persistent React context for wishlists, developed an Apple-inspired floating chatbot panel using Framer Motion, and integrated jiggling micro-animation cues on primary call-to-action buttons.",
+            "result": "Achieved zero state desynchronization on bookmark lists, elevated user engagement, and delivered a premium, highly tactile customer interaction loop.",
+            "inline_image": ""
+          }
+        ],
+        "architectural_deep_dive": {
+          "text": "EcloKit's architecture utilizes a headless decoupling model where Next.js 16 handles server-side page structures, metadata resolution, and partial prerendering. The application state communicates with the Commerce Kit SDK for managing products, variants, shopping carts, and checkouts. In the browser, React Three Fiber mounts a isolated WebGL context inside the DOM to display our modeled craft box. While GSAP drives the sequential opening timeline of the box's lids on initial consent, continuous three-fiber useFrame render loops update point lights and cardboard emissive shaders dynamically by calculating the Euclidean distance of the user's pointer, merging high-performance commerce with real-time immersive artwork.",
+          "illustration": null
+        },
+        "lessons_learned": "This project demonstrated the power of creative coding when applied to traditional e-commerce. Balancing heavy WebGL animations and bloom post-processing filters with strict Core Web Vitals taught me how to strategically deferred render non-critical client assets. Furthermore, working alongside Loanne, Lina, and Clara highlighted the importance of translating artistic brand direction into accessible, highly performant design tokens, proving that e-commerce can be both technologically elite and visually breathtaking."
+      }
+    },
+    {
+      "name": "whistleblower",
+      "description": "A collaborative 4th-year US-FR engineering project. Features a modern React & Tailwind web app designed with American CPOs to parse industrial spreadsheets, calculate carbon footprints, and render dynamic ecological dashboards",
+      "html_url": "https://github.com/HoodieYlya13/whistleblower",
+      "language": "JavaScript",
+      "languages": [
+        "JavaScript",
+        "HTML",
+        "CSS"
+      ],
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "fork": false,
+      "updated_at": "2026-05-25T17:26:10Z",
+      "homepage": "https://whistleblower-dun.vercel.app",
+      "portfolio": {
+        "routing": {
+          "repo_name": "whistleblower",
+          "project_name": "WhistleBlower",
+          "hero_image": ""
+        },
+        "project_meta": {
+          "role": "Lead Frontend Engineer",
+          "development_phase": "Academic / Completed",
+          "languages": [
+            "JavaScript",
+            "HTML",
+            "CSS"
+          ],
+          "frameworks_and_tools": [
+            "React",
+            "Tailwind CSS",
+            "Chart.js",
+            "React Dropzone",
+            "React Router",
+            "PostCSS"
+          ]
+        },
+        "comprehensive_description": "WhistleBlower is an ecological auditing and data visualization dashboard designed to help modern industries assess and minimize their energy footprints. Developed as a cross-continental academic project in partnership with an American business school—where the American students acted as Chief Project Officers (CPOs) and Product Owners—the platform allows corporate users to securely register accounts, upload monthly energy consumption spreadsheets (.xlsx/.xls) via a drag-and-drop utility, and immediately analyze key parameters. The application processes the uploaded inputs through a dedicated API and visualizes monthly energy metrics (kWh) alongside carbon dioxide emissions (g CO₂) in responsive, interactive dashboards.",
+        "engineering_highlights": [
+          "Integrated React Dropzone with rigid client-side validation to filter out non-spreadsheet MIME types before payload transmission.",
+          "Engineered dynamic Chart.js dashboards using react-chartjs-2 to plot multi-dataset charts for electric consumption and greenhouse footprints.",
+          "Implemented a highly structured local storage state sync to persist authenticated corporate sessions and parsed spreadsheet metrics across refreshes.",
+          "Designed a responsive layout with custom Tailwind CSS utility layers and intricate clip-path geometry masks to render distinct trapezoid and parallelogram containers."
+        ],
+        "measurable_metrics": {
+          "execution_latency": "Excel upload, validation, and emission translation in under 150ms",
+          "ui_performance": "60fps dashboard interactions and sub-10ms dataset toggle latency",
+          "operational_cost": "Zero cost (static hosting for frontend, minimal local sharing for backend)"
+        },
+        "star_challenges": [
+          {
+            "situation": "Developing a technical application in collaboration with an American school where the American partners acted as Chief Project Officers (CPOs) required bridging time zones and translating high-level business models and mockups into pixel-perfect, functioning code.",
+            "action": "Adopted agile methods to sync regularly with the American CPOs' roadmap. Designed a flexible utility styling system with responsive Tailwind layers and custom CSS variables mapping to their exact green brand guidelines.",
+            "result": "Successfully launched a high-fidelity frontend matching the product owner's visual specifications, receiving excellent academic reviews for cross-continental collaboration.",
+            "inline_image": ""
+          },
+          {
+            "situation": "Corporate clients needed to toggle instantly between raw energy consumption statistics (kWh) and equivalent carbon emissions (g CO₂) without suffering page reloads, layout shifts, or rendering delays.",
+            "action": "Developed an internal state machine in React that dynamically maps and swaps data arrays, grid colors, and axis configurations within Chart.js components.",
+            "result": "Achieved seamless graph switching under 10ms with fluid visual refreshes, vastly improving usability during corporate energy audits.",
+            "inline_image": ""
+          }
+        ],
+        "architectural_deep_dive": {
+          "text": "The platform leverages a decoupled React client and PHP backend architecture. The frontend handles landing page interaction, user authentication forms, and secure drag-and-drop actions. When a valid spreadsheet is dropped, the client sends a POST request with the file to the PHP backend API. The API processes the worksheet rows, calculates monthly consumption aggregates, converts raw power into carbon equivalents using regional emission factors, and returns a JSON payload. This response is dynamically bound to the frontend's chart components, rendering interactive analytical dashboards without state loss.",
+          "illustration": null
+        },
+        "lessons_learned": "Collaborating with an international team where engineering and business roles were divided across continents highlighted the importance of establishing robust API contracts and a modular design system early. It also proved that modern CSS tooling like Tailwind enables rapid UI iteration, making it easy to accommodate evolving product requirements and design specs."
+      }
+    },
+    {
+      "name": "vanilla-projects",
+      "description": "A high-performance monorepo showcase of modular web apps and experiments built strictly with Vanilla HTML5, CSS3 (3D transforms/variables), and JavaScript",
+      "html_url": "https://github.com/HoodieYlya13/vanilla-projects",
+      "language": "JavaScript",
+      "languages": [
+        "JavaScript",
+        "HTML5",
+        "CSS3"
+      ],
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "fork": false,
+      "updated_at": "2026-05-25T17:25:44Z",
+      "homepage": "https://vanilla-projects.hy13dev.com",
+      "portfolio": {
+        "routing": {
+          "repo_name": "vanilla-projects",
+          "project_name": "Vanilla Projects",
+          "hero_image": ""
+        },
+        "project_meta": {
+          "role": "Lead Frontend Developer & UI Engineer",
+          "development_phase": "Production-Ready Showcase",
+          "languages": [
+            "JavaScript",
+            "HTML5",
+            "CSS3"
+          ],
+          "frameworks_and_tools": [
+            "Git Submodules",
+            "Modern CSS 3D Transforms",
+            "HTML5 Web Storage API",
+            "CSS Custom Properties",
+            "Hardware Acceleration",
+            "Google Fonts API",
+            "Static Web Server"
+          ]
+        },
+        "comprehensive_description": "A high-performance monorepo aggregating a curated collection of standalone vanilla web applications, each managed as an isolated Git submodule. Designed to demonstrate the advanced capabilities of native web APIs, hardware-accelerated animations, and responsive interactions without the overhead of modern framework layers. The portfolio includes a hardware-accelerated 3D rotating cylindrical carousel built using pure CSS transforms (css-playground), a real-time analog and digital timepiece using dynamic rotational trigonometric math (clock), an accessible, event-delegated task manager with persistent browser storage sync (to-do-list), and a highly responsive number guessing game featuring interactive validation, dynamic autofocus, keyboard binding hooks, and a hidden YouTube Easter egg (guess-number).",
+        "engineering_highlights": [
+          "Monorepo Submodule Architecture: Engineered a decoupled, modular monorepo structure utilizing Git Submodules to maintain separate repositories for each project while presenting them inside a single master portfolio page, keeping individual dependency trees clean and standalone deployments trivial.",
+          "Pure CSS 3D Mathematical Layouts: Developed a highly optimized, JavaScript-free 3D rotating cylindrical carousel using advanced CSS 3D transforms (preserve-3d, backface-visibility: hidden) and mathematical angle calculations (transform: rotateY() translateZ()) to create a hardware-accelerated, fluid carousel that renders at a locked 60 FPS.",
+          "Smooth Analog Rotation Ratios: Implemented a real-time analog clock hand movement system that bypasses jerky minute-to-minute transitions. Calculated continuous floating-point rotation ratios mapping seconds to minutes, and minutes to hours, enabling smooth physical-like sweeps across the analog dial.",
+          "Event-Delegated State Serialization: Engineered a high-performance To-Do list state-management loop using event delegation and synchronous browser localStorage serialization. Submitting or deleting items instantly parses the DOM state and updates the serialized JSON array to prevent data loss across sessions.",
+          "Keyboard Event-Binding Hook System: Created clean, non-intrusive global and local keyboard event listeners (keydown) inside the guessing game to bind interactive controls directly to application states (e.g., standardizing 'r' for immediate board resets and 'Enter' for guess checks), featuring robust validation for NaN and out-of-bounds input ranges.",
+          "Performance-Driven Rendering & Hardware Acceleration: Bypassed expensive layout reflows in animations by leveraging CSS GPU-accelerated transition properties (transform: translate3d() and opacity), keeping paint times sub-1ms even under heavy animations."
+        ],
+        "measurable_metrics": {
+          "execution_latency": "Sub-1ms scripting evaluation and DOM rendering times; sub-10ms localized event-to-UI update latency.",
+          "ui_performance": "Locked 60 FPS visual rendering across all animations under heavy DOM manipulation, using GPU-accelerated transforms; 100% Google Lighthouse scores for Performance, Accessibility, and Best Practices.",
+          "operational_cost": "Absolute zero ($0.00) monthly hosting and maintenance costs, running serverless on static CDNs (GitHub Pages/Vercel) with no backend compute requirements."
+        },
+        "star_challenges": [
+          {
+            "situation": "Creating a 3D cylindrical carousel rotating infinitely in space using traditional JavaScript and CSS results in layout thrashing, main thread locking, and visible stuttering on mobile viewports due to continuous DOM style computations.",
+            "action": "Architected a zero-JavaScript 3D rotating slider. Leveraged custom CSS variables (--width, --height, --position, --quantity) to dynamically compute rotational positions (transform: rotateY(calc(360deg / var(--quantity) * var(--position))) translateZ(...)) in compile-time stylesheets. Delegated the entire rotation loop to the GPU via hardware-accelerated CSS animations (@keyframes operating purely on transform: rotateY).",
+            "result": "Achieved a perfect, lock-tight 60 FPS rotational animation on both high-end desktop screens and low-tier mobile devices with zero CPU scripting overhead.",
+            "inline_image": ""
+          },
+          {
+            "situation": "Real-time clock hands updated strictly on integers (e.g., rotating the minute hand only when currentDate.getMinutes() changes) caused jarring, unnatural jumps that broken the visual illusion of a premium physical clock sweep.",
+            "action": "Refactored the calculation pipeline to use dynamic fractional ratios. Mapped the seconds ratio (currentDate.getSeconds() / 60) into the minute hand's rotational ratio ((secondsRatio + currentDate.getMinutes()) / 60), and recursively injected the minute ratio into the hour hand ((minutesRatio + currentDate.getHours()) / 12).",
+            "result": "Achieved a seamless, continuous analog sweep where hands drift imperceptibly and precisely, mimicking high-end physical clock mechanisms.",
+            "inline_image": ""
+          },
+          {
+            "situation": "In the Guess the Number game, the 'Reset Game' button was designed to feature a playful 'Rickroll' Easter egg that opens a new tab, but typical anchor link navigation broke the JavaScript execution context, preventing the game board from resetting locally on the page simultaneously.",
+            "action": "Configured an asynchronous event-handling sequence. Bound a click listener directly to the reset anchor element that intercepts the default action. Executed the resetGame() logic synchronously to restore board variables, clear input buffers, and reset the attempts counter, while allowing the browser's native window manager to safely open the YouTube link in a background tab.",
+            "result": "Delivered a delightful, fully functional, and dual-purpose Easter egg that maintains flawless local game state integrity while delivering the visual joke.",
+            "inline_image": ""
+          }
+        ],
+        "architectural_deep_dive": {
+          "text": "The vanilla-projects monorepo is architected around a strict decoupled, client-side, zero-dependency philosophy. The root directory acts as a static gateway and index page. Each application exists as an isolated Git submodule, completely self-contained with its own structural index.html, custom modular styles.css, and client-side script.js file. Submodules communicate with the host browser's native window context for storage (localStorage API), animation frame rendering (CSS transition engines), and real-time state calculation (Date API). The styling layer utilizes root-scoped CSS Custom Variables to enable rapid system variables hot-swapping and responsive calculations directly within the stylesheet compilation step, eliminating the need for client-side layout math.",
+          "illustration": null
+        },
+        "lessons_learned": "Bypassing modern, heavy JavaScript frameworks for lightweight utility applications reveals the true efficiency of native browser engines. Using CSS variables to handle spatial mathematics and delegating complex 3D transformations to the GPU dramatically reduces battery drain, eliminates frame drops, and minimizes script bundle size to practically zero. Additionally, utilizing Git Submodules allows developers to create a highly organized, decoupled project ecosystem where each individual component remains fully functional, testable, and deployable on its own, avoiding the standard 'dependency hell' of unified monorepos."
+      }
+    },
+    {
+      "name": "passkey-auth-template",
+      "description": "Premium passwordless auth template with Passkeys (WebAuthn) & Magic Links. Powered by Next.js 16 (PPR), React 19, Prisma, Tailwind CSS v4, and Upstash",
+      "html_url": "https://github.com/HoodieYlya13/passkey-auth-template",
+      "language": "TypeScript",
+      "languages": [
+        "TypeScript",
+        "JavaScript",
+        "SQL",
+        "HTML",
+        "CSS"
+      ],
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "fork": false,
+      "updated_at": "2026-05-25T17:24:51Z",
+      "homepage": "https://auth-template.hy13dev.com",
+      "portfolio": {
+        "routing": {
+          "repo_name": "passkey-auth-template",
+          "project_name": "Passkey & Magic Link Authentication Template",
+          "hero_image": ""
+        },
+        "project_meta": {
+          "role": "Lead Full-Stack Security & Infrastructure Engineer",
+          "development_phase": "Production-Ready Template / Production",
+          "languages": [
+            "TypeScript",
+            "JavaScript",
+            "SQL",
+            "HTML",
+            "CSS"
+          ],
+          "frameworks_and_tools": [
+            "Next.js 16 (Turbopack)",
+            "React 19",
+            "Prisma ORM",
+            "Tailwind CSS v4",
+            "SimpleWebAuthn (WebAuthn)",
+            "Upstash Redis",
+            "PostgreSQL",
+            "next-intl (i18n)",
+            "Resend API",
+            "Zod",
+            "Mailpit",
+            "Framer Motion"
+          ]
+        },
+        "comprehensive_description": "An ultra-premium, production-ready, passwordless authentication template built on Next.js 16, React 19, Prisma, Tailwind CSS v4, and WebAuthn (SimpleWebAuthn). The project features a robust, innovative dual-architecture design allowing developer configurations to toggle seamlessly between Serverless Mode (direct PostgreSQL Prisma querying, @simplewebauthn/server cryptographic challenge generation, and direct Resend email dispatching) and a Dedicated Backend Client Mode (acting as a lightweight UI gateway delegating core auth, session token operations, and cryptography to an external API server). It adheres to bleeding-edge security standards with Upstash Redis rate limiting, secure staging environment password gating via Next.js 16 network-boundary proxying (proxy.ts), custom dynamic theme modules using light/dark glassmorphic UI (liquid-glass), dynamic translation orchestration (next-intl), and modern React 19 UI state synchronization (leveraging useActionState and useOptimistic).",
+        "engineering_highlights": [
+          "Dual-Architecture Boundary Toggle: Engineered a dual-mode integration powered by NEXT_PUBLIC_SERVERLESS env, dynamically routing all database, session, and email operations either serverlessly through Prisma/Resend/WebAuthn-server or via API proxying to an external backend using a robust fetchApi client.",
+          "Next.js 16 Network Boundary & Proxy Pattern: Implemented a highly optimized proxy.ts boundary to handle dynamic sub-path locale routing, HTTP-only session token verification, and developer-staging gate password protection (auth-testing-mode) with minimal execution latency.",
+          "React 19 Zero-Latency Optimistic Operations: Leveraged React 19's native compiler and useOptimistic hook to trigger immediate client-side credential listings on passkey addition, rename, or deletion, implementing elegant rollbacks and Sonner alerts if the background Server Action fails validation.",
+          "Cryptographically Secure WebAuthn Handshake: Configured deep WebAuthn flows with @simplewebauthn/browser and @simplewebauthn/server, supporting platform-attached key selection, signature verifications, and custom user-verifications with cryptographically hashed challenges stored in PostgreSQL.",
+          "Rate Limiting & Maintenance Automations: Guarded Server Actions with Upstash Redis Token Bucket rate limiting and established a daily db-ping cron endpoint (/api/cron) to keep Neon Postgres and Upstash instances warm, while automatically purging unconfirmed magic-link signups."
+        ],
+        "measurable_metrics": {
+          "execution_latency": "Sub-50ms cryptographic challenge verification and token generation in Serverless Mode, with under 5ms rate-limiting checks via Upstash Redis.",
+          "ui_performance": "100/100 Lighthouse Performance score with 0ms blocking time and instant response on form actions using React 19 useOptimistic UI updates.",
+          "operational_cost": "$0/month runtime operations using free-tier Vercel Postgres, Neon DB pooling, Upstash Redis, and Mailpit local email simulation."
+        },
+        "star_challenges": [
+          {
+            "situation": "Standard authentication templates suffer from heavy middleware overhead, bloated client bundles, and weak access-control protections for staging/development builds.",
+            "action": "Leveraged Next.js 16's strict network boundary pattern, replacing legacy middleware.ts with a lightweight proxy.ts router. Developed a secure password-gating shield (auth-testing-mode) that verifies credentials and sets HTTP-only cookies entirely at the proxy edge before any heavy client assets are downloaded.",
+            "result": "Reduced routing overhead to under 10ms, kept the staging shield fully insulated, and ensured zero leakage of proprietary features without loading client-side packages.",
+            "inline_image": ""
+          },
+          {
+            "situation": "Passkey registration, renaming, and deletion involve complex, multi-step cryptographic verification and database transactions that traditionally result in sluggish UI responses and poor user experiences.",
+            "action": "Adopted React 19's native useOptimistic state reducer and useActionState inside Server Action forms. Designed the passkey management component to immediately reflect key modifications on the UI, utilizing seamless background synchronization that automatically rolls back and raises localized Sonner toasts if the cryptographic verify action encounters a failure.",
+            "result": "Eliminated all user-perceived network latency, creating a highly responsive and fluid passwordless authentication experience with robust error-recovery.",
+            "inline_image": ""
+          },
+          {
+            "situation": "Deploying serverless authentication architectures on standard free-tier plans often results in frustrating Neon PostgreSQL cold starts after periods of inactivity, alongside database pollution from aborted user magic-link signups.",
+            "action": "Designed a secured API cron routing mechanism (/api/cron) guarded by dynamic authorization headers and an automated daily GitHub Actions runner. The script pings database endpoints to keep connections warm and runs a transactional DB purge, deleting uncompleted signups created more than 24 hours prior.",
+            "result": "Completely eliminated Neon DB cold starts, keeping active queries warm, and automated 100% of inactive data cleanup, maintaining a lean and high-performance database schema.",
+            "inline_image": ""
+          }
+        ],
+        "architectural_deep_dive": {
+          "text": "The template sits behind a highly efficient Next.js 16 Proxy Network Boundary (implemented in proxy.ts) which intercepts all incoming requests to perform locale negotiation (using preferred_locale cookies and headers) and staging access validation. In Serverless Mode (NEXT_PUBLIC_SERVERLESS=true), the app operates as a self-contained monorepo: Next.js Server Actions ('use server') invoke Prisma ORM to communicate with PostgreSQL (configured with pooled connections for fast reads and direct connections for migrations), verify cryptographic WebAuthn credentials via @simplewebauthn/server, and trigger emails using Resend. In Dedicated Backend Client Mode (NEXT_PUBLIC_SERVERLESS=false), the serverless backend layers are completely bypassed; instead, Server Actions function as secure gateway orchestrators, forwarding proxy-session cookie headers and delegating all core authentication transactions to a remote API server using a centralized fetchApi client. React 19's native compiler and <Suspense> streaming isolates dynamic database checks and cookie-dependent components, allowing the static parts of pages to prerender instantly as HTML shells.",
+          "illustration": null
+        },
+        "lessons_learned": "Architecting this cutting-edge Next.js 16 and React 19 passwordless authentication template proved the immense power of the modern Network Boundary (proxy.ts) pattern. Moving heavy database and cryptographic operations out of the routing layer and into dedicated Server Actions ensures a highly performant, predictable routing architecture. Furthermore, adopting the React 19 Compiler and native state reducers like useOptimistic demonstrated that we can eliminate traditional state management libraries and complex memoization logic (useMemo/useCallback) entirely, achieving instant, beautiful, and fluid interfaces with absolute type safety and maximum clean code."
+      }
+    }
+  ]
+}
