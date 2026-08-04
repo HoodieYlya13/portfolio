@@ -14,7 +14,7 @@
   <p align="center">
     <a href="https://www.hy13dev.com"><img src="https://img.shields.io/badge/Live_Portfolio-hy13dev.com-6366f1?style=for-the-badge&logo=react&logoColor=white" alt="Live Portfolio" /></a>
     <a href="https://www.linkedin.com/in/ylya-martchenko"><img src="https://img.shields.io/badge/LinkedIn-Ylya_Martchenko-0077b5?style=for-the-badge&logo=linkedin&logoColor=white" alt="LinkedIn" /></a>
-    <a href="mailto:ylyamartchenko@gmail.com"><img src="https://img.shields.io/badge/Email-ylyamartchenko@gmail.com-ea4335?style=for-the-badge&logo=gmail&logoColor=white" alt="Email" /></a>
+    <a href="mailto:ylyamartchenko@proton.me"><img src="https://img.shields.io/badge/Email-ylyamartchenko@proton.me-ea4335?style=for-the-badge&logo=gmail&logoColor=white" alt="Email" /></a>
   </p>
 </div>
 
@@ -221,7 +221,7 @@ I am always looking for challenging engineering opportunities, specifically invo
 
 - 💼 **Placement Preferences:** Hybrid/Remote roles within **Luxembourg**, **Switzerland**, or **North America**.
 - 🎯 **Technical Domains:** Web Development, AI/RAG, Space Engineering, IoT, Cloud & DevOps, and Embedded Systems.
-- 📬 **Direct Inquiries:** [ylyamartchenko@gmail.com](mailto:ylyamartchenko@gmail.com)
+- 📬 **Direct Inquiries:** [ylyamartchenko@proton.me](mailto:ylyamartchenko@proton.me)
 
 ---
 
