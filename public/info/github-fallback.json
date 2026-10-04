@@ -1086,87 +1086,6 @@
   ],
   "repositories": [
     {
-      "name": "ptz-zone-abc",
-      "description": "Interactive map of ABC zoning for zero-interest housing loans (PTZ) in France (effective as of June 26, 2026).",
-      "html_url": "https://github.com/HoodieYlya13/ptz-zone-abc",
-      "language": "JavaScript",
-      "languages": [
-        "JavaScript",
-        "HTML",
-        "CSS"
-      ],
-      "stargazers_count": 0,
-      "forks_count": 0,
-      "fork": false,
-      "updated_at": "2026-10-02T09:00:03Z",
-      "homepage": "https://ptz-zone-abc.hy13dev.com",
-      "portfolio": {
-        "routing": {
-          "repo_name": "ptz-zone-abc",
-          "project_name": "PTZ Zone ABC"
-        },
-        "project_meta": {
-          "role": "Front-End Developer (Geospatial Data Visualization)",
-          "development_phase": "Production-Ready: Zero-Build Static Web App Covering All of France (Metropolitan + Overseas), Region-by-Region On-Demand Loading",
-          "languages": [
-            "JavaScript",
-            "HTML",
-            "CSS"
-          ],
-          "frameworks_and_tools": [
-            "Leaflet 1.9 (Interactive Maps, Custom Panes, GeoJSON Layers)",
-            "PapaParse (Streaming CSV Parsing)",
-            "geo.api.gouv.fr (Etalab Official Commune Boundaries, GeoJSON API)",
-            "france-geojson (Simplified Region Outlines)",
-            "OpenStreetMap Tiles",
-            "Schema.org JSON-LD, Open Graph & Twitter Cards (SEO)",
-            "Vanilla JavaScript (ES2020+, No Build Step)"
-          ]
-        },
-        "comprehensive_description": "An interactive map of the French ABC housing zoning used to determine eligibility for the PTZ (Prêt à Taux Zéro, France's zero-interest home loan), based on the official zoning effective June 26, 2026. It covers all ~34,900 communes of France, including the overseas regions, and colors each one by its zone (A bis, A, B1, B2, C) so anyone can check in a few clicks whether a town qualifies for a PTZ on new builds only or also on renovated older homes. Rendering every commune boundary of France at once is too heavy for a browser, so the app opens on a lightweight national view of the 13 metropolitan regions and loads the detailed commune polygons of one region at a time, either by clicking it on the map or picking it from a list that also covers the five overseas regions. Each region's departments are fetched in parallel from the government's official GeoJSON API, joined in memory with a local CSV of the official zoning, cached for instant revisits, and shareable through a deep link. The whole application is a single static HTML file with no build step and no backend.",
-        "engineering_highlights": [
-          "Designed region-by-region lazy loading: the app starts on a ~225 KB simplified national map of region outlines and only downloads detailed commune boundaries for the region the user selects, avoiding the tens of megabytes needed to draw all ~34,900 French communes at once.",
-          "Resolved each region to its departments at runtime from the official geo.api.gouv.fr reference endpoints, then fetched every department's commune GeoJSON in parallel with a live 'n/total departments' progress indicator, so the region list and its composition stay in sync with the official administrative data instead of being hardcoded.",
-          "Guarded against race conditions with a monotonically increasing load token: when a user switches region while another is still downloading, stale responses are cached but never rendered, so the map always reflects the latest selection.",
-          "Cached each region's merged FeatureCollection in memory, making return visits to a previously opened region instant with no further network requests.",
-          "Joined official boundaries with the zoning dataset through an O(1) Map keyed on zero-padded INSEE codes, built once from a streamed PapaParse pass over the 34,875-row CSV, with the zoning column located by header name to survive dataset renames.",
-          "Layered the map with a dedicated Leaflet pane placed beneath the commune overlay, so region outlines stay clickable to jump between regions while never intercepting clicks on the communes of the active region.",
-          "Made region selection shareable with a #region= URL fragment restored on page load, and added zoom-aware region labels that hide when the user zooms into commune level.",
-          "Kept the app framework-free and build-free: one static HTML file plus a CSV, deployable on any static host, with full SEO metadata (Schema.org WebApplication JSON-LD, Open Graph, Twitter cards) and HTML-escaped popup content."
-        ],
-        "measurable_metrics": {
-          "data_coverage": "34,875 communes across 101 departments and 18 regions (13 metropolitan + 5 overseas), each classified into one of five official ABC zones.",
-          "network_efficiency": "Initial load limited to the zoning CSV, two small reference JSON calls and a ~225 KB simplified region outline file; detailed boundaries are downloaded per region only on demand and cached for the rest of the session.",
-          "operational_cost": "$0/month: a single static HTML file with no build step and no backend, relying on public government and open-data APIs."
-        },
-        "star_challenges": [
-          {
-            "situation": "The first version only covered the Grand Est region (~5,100 communes). Extending it to all of France meant handling roughly seven times more commune polygons, far more than a browser can download and render as SVG in a single pass.",
-            "action": "Restructured the app around on-demand loading: a lightweight national map of simplified region outlines plus a region selector, with detailed commune boundaries fetched department by department, in parallel, only for the selected region, and cached in memory afterwards.",
-            "result": "The whole country is now covered while the browser never holds more than one region's detailed geometry at a time, keeping the map responsive at the same level as the original single-region version.",
-            "inline_image": ""
-          },
-          {
-            "situation": "Because loading a region takes several parallel requests, a user changing their mind mid-download could see an outdated region overwrite the one they just picked.",
-            "action": "Introduced a load token incremented on every selection; each asynchronous step checks the token before updating the status or the map, while completed downloads are still cached for later.",
-            "result": "The map deterministically shows the most recent selection regardless of network timing, and abandoned downloads are not wasted.",
-            "inline_image": ""
-          },
-          {
-            "situation": "Region outlines had to remain on the map for navigation, but once a region was opened its outline overlapped every commune inside it and could swallow commune clicks.",
-            "action": "Moved the outlines into a custom Leaflet pane with a lower z-index than the commune overlay and made the active region's fill transparent.",
-            "result": "Clicking a commune always opens its zoning popup, while clicking anywhere else in France still switches to that region.",
-            "inline_image": ""
-          }
-        ],
-        "architectural_deep_dive": {
-          "text": "On startup the app streams the official zoning CSV with PapaParse into an in-memory Map from INSEE code to zone, then fetches the list of regions and the department-to-region mapping from geo.api.gouv.fr to build the region selector, and draws simplified region outlines in a dedicated Leaflet pane. Selecting a region, from the list, the map or a #region= deep link, resolves its departments, fetches each department's commune boundaries as GeoJSON in parallel, merges them into a single FeatureCollection cached per region, and renders it as one Leaflet GeoJSON layer styled by looking up each commune's zone. Each commune gets a hover highlight and a popup with its name, INSEE code, zone and PTZ eligibility (new builds only in tight markets A bis, A and B1; new builds and renovated older homes in B2 and C). A load token makes concurrent selections safe, and a zoom listener hides region labels at commune level.",
-          "illustration": null
-        },
-        "lessons_learned": "Scaling a map from one region to a whole country is less about rendering tricks than about deciding what not to load: a cheap overview plus targeted on-demand detail beats trying to optimize a single giant payload. Relying on official reference APIs for the administrative structure, rather than hardcoding department lists, also made the extension to every region, overseas included, almost free once the loading model was right."
-      }
-    },
-    {
       "name": "portfolio",
       "description": "Personal Portfolio & AI Concierge | Built with Next.js 16 & React 19. Dynamically hydrated via a centralized profile SSoT and integrated with a custom RAG-powered LLM (YlyaBot)",
       "html_url": "https://github.com/HoodieYlya13/portfolio",
@@ -1181,7 +1100,7 @@
       "stargazers_count": 0,
       "forks_count": 0,
       "fork": false,
-      "updated_at": "2026-10-02T03:22:30Z",
+      "updated_at": "2026-10-03T03:07:11Z",
       "homepage": "https://www.hy13dev.com",
       "portfolio": {
         "routing": {
@@ -1266,6 +1185,87 @@
           }
         },
         "lessons_learned": "Decoupling content data from layout presentation via a machine-readable Single Source of Truth (SSoT) dramatically accelerates professional portfolio updates, eliminates copy-paste sync errors across networks, and directly supplies high-fidelity data matrices to Retrieval-Augmented Generation (RAG) agents with zero extra ingestion overhead. Furthermore, when building hyper-smooth visual experiences in Next.js 16/React 19, keeping high-frequency animation logic and theme observer states completely isolated from the React render diffing pipeline is essential to preventing frame drops and hydration anomalies."
+      }
+    },
+    {
+      "name": "ptz-zone-abc",
+      "description": "Interactive map of ABC zoning for zero-interest housing loans (PTZ) in France (effective as of June 26, 2026).",
+      "html_url": "https://github.com/HoodieYlya13/ptz-zone-abc",
+      "language": "JavaScript",
+      "languages": [
+        "JavaScript",
+        "HTML",
+        "CSS"
+      ],
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "fork": false,
+      "updated_at": "2026-10-02T09:00:03Z",
+      "homepage": "https://ptz-zone-abc.hy13dev.com",
+      "portfolio": {
+        "routing": {
+          "repo_name": "ptz-zone-abc",
+          "project_name": "PTZ Zone ABC"
+        },
+        "project_meta": {
+          "role": "Front-End Developer (Geospatial Data Visualization)",
+          "development_phase": "Production-Ready: Zero-Build Static Web App Covering All of France (Metropolitan + Overseas), Region-by-Region On-Demand Loading",
+          "languages": [
+            "JavaScript",
+            "HTML",
+            "CSS"
+          ],
+          "frameworks_and_tools": [
+            "Leaflet 1.9 (Interactive Maps, Custom Panes, GeoJSON Layers)",
+            "PapaParse (Streaming CSV Parsing)",
+            "geo.api.gouv.fr (Etalab Official Commune Boundaries, GeoJSON API)",
+            "france-geojson (Simplified Region Outlines)",
+            "OpenStreetMap Tiles",
+            "Schema.org JSON-LD, Open Graph & Twitter Cards (SEO)",
+            "Vanilla JavaScript (ES2020+, No Build Step)"
+          ]
+        },
+        "comprehensive_description": "An interactive map of the French ABC housing zoning used to determine eligibility for the PTZ (Prêt à Taux Zéro, France's zero-interest home loan), based on the official zoning effective June 26, 2026. It covers all ~34,900 communes of France, including the overseas regions, and colors each one by its zone (A bis, A, B1, B2, C) so anyone can check in a few clicks whether a town qualifies for a PTZ on new builds only or also on renovated older homes. Rendering every commune boundary of France at once is too heavy for a browser, so the app opens on a lightweight national view of the 13 metropolitan regions and loads the detailed commune polygons of one region at a time, either by clicking it on the map or picking it from a list that also covers the five overseas regions. Each region's departments are fetched in parallel from the government's official GeoJSON API, joined in memory with a local CSV of the official zoning, cached for instant revisits, and shareable through a deep link. The whole application is a single static HTML file with no build step and no backend.",
+        "engineering_highlights": [
+          "Designed region-by-region lazy loading: the app starts on a ~225 KB simplified national map of region outlines and only downloads detailed commune boundaries for the region the user selects, avoiding the tens of megabytes needed to draw all ~34,900 French communes at once.",
+          "Resolved each region to its departments at runtime from the official geo.api.gouv.fr reference endpoints, then fetched every department's commune GeoJSON in parallel with a live 'n/total departments' progress indicator, so the region list and its composition stay in sync with the official administrative data instead of being hardcoded.",
+          "Guarded against race conditions with a monotonically increasing load token: when a user switches region while another is still downloading, stale responses are cached but never rendered, so the map always reflects the latest selection.",
+          "Cached each region's merged FeatureCollection in memory, making return visits to a previously opened region instant with no further network requests.",
+          "Joined official boundaries with the zoning dataset through an O(1) Map keyed on zero-padded INSEE codes, built once from a streamed PapaParse pass over the 34,875-row CSV, with the zoning column located by header name to survive dataset renames.",
+          "Layered the map with a dedicated Leaflet pane placed beneath the commune overlay, so region outlines stay clickable to jump between regions while never intercepting clicks on the communes of the active region.",
+          "Made region selection shareable with a #region= URL fragment restored on page load, and added zoom-aware region labels that hide when the user zooms into commune level.",
+          "Kept the app framework-free and build-free: one static HTML file plus a CSV, deployable on any static host, with full SEO metadata (Schema.org WebApplication JSON-LD, Open Graph, Twitter cards) and HTML-escaped popup content."
+        ],
+        "measurable_metrics": {
+          "data_coverage": "34,875 communes across 101 departments and 18 regions (13 metropolitan + 5 overseas), each classified into one of five official ABC zones.",
+          "network_efficiency": "Initial load limited to the zoning CSV, two small reference JSON calls and a ~225 KB simplified region outline file; detailed boundaries are downloaded per region only on demand and cached for the rest of the session.",
+          "operational_cost": "$0/month: a single static HTML file with no build step and no backend, relying on public government and open-data APIs."
+        },
+        "star_challenges": [
+          {
+            "situation": "The first version only covered the Grand Est region (~5,100 communes). Extending it to all of France meant handling roughly seven times more commune polygons, far more than a browser can download and render as SVG in a single pass.",
+            "action": "Restructured the app around on-demand loading: a lightweight national map of simplified region outlines plus a region selector, with detailed commune boundaries fetched department by department, in parallel, only for the selected region, and cached in memory afterwards.",
+            "result": "The whole country is now covered while the browser never holds more than one region's detailed geometry at a time, keeping the map responsive at the same level as the original single-region version.",
+            "inline_image": ""
+          },
+          {
+            "situation": "Because loading a region takes several parallel requests, a user changing their mind mid-download could see an outdated region overwrite the one they just picked.",
+            "action": "Introduced a load token incremented on every selection; each asynchronous step checks the token before updating the status or the map, while completed downloads are still cached for later.",
+            "result": "The map deterministically shows the most recent selection regardless of network timing, and abandoned downloads are not wasted.",
+            "inline_image": ""
+          },
+          {
+            "situation": "Region outlines had to remain on the map for navigation, but once a region was opened its outline overlapped every commune inside it and could swallow commune clicks.",
+            "action": "Moved the outlines into a custom Leaflet pane with a lower z-index than the commune overlay and made the active region's fill transparent.",
+            "result": "Clicking a commune always opens its zoning popup, while clicking anywhere else in France still switches to that region.",
+            "inline_image": ""
+          }
+        ],
+        "architectural_deep_dive": {
+          "text": "On startup the app streams the official zoning CSV with PapaParse into an in-memory Map from INSEE code to zone, then fetches the list of regions and the department-to-region mapping from geo.api.gouv.fr to build the region selector, and draws simplified region outlines in a dedicated Leaflet pane. Selecting a region, from the list, the map or a #region= deep link, resolves its departments, fetches each department's commune boundaries as GeoJSON in parallel, merges them into a single FeatureCollection cached per region, and renders it as one Leaflet GeoJSON layer styled by looking up each commune's zone. Each commune gets a hover highlight and a popup with its name, INSEE code, zone and PTZ eligibility (new builds only in tight markets A bis, A and B1; new builds and renovated older homes in B2 and C). A load token makes concurrent selections safe, and a zoom listener hides region labels at commune level.",
+          "illustration": null
+        },
+        "lessons_learned": "Scaling a map from one region to a whole country is less about rendering tricks than about deciding what not to load: a cheap overview plus targeted on-demand detail beats trying to optimize a single giant payload. Relying on official reference APIs for the administrative structure, rather than hardcoding department lists, also made the extension to every region, overseas included, almost free once the loading model was right."
       }
     },
     {
