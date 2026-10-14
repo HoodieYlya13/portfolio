@@ -218,7 +218,7 @@
     },
     {
       "name": "ylya-bot",
-      "description": "An architectural digital twin running on Next.js 16 App Router. Features semantic multi-repository ingestion (portfolio.json), stateless RAG pipeline embedding queries, and React 19 async streaming. (In Development)",
+      "description": "An architectural digital twin running on Next.js 16 App Router. Features semantic multi-repository ingestion (portfolio.json), stateless RAG pipeline embedding queries, and React 19 async streaming.",
       "html_url": "https://github.com/HoodieYlya13/ylya-bot",
       "language": "TypeScript",
       "languages": [
@@ -229,7 +229,7 @@
       "stargazers_count": 0,
       "forks_count": 0,
       "fork": false,
-      "updated_at": "2026-08-04T17:13:03Z",
+      "updated_at": "2026-10-13T09:42:46Z",
       "homepage": "https://www.hy13dev.com/ylya-bot",
       "portfolio": {
         "routing": {
@@ -1100,7 +1100,7 @@
       "stargazers_count": 0,
       "forks_count": 0,
       "fork": false,
-      "updated_at": "2026-10-12T03:32:39Z",
+      "updated_at": "2026-10-13T04:46:40Z",
       "homepage": "https://www.hy13dev.com",
       "portfolio": {
         "routing": {
