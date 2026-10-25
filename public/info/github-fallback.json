@@ -8,7 +8,7 @@
     "website": "HY13dev.com",
     "linkedIn": "https://www.linkedin.com/in/ylya-martchenko",
     "githubUrl": "https://github.com/HoodieYlya13",
-    "public_repos": 37
+    "public_repos": 38
   },
   "pinnedRepositories": [
     {
@@ -411,7 +411,7 @@
       "stargazers_count": 5,
       "forks_count": 1,
       "fork": false,
-      "updated_at": "2026-08-05T01:06:50Z",
+      "updated_at": "2026-10-24T23:31:39Z",
       "homepage": "https://vibecoder.hy13dev.com",
       "portfolio": {
         "routing": {
@@ -433,7 +433,7 @@
             "React 19.2.4",
             "Tailwind CSS v4",
             "React Compiler",
-            "PartyKit",
+            "PartyServer (Cloudflare Durable Objects)",
             "PartySocket (Reconnecting Socket API)",
             "Zustand",
             "Yjs CRDTs",
@@ -447,7 +447,7 @@
         "comprehensive_description": "A high-performance multiplayer social deduction game for developers supporting up to 20 concurrent users per lobby. Rebuilt from the ground up by reverse-engineering obfuscated, minified legacy production web assets retrieved from the Wayback Machine. The project was engineered specifically as an interactive, custom collaborative icebreaker built to engage my corporate team and host a live multiplayer gaming session during the end of our spring sprint retrospective and planning meeting. The platform integrates real-time state synchronization, collaborative coding environments using conflict-free replicated data types (CRDTs), and client-side, sandboxed execution of user-submitted code.",
         "engineering_highlights": [
           "Reverse-Engineered Legacy Assets: Dissected minified production bundles from Internet Archive Wayback Machine mirrors to recover game state transition logic, Python level schemas, and sabotage verification cases.",
-          "Multiplexed Event Protocol: Engineered a custom hybrid socket layer that multiplexes Zustand global game state updates, presence tracking, and Monaco editor Yjs CRDT document sync events into a single JSON-based PartyKit channel.",
+          "Multiplexed Event Protocol: Engineered a custom hybrid socket layer that multiplexes Zustand global game state updates, presence tracking, and Monaco editor Yjs CRDT document sync events into a single JSON-based PartyServer channel.",
           "Sandboxed Client-Side Execution: Integrated Pyodide WebAssembly to execute Python validations and unit tests in-browser, achieving zero remote code execution (RCE) vulnerabilities and zero cloud hosting costs.",
           "Watchdog Thread Isolation: Developed a dedicated Web Worker wrapper for Pyodide with an active 5-second supervisor watchdog that terminates and regenerates the thread to handle infinite loop exploits gracefully.",
           "Multiplayer Collision Interception: Intercepted Monaco Editor commands to deactivate high-risk keyboard shortcuts (e.g. Cmd+A select all, mass undo/redo, cut, search-replace), blocking collaborative text degradation during concurrent edits.",
@@ -467,7 +467,7 @@
           },
           {
             "situation": "Standard binary-over-WebSocket Yjs collaboration crashed on Cloudflare edge proxy routing when transferring large document updates due to token frame truncation.",
-            "action": "Constructed a custom serialization protocol that encodes binary Yjs update buffers into standard JSON number arrays and routes them as standard messages through the unified PartyKit socket.",
+            "action": "Constructed a custom serialization protocol that encodes binary Yjs update buffers into standard JSON number arrays and routes them as standard messages through the unified PartyServer socket.",
             "result": "Bypassed Cloudflare's binary proxy limits entirely, enabling highly stable real-time document synchronization with zero packet truncation anomalies and zero extra socket connections.",
             "inline_image": ""
           },
@@ -479,7 +479,7 @@
           }
         ],
         "architectural_deep_dive": {
-          "text": "The system uses Next.js 16 and Zustand for frontend presentation, communicating with a PartyKit WebSocket server. Real-time document syncing is handled by Monaco Editor linked to a local Y.Doc text node. Document updates are serialized as JSON and multiplexed inside the single game socket connection. Python compilation and unit testing are offloaded to Pyodide (running inside a sandboxed Web Worker), featuring a custom supervisor hook that automatically terminates and restarts the worker thread when an infinite loop or runaway calculation is detected.",
+          "text": "The system uses Next.js 16 and Zustand for frontend presentation, communicating with a PartyServer WebSocket server running on Cloudflare Durable Objects. Real-time document syncing is handled by Monaco Editor linked to a local Y.Doc text node. Document updates are serialized as JSON and multiplexed inside the single game socket connection. Python compilation and unit testing are offloaded to Pyodide (running inside a sandboxed Web Worker), featuring a custom supervisor hook that automatically terminates and restarts the worker thread when an infinite loop or runaway calculation is detected.",
           "illustration": null
         },
         "lessons_learned": "Offloading complex WebAssembly operations (like Pyodide compilation) and real-time serialization tasks to background Web Workers is essential for modern web applications. Executing these operations on the main UI thread immediately disrupts the React rendering pipeline and drops frames. Furthermore, implementing active thread watchdogs is crucial to preventing user-submitted infinite loops from freezing the browser."
@@ -1086,6 +1086,170 @@
   ],
   "repositories": [
     {
+      "name": "werewolves",
+      "description": "Game master companion for Werewolves (Loups-Garous de Thiercelieux): step-by-step narration, 30 roles, undo, win detection and themes. Players reveal their role on their phone.",
+      "html_url": "https://github.com/HoodieYlya13/werewolves",
+      "language": "TypeScript",
+      "languages": [
+        "TypeScript",
+        "CSS"
+      ],
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "fork": false,
+      "updated_at": "2026-10-24T23:31:36Z",
+      "homepage": "https://werewolves.hy13dev.com",
+      "portfolio": {
+        "routing": {
+          "repo_name": "werewolves",
+          "project_name": "Werewolves",
+          "hero_image": ""
+        },
+        "project_meta": {
+          "role": "Sole Creator & Full-Stack Engineer",
+          "development_phase": "Production (live at werewolves.hy13dev.com)",
+          "languages": [
+            "TypeScript",
+            "CSS"
+          ],
+          "frameworks_and_tools": [
+            "Next.js 16.4 (Cache Components / Partial Prerendering)",
+            "React 19.3",
+            "React Compiler",
+            "Tailwind CSS v4",
+            "PartyServer",
+            "Cloudflare Workers & Durable Objects",
+            "Wrangler",
+            "PartySocket (Reconnecting Socket API)",
+            "Vitest",
+            "Progressive Web App (Web App Manifest)",
+            "Lucide Icons"
+          ]
+        },
+        "comprehensive_description": "A game master's companion for Werewolves (Les Loups-Garous de Thiercelieux), built for game nights with friends. Narrating the game by heart is error-prone: roles wake in the wrong order, a power gets forgotten, or nobody notices that a team has already won. The app runs the whole game on the narrator's iPad or laptop, step by step, with the exact lines to read aloud, while players join a room by scanning a QR code and hold their phone to reveal their secret role card. Players without a phone can be added by hand, and only the narrator interacts with the game, so it works for any group. It supports 30 roles from the base game and the Nouvelle Lune, Personnages and Le Village expansions, four themes (Werewolves, Mafia, Vampires, Spaceship) that rename every role and line of narration, and English and French with a flash-free light, dark and auto theme.",
+        "engineering_highlights": [
+          "Event-Sourced Game Engine: The game is stored as its setup plus an append-only action log, and every state is rebuilt by replaying it through pure functions. Undo is popping the last action and replaying, so any misclick, including an accidental end of game, can be taken back.",
+          "Roles as Data: Each role declares its team, night turn order, limited uses and death triggers, and the night sequence is computed from the roles in play. Adding a role means adding a definition rather than editing the game flow.",
+          "Win and 'Who Can Still Win' Detection: Solo goals (Angel, Pied Piper, Abominable Sectarian) are checked before team victories, mixed Cupid couples form their own team, and the narrator always sees which teams can still win.",
+          "Per-Connection Filtered Views: The room server sends each socket its own view. The narrator sees everything, while a phone only receives public information and its own role, so no secret ever reaches another player's device.",
+          "Refresh-Proof Rooms on Durable Objects: Each room is a hibernating Cloudflare Durable Object that persists its state and rebuilds the game on wake-up. Players reclaim their seat with a token saved on their phone after a refresh, a locked screen or a closed tab, and empty rooms clean themselves up after 24 hours.",
+          "Theme Engine Decoupled from Rules: Themes are whole-word rename maps per language plus targeted overrides, applied to the dictionaries at render time. The engine never reads the theme, and tests fail if any werewolf wording leaks into another theme.",
+          "Spoiler-Safe Shared Screen: Because the narrator's screen is visible to the table, roles can be blurred with one tap and private information (such as the Seer's vision) opens in a full-screen reveal that hides the rest of the board."
+        ],
+        "measurable_metrics": {
+          "rules_coverage": "30 roles and 31 distinct night and day step types, each covered by an engine test suite of 67 tests.",
+          "server_footprint": "The whole room server, including the shared game engine, deploys as a 20 KB gzipped Cloudflare Worker.",
+          "operational_cost": "Rooms hibernate between messages and are wiped 24 hours after everyone leaves, so the backend runs on Cloudflare's free plan."
+        },
+        "star_challenges": [
+          {
+            "situation": "Narrating a game with many roles from memory leads to mistakes that can ruin a round: waking roles out of order, forgetting a once-per-game power, or missing that a team has already won.",
+            "action": "Modelled every role as data and built a pure engine that computes the night order, prompts the narrator with each line to read, tracks one-time powers, and checks every win condition after each step.",
+            "result": "The narrator only has to read and tap. The rules are enforced by tested code instead of memory, including edge cases like the Angel's first-vote win and mixed lovers.",
+            "inline_image": ""
+          },
+          {
+            "situation": "In a live game, one wrong tap (the wrong victim, the wrong vote, or ending the game by accident) is hard to fix without restarting.",
+            "action": "Designed the game state as a replay of a setup and an action log, making undo a matter of dropping the last action, and kept a closed game resumable until the lineup changes.",
+            "result": "Any step can be rolled back instantly, with no special-case undo code per role.",
+            "inline_image": ""
+          },
+          {
+            "situation": "The hosted PartyKit platform that ran the realtime rooms shut down in October 2026, taking the multiplayer backend offline.",
+            "action": "Migrated the room server to PartyServer on my own Cloudflare account, moving to Durable Objects with hibernation, storage-backed state and alarms, and verified reconnects, filtered views, undo and persistence across Worker restarts with end-to-end socket tests.",
+            "result": "Rooms survive refreshes and server restarts with no change for players, and the backend now deploys with a single Wrangler command, with a separate staging environment for previews.",
+            "inline_image": ""
+          }
+        ],
+        "architectural_deep_dive": {
+          "text": "The frontend is a Next.js 16 app using Cache Components (Partial Prerendering) and the React Compiler, served per language under /en and /fr and installable as a PWA. The narrator's browser creates a room on a PartyServer Durable Object and holds a secret host token. Phones join with a name and receive a player token, both kept in localStorage. All rules live in a framework-free TypeScript engine shared by the server and the client: the server stores the setup and action log, replays them into the current state, and sends each connection a filtered view. Themes and translations are applied only in the UI layer, so the same engine powers every theme and language.",
+          "illustration": null
+        },
+        "lessons_learned": "Event sourcing pays off quickly in a game with complex rules: once state is a pure replay of actions, undo, persistence and server restarts all come for free, and the engine can be tested without a UI or a network. Keeping the rules engine independent of presentation also made it possible to add themes and languages without touching game logic. Finally, relying on a hosted realtime platform is a risk worth planning for, and keeping the server thin made the migration to self-hosted Durable Objects a matter of hours."
+      }
+    },
+    {
+      "name": "ptz-zone-abc",
+      "description": "Interactive map of ABC zoning for zero-interest housing loans (PTZ) in France (effective as of June 26, 2026).",
+      "html_url": "https://github.com/HoodieYlya13/ptz-zone-abc",
+      "language": "JavaScript",
+      "languages": [
+        "JavaScript",
+        "HTML",
+        "CSS"
+      ],
+      "stargazers_count": 0,
+      "forks_count": 0,
+      "fork": false,
+      "updated_at": "2026-10-24T22:43:36Z",
+      "homepage": "https://ptz-zone-abc.hy13dev.com",
+      "portfolio": {
+        "routing": {
+          "repo_name": "ptz-zone-abc",
+          "project_name": "PTZ Zone ABC"
+        },
+        "project_meta": {
+          "role": "Front-End Developer (Geospatial Data Visualization)",
+          "development_phase": "Production-Ready: Zero-Build Static Web App Covering All of France (Metropolitan + Overseas), Region-by-Region On-Demand Loading",
+          "languages": [
+            "JavaScript",
+            "HTML",
+            "CSS"
+          ],
+          "frameworks_and_tools": [
+            "Leaflet 1.9 (Interactive Maps, Custom Panes, GeoJSON Layers)",
+            "PapaParse (Streaming CSV Parsing)",
+            "geo.api.gouv.fr (Etalab Official Commune Boundaries, GeoJSON API)",
+            "france-geojson (Simplified Region Outlines)",
+            "OpenStreetMap Tiles",
+            "Schema.org JSON-LD, Open Graph & Twitter Cards (SEO)",
+            "Vanilla JavaScript (ES2020+, No Build Step)"
+          ]
+        },
+        "comprehensive_description": "An interactive map of the French ABC housing zoning used to determine eligibility for the PTZ (Prêt à Taux Zéro, France's zero-interest home loan), based on the official zoning effective June 26, 2026. It covers all ~34,900 communes of France, including the overseas regions, and colors each one by its zone (A bis, A, B1, B2, C) so anyone can check in a few clicks whether a town qualifies for a PTZ on new builds only or also on renovated older homes. Rendering every commune boundary of France at once is too heavy for a browser, so the app opens on a lightweight national view of the 13 metropolitan regions and loads the detailed commune polygons of one region at a time, either by clicking it on the map or picking it from a list that also covers the five overseas regions. Each region's departments are fetched in parallel from the government's official GeoJSON API, joined in memory with a local CSV of the official zoning, cached for instant revisits, and shareable through a deep link. The whole application is a single static HTML file with no build step and no backend.",
+        "engineering_highlights": [
+          "Designed region-by-region lazy loading: the app starts on a ~225 KB simplified national map of region outlines and only downloads detailed commune boundaries for the region the user selects, avoiding the tens of megabytes needed to draw all ~34,900 French communes at once.",
+          "Resolved each region to its departments at runtime from the official geo.api.gouv.fr reference endpoints, then fetched every department's commune GeoJSON in parallel with a live 'n/total departments' progress indicator, so the region list and its composition stay in sync with the official administrative data instead of being hardcoded.",
+          "Guarded against race conditions with a monotonically increasing load token: when a user switches region while another is still downloading, stale responses are cached but never rendered, so the map always reflects the latest selection.",
+          "Cached each region's merged FeatureCollection in memory, making return visits to a previously opened region instant with no further network requests.",
+          "Joined official boundaries with the zoning dataset through an O(1) Map keyed on zero-padded INSEE codes, built once from a streamed PapaParse pass over the 34,875-row CSV, with the zoning column located by header name to survive dataset renames.",
+          "Layered the map with a dedicated Leaflet pane placed beneath the commune overlay, so region outlines stay clickable to jump between regions while never intercepting clicks on the communes of the active region.",
+          "Made region selection shareable with a #region= URL fragment restored on page load, and added zoom-aware region labels that hide when the user zooms into commune level.",
+          "Kept the app framework-free and build-free: one static HTML file plus a CSV, deployable on any static host, with full SEO metadata (Schema.org WebApplication JSON-LD, Open Graph, Twitter cards) and HTML-escaped popup content."
+        ],
+        "measurable_metrics": {
+          "data_coverage": "34,875 communes across 101 departments and 18 regions (13 metropolitan + 5 overseas), each classified into one of five official ABC zones.",
+          "network_efficiency": "Initial load limited to the zoning CSV, two small reference JSON calls and a ~225 KB simplified region outline file; detailed boundaries are downloaded per region only on demand and cached for the rest of the session.",
+          "operational_cost": "$0/month: a single static HTML file with no build step and no backend, relying on public government and open-data APIs."
+        },
+        "star_challenges": [
+          {
+            "situation": "The first version only covered the Grand Est region (~5,100 communes). Extending it to all of France meant handling roughly seven times more commune polygons, far more than a browser can download and render as SVG in a single pass.",
+            "action": "Restructured the app around on-demand loading: a lightweight national map of simplified region outlines plus a region selector, with detailed commune boundaries fetched department by department, in parallel, only for the selected region, and cached in memory afterwards.",
+            "result": "The whole country is now covered while the browser never holds more than one region's detailed geometry at a time, keeping the map responsive at the same level as the original single-region version.",
+            "inline_image": ""
+          },
+          {
+            "situation": "Because loading a region takes several parallel requests, a user changing their mind mid-download could see an outdated region overwrite the one they just picked.",
+            "action": "Introduced a load token incremented on every selection; each asynchronous step checks the token before updating the status or the map, while completed downloads are still cached for later.",
+            "result": "The map deterministically shows the most recent selection regardless of network timing, and abandoned downloads are not wasted.",
+            "inline_image": ""
+          },
+          {
+            "situation": "Region outlines had to remain on the map for navigation, but once a region was opened its outline overlapped every commune inside it and could swallow commune clicks.",
+            "action": "Moved the outlines into a custom Leaflet pane with a lower z-index than the commune overlay and made the active region's fill transparent.",
+            "result": "Clicking a commune always opens its zoning popup, while clicking anywhere else in France still switches to that region.",
+            "inline_image": ""
+          }
+        ],
+        "architectural_deep_dive": {
+          "text": "On startup the app streams the official zoning CSV with PapaParse into an in-memory Map from INSEE code to zone, then fetches the list of regions and the department-to-region mapping from geo.api.gouv.fr to build the region selector, and draws simplified region outlines in a dedicated Leaflet pane. Selecting a region, from the list, the map or a #region= deep link, resolves its departments, fetches each department's commune boundaries as GeoJSON in parallel, merges them into a single FeatureCollection cached per region, and renders it as one Leaflet GeoJSON layer styled by looking up each commune's zone. Each commune gets a hover highlight and a popup with its name, INSEE code, zone and PTZ eligibility (new builds only in tight markets A bis, A and B1; new builds and renovated older homes in B2 and C). A load token makes concurrent selections safe, and a zoom listener hides region labels at commune level.",
+          "illustration": null
+        },
+        "lessons_learned": "Scaling a map from one region to a whole country is less about rendering tricks than about deciding what not to load: a cheap overview plus targeted on-demand detail beats trying to optimize a single giant payload. Relying on official reference APIs for the administrative structure, rather than hardcoding department lists, also made the extension to every region, overseas included, almost free once the loading model was right."
+      }
+    },
+    {
       "name": "portfolio",
       "description": "Personal Portfolio & AI Concierge | Built with Next.js 16 & React 19. Dynamically hydrated via a centralized profile SSoT and integrated with a custom RAG-powered LLM (YlyaBot)",
       "html_url": "https://github.com/HoodieYlya13/portfolio",
@@ -1100,7 +1264,7 @@
       "stargazers_count": 0,
       "forks_count": 0,
       "fork": false,
-      "updated_at": "2026-10-23T02:44:43Z",
+      "updated_at": "2026-10-24T02:42:07Z",
       "homepage": "https://www.hy13dev.com",
       "portfolio": {
         "routing": {
@@ -1185,87 +1349,6 @@
           }
         },
         "lessons_learned": "Decoupling content data from layout presentation via a machine-readable Single Source of Truth (SSoT) dramatically accelerates professional portfolio updates, eliminates copy-paste sync errors across networks, and directly supplies high-fidelity data matrices to Retrieval-Augmented Generation (RAG) agents with zero extra ingestion overhead. Furthermore, when building hyper-smooth visual experiences in Next.js 16/React 19, keeping high-frequency animation logic and theme observer states completely isolated from the React render diffing pipeline is essential to preventing frame drops and hydration anomalies."
-      }
-    },
-    {
-      "name": "ptz-zone-abc",
-      "description": "Interactive map of ABC zoning for zero-interest housing loans (PTZ) in France (effective as of June 26, 2026).",
-      "html_url": "https://github.com/HoodieYlya13/ptz-zone-abc",
-      "language": "JavaScript",
-      "languages": [
-        "JavaScript",
-        "HTML",
-        "CSS"
-      ],
-      "stargazers_count": 0,
-      "forks_count": 0,
-      "fork": false,
-      "updated_at": "2026-10-02T09:00:03Z",
-      "homepage": "https://ptz-zone-abc.hy13dev.com",
-      "portfolio": {
-        "routing": {
-          "repo_name": "ptz-zone-abc",
-          "project_name": "PTZ Zone ABC"
-        },
-        "project_meta": {
-          "role": "Front-End Developer (Geospatial Data Visualization)",
-          "development_phase": "Production-Ready: Zero-Build Static Web App Covering All of France (Metropolitan + Overseas), Region-by-Region On-Demand Loading",
-          "languages": [
-            "JavaScript",
-            "HTML",
-            "CSS"
-          ],
-          "frameworks_and_tools": [
-            "Leaflet 1.9 (Interactive Maps, Custom Panes, GeoJSON Layers)",
-            "PapaParse (Streaming CSV Parsing)",
-            "geo.api.gouv.fr (Etalab Official Commune Boundaries, GeoJSON API)",
-            "france-geojson (Simplified Region Outlines)",
-            "OpenStreetMap Tiles",
-            "Schema.org JSON-LD, Open Graph & Twitter Cards (SEO)",
-            "Vanilla JavaScript (ES2020+, No Build Step)"
-          ]
-        },
-        "comprehensive_description": "An interactive map of the French ABC housing zoning used to determine eligibility for the PTZ (Prêt à Taux Zéro, France's zero-interest home loan), based on the official zoning effective June 26, 2026. It covers all ~34,900 communes of France, including the overseas regions, and colors each one by its zone (A bis, A, B1, B2, C) so anyone can check in a few clicks whether a town qualifies for a PTZ on new builds only or also on renovated older homes. Rendering every commune boundary of France at once is too heavy for a browser, so the app opens on a lightweight national view of the 13 metropolitan regions and loads the detailed commune polygons of one region at a time, either by clicking it on the map or picking it from a list that also covers the five overseas regions. Each region's departments are fetched in parallel from the government's official GeoJSON API, joined in memory with a local CSV of the official zoning, cached for instant revisits, and shareable through a deep link. The whole application is a single static HTML file with no build step and no backend.",
-        "engineering_highlights": [
-          "Designed region-by-region lazy loading: the app starts on a ~225 KB simplified national map of region outlines and only downloads detailed commune boundaries for the region the user selects, avoiding the tens of megabytes needed to draw all ~34,900 French communes at once.",
-          "Resolved each region to its departments at runtime from the official geo.api.gouv.fr reference endpoints, then fetched every department's commune GeoJSON in parallel with a live 'n/total departments' progress indicator, so the region list and its composition stay in sync with the official administrative data instead of being hardcoded.",
-          "Guarded against race conditions with a monotonically increasing load token: when a user switches region while another is still downloading, stale responses are cached but never rendered, so the map always reflects the latest selection.",
-          "Cached each region's merged FeatureCollection in memory, making return visits to a previously opened region instant with no further network requests.",
-          "Joined official boundaries with the zoning dataset through an O(1) Map keyed on zero-padded INSEE codes, built once from a streamed PapaParse pass over the 34,875-row CSV, with the zoning column located by header name to survive dataset renames.",
-          "Layered the map with a dedicated Leaflet pane placed beneath the commune overlay, so region outlines stay clickable to jump between regions while never intercepting clicks on the communes of the active region.",
-          "Made region selection shareable with a #region= URL fragment restored on page load, and added zoom-aware region labels that hide when the user zooms into commune level.",
-          "Kept the app framework-free and build-free: one static HTML file plus a CSV, deployable on any static host, with full SEO metadata (Schema.org WebApplication JSON-LD, Open Graph, Twitter cards) and HTML-escaped popup content."
-        ],
-        "measurable_metrics": {
-          "data_coverage": "34,875 communes across 101 departments and 18 regions (13 metropolitan + 5 overseas), each classified into one of five official ABC zones.",
-          "network_efficiency": "Initial load limited to the zoning CSV, two small reference JSON calls and a ~225 KB simplified region outline file; detailed boundaries are downloaded per region only on demand and cached for the rest of the session.",
-          "operational_cost": "$0/month: a single static HTML file with no build step and no backend, relying on public government and open-data APIs."
-        },
-        "star_challenges": [
-          {
-            "situation": "The first version only covered the Grand Est region (~5,100 communes). Extending it to all of France meant handling roughly seven times more commune polygons, far more than a browser can download and render as SVG in a single pass.",
-            "action": "Restructured the app around on-demand loading: a lightweight national map of simplified region outlines plus a region selector, with detailed commune boundaries fetched department by department, in parallel, only for the selected region, and cached in memory afterwards.",
-            "result": "The whole country is now covered while the browser never holds more than one region's detailed geometry at a time, keeping the map responsive at the same level as the original single-region version.",
-            "inline_image": ""
-          },
-          {
-            "situation": "Because loading a region takes several parallel requests, a user changing their mind mid-download could see an outdated region overwrite the one they just picked.",
-            "action": "Introduced a load token incremented on every selection; each asynchronous step checks the token before updating the status or the map, while completed downloads are still cached for later.",
-            "result": "The map deterministically shows the most recent selection regardless of network timing, and abandoned downloads are not wasted.",
-            "inline_image": ""
-          },
-          {
-            "situation": "Region outlines had to remain on the map for navigation, but once a region was opened its outline overlapped every commune inside it and could swallow commune clicks.",
-            "action": "Moved the outlines into a custom Leaflet pane with a lower z-index than the commune overlay and made the active region's fill transparent.",
-            "result": "Clicking a commune always opens its zoning popup, while clicking anywhere else in France still switches to that region.",
-            "inline_image": ""
-          }
-        ],
-        "architectural_deep_dive": {
-          "text": "On startup the app streams the official zoning CSV with PapaParse into an in-memory Map from INSEE code to zone, then fetches the list of regions and the department-to-region mapping from geo.api.gouv.fr to build the region selector, and draws simplified region outlines in a dedicated Leaflet pane. Selecting a region, from the list, the map or a #region= deep link, resolves its departments, fetches each department's commune boundaries as GeoJSON in parallel, merges them into a single FeatureCollection cached per region, and renders it as one Leaflet GeoJSON layer styled by looking up each commune's zone. Each commune gets a hover highlight and a popup with its name, INSEE code, zone and PTZ eligibility (new builds only in tight markets A bis, A and B1; new builds and renovated older homes in B2 and C). A load token makes concurrent selections safe, and a zoom listener hides region labels at commune level.",
-          "illustration": null
-        },
-        "lessons_learned": "Scaling a map from one region to a whole country is less about rendering tricks than about deciding what not to load: a cheap overview plus targeted on-demand detail beats trying to optimize a single giant payload. Relying on official reference APIs for the administrative structure, rather than hardcoding department lists, also made the extension to every region, overseas included, almost free once the loading model was right."
       }
     },
     {
