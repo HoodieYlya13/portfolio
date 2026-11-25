@@ -7,6 +7,8 @@
 @theme inline {
   /* The phone menu's round tiles (32px) plus its padding (8px): its corners wrap them evenly. */
   --radius-concentric: 2.5rem;
+  /* Half a phone tile (64px): a corner as round as a circle's. */
+  --radius-tile: 2rem;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);

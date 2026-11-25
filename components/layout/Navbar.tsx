@@ -61,13 +61,15 @@ export default function Navbar() {
               style={{ transitionDelay: `${index * 75}ms` }}
             >
               <NavItem
+                // The first row follows the open menu's top-left corner on phones.
+                tileClassName={index === 0 ? "max-sm:rounded-tl-tile" : ""}
                 icon={
                   <Image
                     src={link.src}
                     alt={link.alt}
                     width={52}
                     height={52}
-                    className="object-contain size-11 group-hover:size-10 sm:size-13 sm:group-hover:size-12 md:size-15 md:group-hover:size-14 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                    className="object-contain size-13 group-hover:size-12 md:size-15 md:group-hover:size-14 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
                   />
                 }
               >
@@ -89,7 +91,7 @@ export default function Navbar() {
 
           <NavItem
             icon={
-              <Link href="/" className="size-full block">
+              <Link href="/ylya-bot" aria-label="Talk to YlyaBot" className="size-full block">
                 <video
                   autoPlay
                   loop
@@ -103,6 +105,8 @@ export default function Navbar() {
               </Link>
             }
             className="flex-1 min-w-0"
+            // A circle in the closed bar; the open menu unfolds it, keeping the bottom-left round (see NavbarContainer).
+            tileClassName="profile-tile max-sm:rounded-tile"
           >
             <Link href="/" className="w-fit">
               <div className="font-bold md:text-lg uppercase tracking-wide">
