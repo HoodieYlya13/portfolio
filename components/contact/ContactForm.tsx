@@ -11,6 +11,7 @@ import { contactSchema, type ContactFormData } from "@/app/actions/schemas";
 import SplitText from "@/components/react-bits/SplitText";
 import { Turnstile } from "@/components/contact/Turnstile";
 import { tryCatch } from "@/lib/utils";
+import { FIELD_ERROR, FIELD_INPUT, FIELD_LABEL, FIELD_TEXTAREA, FORM_CARD, SUBMIT_BUTTON } from "@/components/contact/field-styles";
 
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
 
@@ -114,7 +115,7 @@ export function ContactForm() {
   return (
     <div
       ref={containerRef}
-      className="w-full max-w-xl bg-card/75 dark:bg-card/75 backdrop-blur-md border border-border/80 dark:border-border/40 p-8 rounded-2xl shadow-xl transition-all duration-300 hover:border-primary/40 dark:hover:border-primary/30 opacity-0"
+      className={FORM_CARD}
     >
       <div className="mb-6">
         <SplitText
@@ -167,7 +168,7 @@ export function ContactForm() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+            <label className={FIELD_LABEL}>
               First Name
             </label>
             <input
@@ -175,18 +176,18 @@ export function ContactForm() {
               type="text"
               autoComplete="given-name"
               disabled={isSubmitting}
-              className="w-full bg-background/70 dark:bg-black/40 border border-border/80 dark:border-border/45 rounded-xl px-4 py-3 text-[1rem] md:text-sm text-foreground placeholder-muted-foreground/60 focus:outline-hidden focus:border-primary/80 focus:ring-2 focus:ring-primary/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+              className={FIELD_INPUT}
               placeholder="John"
             />
             {errors.firstName && (
-              <span className="text-xs text-destructive font-medium pl-1 animate-fadeIn">
+              <span className={FIELD_ERROR}>
                 {errors.firstName.message}
               </span>
             )}
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+            <label className={FIELD_LABEL}>
               Last Name
             </label>
             <input
@@ -194,11 +195,11 @@ export function ContactForm() {
               type="text"
               autoComplete="family-name"
               disabled={isSubmitting}
-              className="w-full bg-background/70 dark:bg-black/40 border border-border/80 dark:border-border/45 rounded-xl px-4 py-3 text-[1rem] md:text-sm text-foreground placeholder-muted-foreground/60 focus:outline-hidden focus:border-primary/80 focus:ring-2 focus:ring-primary/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+              className={FIELD_INPUT}
               placeholder="Doe"
             />
             {errors.lastName && (
-              <span className="text-xs text-destructive font-medium pl-1 animate-fadeIn">
+              <span className={FIELD_ERROR}>
                 {errors.lastName.message}
               </span>
             )}
@@ -206,7 +207,7 @@ export function ContactForm() {
         </div>
 
         <div className="space-y-1.5">
-          <label className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+          <label className={FIELD_LABEL}>
             Email Address
           </label>
           <input
@@ -214,18 +215,18 @@ export function ContactForm() {
             type="email"
             autoComplete="email"
             disabled={isSubmitting}
-            className="w-full bg-background/70 dark:bg-black/40 border border-border/80 dark:border-border/45 rounded-xl px-4 py-3 text-[1rem] md:text-sm text-foreground placeholder-muted-foreground/60 focus:outline-hidden focus:border-primary/80 focus:ring-2 focus:ring-primary/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+            className={FIELD_INPUT}
             placeholder="johndoe@example.com"
           />
           {errors.email && (
-            <span className="text-xs text-destructive font-medium pl-1 animate-fadeIn">
+            <span className={FIELD_ERROR}>
               {errors.email.message}
             </span>
           )}
         </div>
 
         <div className="space-y-1.5">
-          <label className="text-xs font-semibold tracking-wide text-muted-foreground uppercase">
+          <label className={FIELD_LABEL}>
             Message
           </label>
           <textarea
@@ -233,11 +234,11 @@ export function ContactForm() {
             rows={5}
             autoComplete="off"
             disabled={isSubmitting}
-            className="w-full bg-background/70 dark:bg-black/40 border border-border/80 dark:border-border/45 rounded-xl p-4 text-[1rem] md:text-sm text-foreground placeholder-muted-foreground/60 resize-none focus:outline-hidden focus:border-primary/80 focus:ring-2 focus:ring-primary/20 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+            className={FIELD_TEXTAREA}
             placeholder="Tell me about your project stack requirements..."
           />
           {errors.message && (
-            <span className="text-xs text-destructive font-medium pl-1 animate-fadeIn">
+            <span className={FIELD_ERROR}>
               {errors.message.message}
             </span>
           )}
@@ -259,7 +260,7 @@ export function ContactForm() {
         <button
           type="submit"
           disabled={isSubmitting || awaitingCaptcha}
-          className="w-full font-semibold text-sm bg-primary hover:bg-primary/95 text-primary-foreground h-12 rounded-xl flex items-center justify-center gap-2 hover:scale-[1.01] active:scale-[0.99] focus:outline-hidden focus:ring-2 focus:ring-primary/30 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
+          className={SUBMIT_BUTTON}
         >
           {isSubmitting ? (
             <>

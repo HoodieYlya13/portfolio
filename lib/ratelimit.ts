@@ -38,6 +38,7 @@ function getLimiter(identifier: string, redis: Redis) {
         prefix: "rl:ip",
       });
     case "contact":
+    case "feedback":
       return new Ratelimit({
         redis,
         limiter: Ratelimit.slidingWindow(2, "1 m"),

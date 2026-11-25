@@ -6,17 +6,11 @@ import {
   type ContactSubmission,
   type ContactActionResult,
 } from "./schemas";
-import {
-  checkRateLimit,
-  isRepeatSubmission,
-  RateLimitError,
-} from "@/lib/ratelimit";
-import { isCaptchaEnabled, verifyTurnstileToken } from "@/lib/turnstile";
+import { escapeHtml } from "@/lib/escape-html";
+import { guardAgainstSpam } from "@/lib/spam-guard";
 import { tryCatch } from "@/lib/utils";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-
-const MIN_HUMAN_FILL_MS = 3000;
 
 export async function sendContactEmail(
   data: ContactSubmission,
@@ -41,41 +35,13 @@ export async function sendContactEmail(
 
   if (website.trim().length > 0) return { success: true };
 
-  const [error] = await tryCatch(checkRateLimit("contact"));
-  if (error) {
-    if (error instanceof RateLimitError)
-      return {
-        success: false,
-        error: "Too many requests. Please slow down (max 2 messages/min).",
-      };
-    throw error;
-  }
-
-  if (isCaptchaEnabled()) {
-    const tooFast = elapsedMs === undefined || elapsedMs < MIN_HUMAN_FILL_MS;
-    const [, repeat] = await tryCatch(isRepeatSubmission("contact"));
-    const suspect = tooFast || repeat === true;
-
-    if (suspect) {
-      if (!captchaToken)
-        return {
-          success: false,
-          requiresCaptcha: true,
-          error: "Please complete the verification to continue.",
-        };
-
-      const [verifyError, valid] = await tryCatch(
-        verifyTurnstileToken(captchaToken),
-      );
-
-      if (verifyError || !valid)
-        return {
-          success: false,
-          requiresCaptcha: true,
-          error: "Verification failed. Please try again.",
-        };
-    }
-  }
+  const rejection = await guardAgainstSpam({
+    form: "contact",
+    elapsedMs,
+    captchaToken,
+    rateLimitMessage: "Too many requests. Please slow down (max 2 messages/min).",
+  });
+  if (rejection) return rejection;
 
   if (process.env.NODE_ENV !== "production") {
     console.log(
@@ -91,6 +57,13 @@ export async function sendContactEmail(
   }
 
   const currentYear = new Date().getFullYear();
+  // What the visitor typed, as text: never HTML (links, images) in mail sent from this domain.
+  const safe = {
+    firstName: escapeHtml(firstName),
+    lastName: escapeHtml(lastName),
+    email: escapeHtml(email),
+    message: escapeHtml(message),
+  };
 
   const sharedCss = `
     :root {
@@ -163,13 +136,13 @@ export async function sendContactEmail(
               <tr>
                 <td class="text-secondary" style="padding: 8px 0; width: 25%; font-size: 14px; font-weight: 600; color: #475569; vertical-align: top;">From:</td>
                 <td style="padding: 8px 0; font-size: 14px; vertical-align: top;">
-                  <strong class="text-primary" style="color: #0F172A;">${firstName} ${lastName}</strong>
+                  <strong class="text-primary" style="color: #0F172A;">${safe.firstName} ${safe.lastName}</strong>
                 </td>
               </tr>
               <tr>
                 <td class="text-secondary" style="padding: 8px 0; font-size: 14px; font-weight: 600; color: #475569; vertical-align: top;">Email:</td>
                 <td style="padding: 8px 0; font-size: 14px; vertical-align: top;">
-                  <a href="mailto:${email}" class="link-color" style="color: #0265DC; text-decoration: none; font-weight: 500;">${email}</a>
+                  <a href="mailto:${safe.email}" class="link-color" style="color: #0265DC; text-decoration: none; font-weight: 500;">${safe.email}</a>
                 </td>
               </tr>
             </table>
@@ -178,13 +151,13 @@ export async function sendContactEmail(
             <div style="margin-top: 16px; margin-bottom: 32px;">
               <p class="text-secondary" style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #475569; margin: 0 0 10px 0;">Message Content</p>
               <div class="msg-box msg-border-admin" style="background-color: #F8FAFC; border-left: 4px solid #D97706; border-radius: 4px; padding: 20px; border-top: 1px solid #E2E8F0; border-right: 1px solid #E2E8F0; border-bottom: 1px solid #E2E8F0;">
-                <p class="msg-text" style="margin: 0; font-size: 15px; color: #0F172A; line-height: 1.6; white-space: pre-wrap; font-style: italic;">"${message}"</p>
+                <p class="msg-text" style="margin: 0; font-size: 15px; color: #0F172A; line-height: 1.6; white-space: pre-wrap; font-style: italic;">"${safe.message}"</p>
               </div>
             </div>
             
             <!-- Action Button -->
             <div style="text-align: center; margin-top: 32px; margin-bottom: 16px;">
-              <a href="mailto:${email}?subject=Re:%20Your%20portfolio%20message" class="btn-admin" style="background-color: #D97706; color: #FFFFFF; padding: 12px 28px; font-size: 14px; font-weight: 600; text-decoration: none; border-radius: 6px; display: inline-block; box-shadow: 0 2px 4px rgba(217, 119, 6, 0.25);">
+              <a href="mailto:${safe.email}?subject=Re:%20Your%20portfolio%20message" class="btn-admin" style="background-color: #D97706; color: #FFFFFF; padding: 12px 28px; font-size: 14px; font-weight: 600; text-decoration: none; border-radius: 6px; display: inline-block; box-shadow: 0 2px 4px rgba(217, 119, 6, 0.25);">
                 Reply Directly
               </a>
             </div>
@@ -225,7 +198,7 @@ export async function sendContactEmail(
           <div class="border-divider" style="padding: 32px 32px 24px 32px; border-bottom: 1px solid #E2E8F0;">
             <span class="tag-visitor" style="font-size: 12px; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; color: #16A34A; display: inline-block; margin-bottom: 8px;">Message Confirmation</span>
             <h1 class="text-primary" style="font-size: 20px; font-weight: 700; color: #0F172A; margin: 0;">Thanks for reaching out!</h1>
-            <p class="text-secondary" style="font-size: 14px; color: #475569; margin: 6px 0 0 0;">Hi ${firstName}, I've received your message and will get back to you shortly.</p>
+            <p class="text-secondary" style="font-size: 14px; color: #475569; margin: 6px 0 0 0;">Hi ${safe.firstName}, I've received your message and will get back to you shortly.</p>
           </div>
           
           <!-- Body Content -->
@@ -239,7 +212,7 @@ export async function sendContactEmail(
             <div style="margin-top: 16px; margin-bottom: 32px;">
               <p class="text-secondary" style="font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: #475569; margin: 0 0 10px 0;">Copy of Your Message</p>
               <div class="msg-box msg-border-visitor" style="background-color: #F8FAFC; border-left: 4px solid #16A34A; border-radius: 4px; padding: 20px; border-top: 1px solid #E2E8F0; border-right: 1px solid #E2E8F0; border-bottom: 1px solid #E2E8F0;">
-                <p class="msg-text" style="margin: 0; font-size: 15px; color: #0F172A; line-height: 1.6; white-space: pre-wrap; font-style: italic;">"${message}"</p>
+                <p class="msg-text" style="margin: 0; font-size: 15px; color: #0F172A; line-height: 1.6; white-space: pre-wrap; font-style: italic;">"${safe.message}"</p>
               </div>
             </div>
             
