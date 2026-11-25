@@ -5,6 +5,8 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  /* The phone menu's round tiles (32px) plus its padding (8px): its corners wrap them evenly. */
+  --radius-concentric: 2.5rem;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);

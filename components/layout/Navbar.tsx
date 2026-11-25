@@ -67,7 +67,7 @@ export default function Navbar() {
                     alt={link.alt}
                     width={52}
                     height={52}
-                    className="object-contain size-13 group-hover:size-12 md:size-15 md:group-hover:size-14 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                    className="object-contain size-11 group-hover:size-10 sm:size-13 sm:group-hover:size-12 md:size-15 md:group-hover:size-14 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
                   />
                 }
               >
