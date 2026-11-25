@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, Paperclip, Send, X } from "lucide-react";
+import { ArrowLeft, Loader2, Paperclip, Send, X } from "lucide-react";
 import { toast } from "sonner";
 import { gsap } from "gsap";
 import { sendFeedback } from "@/app/actions/feedback";
@@ -115,6 +115,14 @@ export function FeedbackForm({ app }: { app: FeedbackApp }) {
 
   return (
     <div ref={containerRef} className={FORM_CARD}>
+      <a
+        href={app.url}
+        className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
+      >
+        <ArrowLeft className="size-4" />
+        Back to {app.name}
+      </a>
+
       <div className="mb-6">
         <SplitText
           text={`${app.name} feedback`}
