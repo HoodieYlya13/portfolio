@@ -5,7 +5,7 @@ interface RollingTextProps {
 
 export default function RollingText({ text, className = "" }: RollingTextProps) {
   return (
-    <div className={`relative overflow-hidden h-[1.2em] ${className}`}>
+    <div className={`relative overflow-hidden h-[1.4em] leading-[1.4] ${className}`}>
       <span className="block transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-full">
         {text}
       </span>
