@@ -6,6 +6,7 @@ import MenuContent from "./MenuContent";
 import ThemeToggleButton from "./ThemeToggleButton";
 import RollingText from "./RollingText";
 import NavbarSlidingTitles from "./NavbarSlidingTitles";
+import MemojiVideo from "./MemojiVideo";
 
 export default function Navbar() {
   const links = [
@@ -92,16 +93,7 @@ export default function Navbar() {
           <NavItem
             icon={
               <Link href="/ylya-bot" aria-label="Talk to YlyaBot" className="size-full block">
-                <video
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  className="size-full object-cover object-center"
-                >
-                  <source src="/memoji-video.mov" type="video/quicktime" />
-                  <source src="/memoji-video.webm" type="video/webm" />
-                </video>
+                <MemojiVideo />
               </Link>
             }
             className="flex-1 min-w-0"
